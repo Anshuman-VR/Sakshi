@@ -136,6 +136,31 @@ def metrics():
         return jsonify({"error": "Model evaluation metrics not found"}), 404
     return jsonify(json.loads(mp.read_text()))
 
+
+@app.route('/api/model/verify')
+def verify_registered_model():
+    import hashlib
+    root = Path(__file__).parent.parent
+    registry = gateway.registry
+    model_path = (root / 'gateway' / registry.get('onnx_path', '../models/sakshi_credit_v1.onnx')).resolve()
+    actual_hash = hashlib.sha256(model_path.read_bytes()).hexdigest() if model_path.is_file() else None
+    expected_hash = registry.get('model_hash')
+    metrics_path = root / 'models' / 'evaluation_metrics.json'
+    checks = {
+        'model_file_present': bool(model_path.is_file()),
+        'model_hash_matches_registry': bool(actual_hash and expected_hash and actual_hash == expected_hash),
+        'evaluation_report_present': metrics_path.is_file(),
+        'registered_features_present': bool(registry.get('features')),
+        'decision_threshold_configured': isinstance(registry.get('policy', {}).get('approve_threshold'), (int, float)),
+    }
+    return jsonify({
+        'verified': all(checks.values()), 'checks': checks,
+        'model_name': registry.get('model_name'), 'version': registry.get('version'),
+        'registered_hash': expected_hash, 'actual_hash': actual_hash,
+        'features': len(registry.get('features', [])),
+        'threshold': registry.get('policy', {}).get('approve_threshold')
+    })
+
 @app.route('/api/registry')
 def registry():
     reg = dict(gateway.registry)

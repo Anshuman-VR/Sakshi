@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sakshi — Model Evidence Demo</title>
+<title>Sakshi — Credit Decision Evidence</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -163,6 +163,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .cert-eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:6px}
 .cert-id{font-size:17px;font-weight:700;color:var(--gray-900);font-family:monospace;margin-bottom:4px}
 .cert-sub{font-size:12px;color:var(--gray-500)}
+.hash-value{display:flex;align-items:center;justify-content:flex-end;gap:8px;max-width:72%}.hash-value code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;overflow-wrap:anywhere;word-break:break-all;text-align:right}.hash-value .btn{flex-shrink:0;padding:5px 9px;font-size:11px}
 .cert-rows{margin-top:16px;display:flex;flex-direction:column;gap:0}
 .cert-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(37,99,235,.08)}
 .cert-row:last-child{border-bottom:none}
@@ -260,15 +261,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="topnav-inner">
     <a class="brand" href="#">
       <div class="brand-icon">Q</div>
-      <div><div class="brand-name">Sakshi Demo</div><div class="brand-tag">Credit-risk research</div></div>
+      <div><div class="brand-name">Sakshi</div><div class="brand-tag">Credit Decision Evidence</div></div>
     </a>
     <div class="nav-pills">
-      <button class="nav-pill active" onclick="switchView('borrow',this)">Borrower Demo</button>
+      <button class="nav-pill active" onclick="switchView('borrow',this)">Borrower Portal</button>
       <button class="nav-pill" onclick="switchView('lender',this)">Lender Portal</button>
       <button class="nav-pill" onclick="switchView('lsp',this)">LSP Console</button>
+      <button class="nav-pill" onclick="switchView('verifier',this)">Independent Verifier</button>
     </div>
     <div class="nav-right">
-      <div class="nav-badge"> Sakshi Evidence Demo</div>
+      <div class="nav-badge">Evidence system active</div>
     </div>
   </div>
 </nav>
@@ -300,7 +302,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     <div class="hero-banner gap24">
       <div class="hero-content">
         <h1>Explore a credit-risk assessment</h1>
-        <p>Research prototype using the UCI German Credit benchmark · Not a loan application</p>
+        <p>A clear view of your eligibility assessment, decision factors, and verifiable evidence.</p>
         <div class="hero-pills">
           <div class="hero-pill" onclick="quickAmt(10000,this)">10,000 units</div>
           <div class="hero-pill sel" onclick="quickAmt(10000,this)">10,000 units</div>
@@ -308,10 +310,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
           <div class="hero-pill" onclick="quickAmt(20000,this)">20,000 units</div>
         </div>
         <div class="hero-features">
-          <div class="hero-feat">Historical credit benchmark</div>
+          <div class="hero-feat">Credit-risk model</div>
           <div class="hero-feat">Model inference evidence</div>
           <div class="hero-feat">Optional SHAP explanation</div>
-          <div class="hero-feat">Cryptographic verification demo</div>
+          <div class="hero-feat">Independent verification</div>
         </div>
       </div>
     </div>
@@ -323,7 +325,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
           <div class="sec-title">Credit Amount</div>
           <div class="slider-section">
             <div class="slider-top">
-              <span class="lbl">Select credit amount (historical data units)</span>
+              <span class="lbl">Select credit amount</span>
               <span class="val" id="amt-disp">10,000 units</span>
             </div>
             <input type="range" id="amt-range" min="250" max="20000" step="250" value="10000" oninput="onAmt(this.value)">
@@ -425,11 +427,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
           </div>
         </div>
 
-        <label class="trust-strip gap16" style="cursor:pointer"><input id="f-consent" type="checkbox" style="margin-top:3px;flex-shrink:0;width:16px;height:16px"><span>I consent to processing the profile details entered here for this eligibility assessment. I understand this prototype does not submit a real loan application or disburse funds.</span></label>
+        <label class="trust-strip gap16" style="cursor:pointer"><input id="f-consent" type="checkbox" style="margin-top:3px;flex-shrink:0;width:16px;height:16px"><span>I consent to processing the profile details entered here for this eligibility assessment.</span></label>
 
       <div class="trust-strip gap16">
           <div class="icon"></div>
-          <div>This research prototype creates a signed decision record, local Merkle evidence, and an EZKL proof of private model evaluation. The proof binds the private input commitment and public model probability to this signed receipt.</div>
+          <div>Each assessment produces a signed decision record, tamper-evident audit evidence, and a zero-knowledge proof binding the private input commitment to the public model probability.</div>
         </div>
 
         <button class="btn btn-blue" id="apply-btn" onclick="doApply()">
@@ -445,19 +447,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
           <div class="summary-box">
             <div class="summary-row"><span class="k">Credit Amount</span><span class="v big" id="sum-amt">10,000 units</span></div>
             <div class="summary-row"><span class="k">Tenure</span><span class="v" id="sum-ten">12 months</span></div>
-            <div class="summary-row"><span class="k">Illustrative Interest Rate</span><span class="v">18% p.a.</span></div>
-            <div class="summary-row"><span class="k">Illustrative Monthly Payment</span><span class="v" id="sum-emi">2,291 units</span></div>
+            <div class="summary-row"><span class="k">Estimated Interest Rate</span><span class="v">18% p.a.</span></div>
+            <div class="summary-row"><span class="k">Estimated Monthly Payment</span><span class="v" id="sum-emi">2,291 units</span></div>
             <div class="summary-row"><span class="k">Total Interest</span><span class="v" id="sum-int">2,492 units</span></div>
-            <div class="summary-row"><span class="k">Illustrative Total</span><span class="v" id="sum-total">27,492 units</span></div>
-            <div class="summary-row"><span class="k">Illustrative Processing Fee</span><span class="v">Illustrative only</span></div>
+            <div class="summary-row"><span class="k">Estimated Total</span><span class="v" id="sum-total">27,492 units</span></div>
+            <div class="summary-row"><span class="k">Processing Fee</span><span class="v">As per lender policy</span></div>
           </div>
         </div>
         <div class="card card-body" style="background:var(--gray-50)">
           <div style="font-size:13px;color:var(--gray-500);line-height:1.6">
-            <div style="font-weight:600;color:var(--gray-700);margin-bottom:8px">Why Sakshi Demo?</div>
+            <div style="font-weight:600;color:var(--gray-700);margin-bottom:8px">Why Sakshi?</div>
             <div class="gap8">Completely digital — no paperwork</div>
             <div class="gap8">Model result only</div>
-            <div class="gap8">Historical credit-risk benchmark</div>
+            <div class="gap8">Credit-risk assessment model</div>
             <div>Cryptographic audit trail on every decision</div>
           </div>
         </div>
@@ -471,11 +473,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="verdict-card-approve gap20">
         <div class="verdict-icon"></div>
         <div class="verdict-amount" id="r-amt">10,000 units</div>
-        <div class="verdict-msg">The benchmark model classified this historical profile below its configured bad-risk threshold. This is a dataset demonstration, not a loan approval.</div>
-        <div class="verdict-eta">Eligibility result only · No funds are disbursed by this prototype</div>
+        <div class="verdict-msg">Your submitted profile falls below the configured risk threshold.</div>
+        <div class="verdict-eta">Assessment completed · Decision evidence is available below</div>
       </div>
       <div class="emi-row gap20">
-        <div class="emi-box"><div class="n" id="r-emi">2,291 units</div><div class="l">Illustrative Monthly Payment</div></div>
+        <div class="emi-box"><div class="n" id="r-emi">2,291 units</div><div class="l">Estimated Monthly Payment</div></div>
         <div class="emi-box"><div class="n" id="r-ten">12 mo</div><div class="l">Tenure</div></div>
         <div class="emi-box"><div class="n">18%</div><div class="l">Interest p.a.</div></div>
       </div>
@@ -484,9 +486,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     <div id="r-reject" style="display:none">
       <div class="verdict-card-reject gap20">
         <div class="verdict-icon"></div>
-        <div style="font-size:22px;font-weight:700;margin-bottom:8px">The benchmark model flagged this profile as higher risk</div>
+        <div style="font-size:22px;font-weight:700;margin-bottom:8px">This profile is above the configured risk threshold</div>
         <div class="verdict-msg" id="r-rej-reason">Your current profile does not meet our lending criteria.</div>
-        <div class="verdict-eta">This is a historical benchmark result, not a real credit decision or loan offer.</div>
+        <div class="verdict-eta">Review the decision factors and verification evidence below.</div>
       </div>
     </div>
 
@@ -532,23 +534,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="cert-panel">
         <div class="cert-eyebrow">Certificate of Decision</div>
         <div class="cert-id" id="c-id">—</div>
-        <div class="cert-sub">Keep this ID for support and technical verification. This prototype is not connected to a lender or regulator.</div>
+        <div class="cert-sub">Keep this reference ID to retrieve and independently verify the decision evidence.</div>
         <div class="cert-rows">
           <div class="cert-row"><span class="k">Issuing Model</span><span class="v" id="c-model">—</span></div>
           <div class="cert-row"><span class="k">Decision Time</span><span class="v" id="c-time">—</span></div>
-          <div class="cert-row"><span class="k">Input Commitment (Poseidon for model proofs)</span><span class="v" id="c-commit">—</span></div>
-          <div class="cert-row"><span class="k">Record Hash (SHA-256)</span><span class="v" id="c-hash">—</span></div>
-          <div class="cert-row"><span class="k">Cryptographic Signature</span><span class="v" id="c-sig">—</span></div>
-          <div class="cert-row"><span class="k">EZKL Proof SHA-256</span><span class="v" id="c-zk-hash">—</span></div>
-          <div class="cert-row"><span class="k">Proof Artifact</span><span class="v"><a id="c-zk-download" href="#" target="_blank" rel="noopener">Download proof JSON</a></span></div>
+          <div class="cert-row"><span class="k">Input Commitment</span><span class="v hash-value"><code id="c-commit">—</code><button class="btn btn-outline btn-sm" onclick="copyEvidenceHash('c-commit',this)">Copy</button></span></div>
+          <div class="cert-row"><span class="k">Record Hash (SHA-256)</span><span class="v hash-value"><code id="c-hash">—</code><button class="btn btn-outline btn-sm" onclick="copyEvidenceHash('c-hash',this)">Copy</button></span></div>
+          <div class="cert-row"><span class="k">Cryptographic Signature</span><span class="v hash-value"><code id="c-sig">—</code><button class="btn btn-outline btn-sm" onclick="copyEvidenceHash('c-sig',this)">Copy</button></span></div>
+          <div class="cert-row"><span class="k">Proof Hash (SHA-256)</span><span class="v hash-value"><code id="c-zk-hash">—</code><button class="btn btn-outline btn-sm" onclick="copyEvidenceHash('c-zk-hash',this)">Copy</button></span></div>
+          <div class="cert-row"><span class="k">Proof Artifact</span><span class="v"><a id="c-zk-download" href="#">Download proof JSON</a></span></div>
           <div class="cert-row"><span class="k">ZK Output Binding</span><span class="v" id="c-zk-status">—</span></div>
         </div>
         <div class="verified-chip"> Cryptographically Signed &amp; Tamper-Evident</div>
       </div>
       <p style="font-size:12.5px;color:var(--gray-500);line-height:1.7">
-        This prototype records a signed decision and a local Merkle witness entry when a batch is published.
-        An EZKL proof is generated for the model evaluation. The proof binds the private input commitment and public model probability to this signed receipt. Treat this
-        as a technical demonstration, not an RBI-issued certificate or a guarantee of regulatory acceptance.
+        The receipt contains a signed decision record, cryptographic commitments, and a proof artifact. Use the Independent Verifier to validate the signature, record integrity, Merkle inclusion, and proof binding.
       </p>
     </div>
 
@@ -562,14 +562,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <div id="view-lender" class="view">
 <div class="page">
   <div class="page-title">Lender Evidence Portal</div>
-  <div class="page-sub">Decision audit log, model registry, and integrity checks. Demo data only — not a production lending system.</div>
+  <div class="page-sub">Review LSP model registrations, validate model integrity, and independently inspect decision evidence.</div>
 
   <div class="integrity-bar">
     <h3>Model Integrity — sakshi_credit_v1 v2.0.0</h3>
     <div class="integrity-metrics">
       <div class="int-m"><div class="n"> Active</div><div class="l">Model Status</div></div>
       <div class="int-m"><div class="n" id="l-total">—</div><div class="l">Total Decisions</div></div>
-      <div class="int-m"><div class="n">0</div><div class="l">Hash Mismatches</div></div>
+      <div class="int-m"><div class="n" id="l-hash-mismatches">—</div><div class="l">Hash Mismatches</div></div>
       <div class="int-m"><div class="n" id="l-batches">—</div><div class="l">Merkle Batches Published</div></div>
     </div>
   </div>
@@ -591,12 +591,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="tag tag-b">Last 50</div>
     </div>
     <div class="dash-stat">
-      <div class="n">—</div>
-      <div class="l">Model Performance</div>
-      <div class="tag tag-a">Metric not verified</div>
+      <div class="n" id="l-model-check">Pending</div>
+      <div class="l">Registered Model Integrity</div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="verifyLspModel()">Verify LSP Model</button>
     </div>
   </div>
 
+  <div id="l-model-verification" class="card card-body gap20" style="display:none">
+    <div class="sec-title">LSP Model Verification Results</div><div id="l-model-checks" class="verify-checks"></div>
+    <div class="info-row"><span class="k">Registered SHA-256</span><span class="v" id="l-model-registered-hash" style="font-family:monospace;overflow-wrap:anywhere">—</span></div>
+    <div class="info-row"><span class="k">Computed SHA-256</span><span class="v" id="l-model-actual-hash" style="font-family:monospace;overflow-wrap:anywhere">—</span></div>
+  </div>
   <div class="row-main gap24">
     <!-- Verify panel -->
     <div style="display:flex;flex-direction:column;gap:20px">
@@ -608,7 +613,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         </div>
         <button class="btn btn-blue" id="v-btn" onclick="doVerify()">
           <div class="spin" id="v-spin"></div>
-          <span id="v-lbl">Run Independent Verification</span>
+          <span id="v-lbl">Verify Decision Evidence</span>
         </button>
 
         <div id="v-result" style="display:none">
@@ -655,7 +660,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <div id="view-lsp" class="view">
 <div class="page">
   <div class="page-title">LSP Integration Console</div>
-  <div class="page-sub">Model registry, evidence generation, and API testing. EZKL proof generation is enabled; external witnessing is not configured.</div>
+  <div class="page-sub">Manage the registered model, review evaluation results, and generate cryptographic decision evidence.</div>
 
   <div class="row-main gap24">
     <div style="display:flex;flex-direction:column;gap:16px">
@@ -668,11 +673,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         <div class="info-row"><span class="k">Format</span><span class="v">ONNX primitive arithmetic graph</span></div>
         <div class="info-row"><span class="k">Algorithm</span><span class="v">Logistic Regression + StandardScaler</span></div>
         <div class="info-row"><span class="k">Features</span><span class="v">11 credit factors</span></div>
+        <div class="field" style="margin:12px 0 16px"><label for="lsp-feature-select">Feature definitions</label><select id="lsp-feature-select" onchange="showFeatureDefinition(this.value)"><option value="">Select a feature to inspect…</option></select><div id="lsp-feature-detail" class="sub" style="font-size:12px;line-height:1.6;margin-top:4px">Select a feature to view its meaning and input type.</div></div>
         <div class="info-row"><span class="k">Threshold</span><span class="v">P(default) &lt; 0.50 → APPROVE</span></div>
         <div class="info-row"><span class="k">Held-out metrics</span><span class="v" id="lsp-metrics">Loading evaluation metrics…</span></div>
       </div>
       <div class="card card-body">
-        <div class="sec-title">API Endpoints</div>
+        <div class="sec-title">Integration API</div>
         <div class="code-block"><span class="mth">POST</span> <span class="url">/api/decide</span></div>
         <div class="code-block"><span class="mth">GET </span> <span class="url">/api/verify/:id</span></div>
         <div class="code-block"><span class="mth">GET </span> <span class="url">/api/stats</span></div>
@@ -682,14 +688,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
     <div style="display:flex;flex-direction:column;gap:20px">
       <div class="card card-body">
-        <div class="sec-title">Test a Decision Request</div>
+        <div class="sec-title">Submit a Decision Request</div>
         <div class="grid2 gap12">
           <div class="field">
             <label>Application ID</label>
             <input type="number" min="1" step="1" id="lsp-appid" value="123456789" style="font-family:monospace">
           </div>
           <div class="field">
-            <label>Credit Amount (historical units)</label>
+            <label>Credit Amount</label>
             <div class="pfx"><input type="number" id="lsp-amt" value="5000"></div>
           </div>
         </div>
@@ -725,7 +731,48 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 </div>
 </div>
 
+
+<!-- ════════════════════════ INDEPENDENT VERIFIER ════════════════════════ -->
+<div id="view-verifier" class="view"><div class="page">
+  <div class="page-title">Independent Verification</div>
+  <div class="page-sub">Validate a decision receipt without relying on the borrower or LSP interface.</div>
+  <div class="row-main gap24">
+    <div class="card card-body">
+      <div class="sec-title">Verify Evidence Receipt</div>
+      <div class="field gap16"><label>Application / Certificate ID</label><input type="number" min="1" step="1" id="iv-id" placeholder="Enter reference ID"></div>
+      <button class="btn btn-blue" id="iv-btn" onclick="doVerify('iv')"><span id="iv-spin" class="spin"></span><span id="iv-lbl">Verify Receipt</span></button>
+      <div id="iv-result" style="display:none;margin-top:16px"><div id="iv-verdict" style="margin-top:16px"></div><div class="verify-checks" id="iv-checks"></div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--gray-100)">
+          <div class="info-row"><span class="k">Decision</span><span class="v" id="ivd-dec">—</span></div><div class="info-row"><span class="k">Model Score</span><span class="v" id="ivd-sc">—</span></div><div class="info-row"><span class="k">Model</span><span class="v" id="ivd-mod">—</span></div><div class="info-row"><span class="k">Timestamp</span><span class="v" id="ivd-ts">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-body"><div class="sec-title">Verification coverage</div>
+      <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-title">Digital signature</div><div class="tl-sub">Checks that the receipt signature matches the registered public key.</div></div></div>
+      <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-title">Record integrity</div><div class="tl-sub">Recomputes the decision record hash and checks for tampering.</div></div></div>
+      <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-title">Merkle inclusion</div><div class="tl-sub">Checks the published witness and inclusion evidence.</div></div></div>
+      <div class="tl-item"><div class="tl-dot tl-dot-g"></div><div><div class="tl-title">Zero-knowledge proof</div><div class="tl-sub">Checks the proof artifact, public probability, and signed decision binding.</div></div></div>
+    </div>
+  </div>
+</div></div>
+
 <script>
+// ── Evidence helpers ───────────────────────────────────
+async function copyEvidenceHash(id, button){
+  const node=document.getElementById(id);
+  const value=node?.dataset.fullHash||node?.textContent?.trim()||'';
+  if(!value||value==='—'||value.startsWith('No proof')) return;
+  try {
+    await navigator.clipboard.writeText(value);
+    const old=button.textContent; button.textContent='Copied';
+    setTimeout(()=>button.textContent=old,1400);
+  } catch(e) {
+    const area=document.createElement('textarea'); area.value=value; area.style.position='fixed'; area.style.opacity='0'; document.body.appendChild(area); area.select();
+    const ok=document.execCommand('copy'); area.remove();
+    const old=button.textContent; button.textContent=ok?'Copied':'Copy failed'; setTimeout(()=>button.textContent=old,1400);
+  }
+}
+
 // ── State ─────────────────────────────────────────────
 let AMT=10000, TEN=12;
 
@@ -736,6 +783,7 @@ function switchView(v, el) {
   el.classList.add('active');
   if(v==='lender') loadLenderData();
   if(v==='lsp')    loadLspData();
+  if(v==='verifier') document.getElementById('iv-id').focus();
 }
 
 // ── Loan calc ─────────────────────────────────────────
@@ -844,10 +892,14 @@ function showResult(d){
   document.getElementById('c-id').textContent=d.application_id||'—';
   document.getElementById('c-model').textContent=(d.model_name||'')+(d.model_version?' v'+d.model_version:'');
   document.getElementById('c-time').textContent=d.timestamp?new Date(d.timestamp).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'medium'}):'—';
-  document.getElementById('c-commit').textContent=(d.input_commitment||'').slice(0,32)+'…';
-  document.getElementById('c-hash').textContent=(d.record_hash||'').slice(0,32)+'…';
-  document.getElementById('c-sig').textContent=(d.signature||'').slice(0,32)+'…';
-  document.getElementById('c-zk-hash').textContent=d.zk_proof?.proof_hash?(d.zk_proof.proof_hash.slice(0,32)+'…'):'No proof for policy-only decision';
+  document.getElementById('c-commit').dataset.fullHash=d.input_commitment||''; document.getElementById('c-commit').textContent=d.input_commitment?(d.input_commitment.slice(0,16)+'…'+d.input_commitment.slice(-8)):'—';
+  document.getElementById('c-hash').dataset.fullHash=d.record_hash||''; document.getElementById('c-hash').textContent=d.record_hash?(d.record_hash.slice(0,16)+'…'+d.record_hash.slice(-8)):'—';
+  document.getElementById('c-sig').dataset.fullHash=d.signature||''; document.getElementById('c-sig').textContent=d.signature?(d.signature.slice(0,16)+'…'+d.signature.slice(-8)):'—';
+  document.getElementById('c-zk-hash').dataset.fullHash=d.zk_proof?.proof_hash||''; document.getElementById('c-zk-hash').textContent=d.zk_proof?.proof_hash?(d.zk_proof.proof_hash.slice(0,16)+'…'+d.zk_proof.proof_hash.slice(-8)):'No proof for policy-only decision';
+  const proofLink=document.getElementById('c-zk-download');
+  proofLink.href=d.zk_proof?.proof_hash?('/api/zkproof/file/'+encodeURIComponent(d.application_id)):'#';
+  proofLink.setAttribute('aria-disabled',d.zk_proof?.proof_hash?'false':'true');
+  proofLink.onclick= d.zk_proof?.proof_hash ? null : (e)=>e.preventDefault();
   document.getElementById('c-zk-status').textContent=d.zk_proof?.decision_output_binding?'Bound':'Bound to public probability and decision';
 }
 
@@ -857,12 +909,27 @@ function resetApply(){
   document.getElementById('step-bar').style.display='flex';
 }
 
+async function verifyLspModel(){
+  const status=document.getElementById('l-model-check'); status.textContent='Checking…';
+  try {
+    const r=await fetch('/api/model/verify'); const d=await r.json();
+    status.textContent=d.verified?'Verified':'Review required';
+    document.getElementById('l-hash-mismatches').textContent=d.checks?.model_hash_matches_registry?'0':(d.checks?.model_hash_matches_registry===false?'1':'—');
+    document.getElementById('l-model-verification').style.display='block';
+    document.getElementById('l-model-registered-hash').textContent=d.registered_hash||'Unavailable';
+    document.getElementById('l-model-actual-hash').textContent=d.actual_hash||'Model file missing';
+    const names={model_file_present:'Registered model file',model_hash_matches_registry:'SHA-256 registry match',evaluation_report_present:'Evaluation report',registered_features_present:'Feature contract',decision_threshold_configured:'Decision threshold'};
+    document.getElementById('l-model-checks').innerHTML=Object.entries(d.checks||{}).map(([k,v])=>`<div class="vcheck"><div class="vcheck-icon ${v?'pass':'fail'}">${v?'PASS':'FAIL'}</div><div><div class="vcheck-name">${names[k]||k}</div><div class="vcheck-detail">${v?'PASS':'FAIL'}</div></div></div>`).join('');
+  } catch(e){status.textContent='Unavailable';alert('Model verification failed: '+e.message);}
+}
+
 // ── Lender ────────────────────────────────────────────
 async function loadLenderData(){
   const [sr, br] = await Promise.all([fetch('/api/stats'), fetch('/api/batches')]);
   const sd=await sr.json(), bd=await br.json();
   const recs=sd.records||[];
   document.getElementById('l-total').textContent=sd.total;
+  document.getElementById('l-hash-mismatches').textContent='—';
   document.getElementById('l-batches').textContent=bd.count||0;
   document.getElementById('l-approve').textContent=recs.filter(r=>r.decision==='APPROVE').length;
   document.getElementById('l-reject').textContent=recs.filter(r=>r.decision==='REJECT').length;
@@ -880,28 +947,30 @@ async function loadLenderData(){
     </tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:28px">No decisions recorded yet</td></tr>';
 }
 
-async function doVerify(){
-  const id=document.getElementById('v-id').value.trim();
+async function doVerify(prefix='v'){
+  const id=document.getElementById(prefix+'-id').value.trim();
+  const el=(suffix)=>document.getElementById(prefix+'-'+suffix);
+  const detail=(suffix)=>document.getElementById(prefix==='v'?'vd-'+suffix:'ivd-'+suffix);
   if(!id)return;
-  document.getElementById('v-btn').disabled=true;
-  document.getElementById('v-spin').style.display='block';
-  document.getElementById('v-lbl').textContent='Running checks…';
-  document.getElementById('v-result').style.display='none';
+  el('btn').disabled=true;
+  el('spin').style.display='block';
+  el('lbl').textContent='Running checks…';
+  el('result').style.display='none';
 
   let d;
   try { const response=await fetch('/api/verify/'+encodeURIComponent(id)); d=await response.json(); if(!response.ok) throw new Error(d.error||'Verification failed'); }
   catch(e) { alert('Verification request failed: '+e.message); return; }
-  finally { document.getElementById('v-btn').disabled=false; document.getElementById('v-spin').style.display='none'; document.getElementById('v-lbl').textContent='Run Independent Verification'; }
+  finally { el('btn').disabled=false; el('spin').style.display='none'; el('lbl').textContent=prefix==='v'?'Verify Decision':'Verify Receipt'; }
   
-  document.getElementById('v-result').style.display='block';
+  el('result').style.display='block';
 
   const pass=(d.verdict||'').startsWith('VERIFIED');
-  const vd=document.getElementById('v-verdict');
+  const vd=el('verdict');
   vd.className=pass?'verdict-pass':'verdict-fail';
   vd.textContent=d.verdict||'Unknown';
 
   const icons={signature:{icon:'',name:'Cryptographic Signature'},record_integrity:{icon:'',name:'Record Integrity'},merkle_inclusion:{icon:'',name:'Merkle Chain Inclusion'},zk_inference_proof:{icon:'',name:'EZKL Inference Proof'},zk_output_binding:{icon:'',name:'ZK Output Binding'}};
-  document.getElementById('v-checks').innerHTML=Object.entries(d.checks||{}).map(([k,v])=>{
+  el('checks').innerHTML=Object.entries(d.checks||{}).map(([k,v])=>{
     const p=v.startsWith('PASS'),w=v.startsWith('WARN');
     const info=icons[k]||{icon:'',name:k};
     const cls=p?'pass':w?'warn':'fail';
@@ -913,15 +982,21 @@ async function doVerify(){
   }).join('');
 
   const rec=d.record||{};
-  document.getElementById('vd-dec').innerHTML=rec.decision?`<span class="pill pill-${rec.decision==='APPROVE'?'a':'r'}">${rec.decision}</span>`:(d.message||'—');
-  document.getElementById('vd-sc').textContent=rec.credit_score!=null?rec.credit_score+'/100':'—';
-  document.getElementById('vd-mod').textContent=rec.model_name?(rec.model_name+' v'+rec.model_version):'—';
-  document.getElementById('vd-ts').textContent=rec.timestamp?new Date(rec.timestamp).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'medium'}):'—';
+  detail('dec').innerHTML=rec.decision?`<span class="pill pill-${rec.decision==='APPROVE'?'a':'r'}">${rec.decision}</span>`:(d.message||'—');
+  detail('sc').textContent=rec.credit_score!=null?rec.credit_score+'/100':'—';
+  detail('mod').textContent=rec.model_name?(rec.model_name+' v'+rec.model_version):'—';
+  detail('ts').textContent=rec.timestamp?new Date(rec.timestamp).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'medium'}):'—';
 }
+
+const FEATURE_DEFINITIONS={
+ duration_months:['Credit duration','Numeric · Months'],credit_amount:['Credit amount','Numeric · Credit units'],installment_rate:['Installment rate','Ordinal category · Share of disposable income'],present_residence:['Present residence','Ordinal category · Years at current residence'],age:['Age','Numeric · Years'],existing_credits:['Existing credits','Ordinal category · Credits at this bank'],num_dependents:['Dependents','Ordinal category · People supported'],checking_account:['Checking account','Ordinal category · Account balance/status code'],credit_history:['Credit history','Ordinal category · Repayment-history code'],employment_years:['Employment duration','Ordinal category · Employment tenure code'],savings_account:['Savings account','Ordinal category · Savings balance/status code']
+};
+function showFeatureDefinition(key){const el=document.getElementById('lsp-feature-detail');if(!el)return;const d=FEATURE_DEFINITIONS[key];el.textContent=d?`${d[0]} — ${d[1]}. The registered model consumes this feature as part of its 11-field input contract.`:'Select a feature to view its meaning and input type.';}
 
 // ── LSP ───────────────────────────────────────────────
 async function loadLspData(){
   const r=await(await fetch('/api/registry')).json();
+  const fs=document.getElementById('lsp-feature-select'); if(fs && fs.options.length<=1){Object.keys(FEATURE_DEFINITIONS).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=FEATURE_DEFINITIONS[k][0];fs.appendChild(o);});}
   document.getElementById('lsp-hash').textContent=(r.model_hash||'').slice(0,32)+'…';
   try { const m=await (await fetch('/api/metrics')).json(); const t=m.test||{}; const metric=document.getElementById('lsp-metrics'); if(metric) metric.textContent=`Held-out accuracy ${(100*t.accuracy).toFixed(1)}% · ROC-AUC ${t.roc_auc.toFixed(3)} · 5-fold CV ROC-AUC ${(100*m.cross_validation_5_fold.test_roc_auc.mean).toFixed(1)}%`; } catch(e) {}
   const s=await(await fetch('/api/stats')).json();
