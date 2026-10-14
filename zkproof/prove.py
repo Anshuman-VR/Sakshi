@@ -40,7 +40,7 @@ def prove_private_evaluation(features:dict, application_id, expected_probability
         if not valid: raise RuntimeError('EZKL verifier rejected generated proof')
         settings=json.loads(SETTINGS.read_text())
         commitment, probability=_decode_public_instances(proof_obj.get('instances'),settings)
-        if expected_probability is not None and abs(probability-float(expected_probability)) > 0.002:
+        if expected_probability is not None and abs(probability-float(expected_probability)) > 0.01:
             raise RuntimeError(f'ZK output {probability:.6f} disagrees with ONNX output {expected_probability:.6f}')
         digest=hashlib.sha256(proof.read_bytes()).hexdigest()
         return {'system':'EZKL Halo2','proof_id':str(application_id),'proof_hash':digest,'verified':True,

@@ -33,7 +33,7 @@ Open `http://127.0.0.1:9000` (or set `PORT`). `python3 zkproof/setup.py` is mode
 
 Sakshi uses EZKL/Halo2 with **hashed (Poseidon) input visibility** and a **public model probability output**. The raw feature vector is private to the prover. The proof exposes the Poseidon commitment to the quantized feature vector plus four random private nonce dimensions, and the model's quantized probability; the nonce is never stored in the receipt, making offline guessing of low-entropy feature vectors harder; the gateway stores both in the signed receipt and bases the decision on that proof output. The verifier checks the proof, proof-file hash, model hash, input commitment, public probability, and decision threshold consistency against the signed record.
 
-EZKL uses fixed-point quantization. The gateway checks the proof output against ONNX Runtime within 0.002 tolerance. The signed receipt uses the proof's public probability as its canonical value. Model parameters are fixed into the model-specific circuit; rerun setup when changing the ONNX model.
+EZKL uses fixed-point quantization. The gateway checks the proof output against ONNX Runtime within 0.01 tolerance. The signed receipt uses the proof's public probability as its canonical value. Model parameters are fixed into the model-specific circuit; rerun setup when changing the ONNX model.
 
 ## Model evaluation
 
