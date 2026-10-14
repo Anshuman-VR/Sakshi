@@ -1,9 +1,10 @@
-import os, json, hashlib, datetime, pickle, threading
+import os, json, hashlib, datetime, pickle, threading, secrets
 from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes, serialization
 import numpy as np
-import onnxruntime as rt
+from gateway.adapters import OnnxProbabilityAdapter
+from gateway.explanations import ShapLinearAdapter
 
 GATEWAY_DIR   = Path(__file__).parent
 REGISTRY_PATH = GATEWAY_DIR / 'registry.json'
@@ -16,11 +17,9 @@ class SakshiGateway:
     def __init__(self):
         self.registry    = json.loads(REGISTRY_PATH.read_text())
         self.private_key, self.public_key = self._load_or_create_keys()
-        self.ort_session = self._load_model()
-        self.shap_data   = None
-        self._shap_ready = threading.Event()
-        self.pending_records = []
-        threading.Thread(target=self._load_shap_bg, daemon=True).start()
+        self.model_adapter = self._load_model()
+        self.explainer = ShapLinearAdapter(GATEWAY_DIR.parent / 'models' / 'shap_explainer.pkl')
+        self.pending_records = self._recover_pending_records()
         print(f"[Gateway] Ready. Model: {self.registry['model_name']} hash={self.registry['model_hash'][:16]}")
 
     def _load_or_create_keys(self):
@@ -37,29 +36,27 @@ class SakshiGateway:
             serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo))
         return private_key, private_key.public_key()
 
-    def _load_model(self):
-        # Resolve the model relative to this project so the repo works outside
-        # the original VirtualBox shared-folder mount too.
-        onnx_path = Path(self.registry.get('onnx_path', ''))
-        if not onnx_path.is_file():
-            onnx_path = GATEWAY_DIR.parent / 'models' / 'sakshi_credit_v1.onnx'
-        if not onnx_path.is_file():
-            raise FileNotFoundError(f'ONNX model not found: {onnx_path}')
-        actual = hashlib.sha256(onnx_path.read_bytes()).hexdigest()
-        if actual != self.registry['model_hash']:
-            raise RuntimeError("MODEL HASH MISMATCH — halting")
-        return rt.InferenceSession(onnx_path)
+    def _recover_pending_records(self):
+        """Recover signed records that were persisted before their Merkle batch was published."""
+        witnessed = set()
+        if WITNESS_LOG.exists():
+            for line in WITNESS_LOG.read_text().splitlines():
+                if not line.strip(): continue
+                try: witnessed.update(json.loads(line).get('leaves', []))
+                except (json.JSONDecodeError, TypeError): continue
+        pending = []
+        if RECORDS_PATH.exists():
+            for line in RECORDS_PATH.read_text().splitlines():
+                if not line.strip(): continue
+                try: record = json.loads(line)
+                except json.JSONDecodeError: continue
+                digest = record.get('record_hash')
+                if digest and digest not in witnessed and digest not in pending:
+                    pending.append(digest)
+        return pending
 
-    def _load_shap_bg(self):
-        import warnings; warnings.filterwarnings('ignore')
-        p = GATEWAY_DIR.parent / 'models' / 'shap_explainer.pkl'
-        if p.exists():
-            import shap as shap_lib
-            data = pickle.loads(p.read_bytes())
-            data['shap_lib'] = shap_lib
-            self.shap_data = data
-        self._shap_ready.set()
-        print("[Gateway] SHAP explainer ready.")
+    def _load_model(self):
+        return OnnxProbabilityAdapter(self.registry, GATEWAY_DIR.parent)
 
     def decide(self, application_id, features):
         feat_names  = self.registry['features']
@@ -72,29 +69,21 @@ class SakshiGateway:
             return self._policy_reject(application_id, "Requested amount exceeds policy limit")
 
         vec = [float(features.get(f, 0.0)) for f in feat_names]
-        input_commitment = hashlib.sha256(json.dumps(vec, sort_keys=True).encode()).hexdigest()
-        X = np.array([vec], dtype=np.float32)
-        prob_default = float(self.ort_session.run(None, {self.ort_session.get_inputs()[0].name: X})[1][0][1])
-        decision = 'APPROVE' if prob_default < policy.get('approve_threshold', 0.45) else 'REJECT'
-        score    = round((1 - prob_default) * 100)
+        # Four random private nonce dimensions make the public Poseidon commitment
+        # resistant to offline guessing of low-entropy borrower feature vectors.
+        nonce = [secrets.randbelow(8192) for _ in range(int(self.registry.get('zk_nonce_dimensions', 4)))]
+        X_features = np.array([vec], dtype=np.float32)
+        X_model = np.array([vec + nonce], dtype=np.float32)
+        raw_probability = self.model_adapter.predict_default_probability(X_model)
+        shap_values = self.explainer.explain(X_features, features, feat_names, feat_labels)
 
-        shap_values = []
-        if self.shap_data:
-            try:
-                import warnings; warnings.filterwarnings('ignore')
-                X_scaled = self.shap_data['scaler'].transform(X)
-                sv = self.shap_data['explainer'].shap_values(X_scaled)
-                vals = sv[0] if isinstance(sv, list) else sv[0]
-                for i, fname in enumerate(feat_names):
-                    shap_values.append({
-                        'feature': fname,
-                        'label':   feat_labels.get(fname, fname),
-                        'value':   round(float(features.get(fname, 0)), 2),
-                        'shap':    round(float(vals[i]), 4),
-                        'impact':  'positive' if vals[i] <= 0 else 'negative'
-                    })
-                shap_values.sort(key=lambda x: abs(x['shap']), reverse=True)
-            except: pass
+        from zkproof.prove import prove_private_evaluation
+        zk_proof = prove_private_evaluation(features, application_id, expected_probability=raw_probability, nonce=nonce)
+        # Use the public, quantized output emitted by the verified proof as the canonical result.
+        prob_default = float(zk_proof['prob_default'])
+        input_commitment = zk_proof['input_commitment']
+        decision = 'APPROVE' if prob_default < policy.get('approve_threshold', 0.5) else 'REJECT'
+        score = round((1 - prob_default) * 100)
 
         record = {
             "application_id":   application_id,
@@ -107,6 +96,7 @@ class SakshiGateway:
             "credit_score":     score,
             "prob_default":     round(prob_default, 4),
             "shap_values":      shap_values,
+            "zk_proof":         zk_proof,
         }
         # Sign and hash the complete decision payload, including its explanation.
         # The verifier reconstructs this exact payload by removing signature/hash.

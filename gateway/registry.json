@@ -1,8 +1,26 @@
 {
-  "version": "1.0.0",
-  "model_name": "sakshi_credit_v1",
+  "version": "2.0.0",
+  "model_name": "uci_german_credit_logistic_baseline",
+  "model_family": "sklearn_pipeline_logistic_regression",
+  "dataset": {
+    "name": "UCI Statlog German Credit Data",
+    "source": "https://archive.ics.uci.edu/dataset/144/statloggermancreditdata",
+    "license": "CC BY 4.0",
+    "rows": 1000,
+    "target": "default=1 means UCI class 2 (bad credit risk)"
+  },
   "onnx_path": "../models/sakshi_credit_v1.onnx",
-  "model_hash": "77bfa616926886bac5f67755dbaf120b3cea8dbbf224103340d9859afb74931e",
+  "model_hash": "3307b40b94c6e632bad967f89d71c68ef6b78cee1edfb0778c9b313650e0be4b",
+  "output_contract": {
+    "kind": "scalar_probability",
+    "output_index": 0,
+    "description": "single sigmoid probability of bad credit risk"
+  },
+  "zk_nonce_dimensions": 4,
+  "zk_nonce_range": [
+    0,
+    8191
+  ],
   "features": [
     "duration_months",
     "credit_amount",
@@ -17,23 +35,36 @@
     "savings_account"
   ],
   "feature_labels": {
-    "duration_months": "Loan Duration",
-    "credit_amount": "Loan Amount",
-    "installment_rate": "EMI-to-Income Ratio",
-    "present_residence": "Residence Stability",
-    "age": "Age",
-    "existing_credits": "Existing Loans",
-    "num_dependents": "Dependents",
-    "checking_account": "Checking Account Balance",
-    "credit_history": "Repayment History",
-    "employment_years": "Employment Duration",
-    "savings_account": "Savings Balance"
+    "duration_months": "Credit duration (months)",
+    "credit_amount": "Credit amount (historical dataset units)",
+    "installment_rate": "Installment rate (% of disposable income)",
+    "present_residence": "Years at current residence",
+    "age": "Age (years)",
+    "existing_credits": "Existing credits at this bank",
+    "num_dependents": "People supported",
+    "checking_account": "Checking account category",
+    "credit_history": "Credit history category",
+    "employment_years": "Employment duration category",
+    "savings_account": "Savings account category"
   },
   "policy": {
-    "approve_threshold": 0.45,
-    "max_credit_amount": 50000,
-    "min_age": 21
+    "approve_threshold": 0.5,
+    "max_credit_amount": 20000,
+    "min_age": 18
   },
   "registered_by": "lender_admin",
-  "registered_at": "2026-10-14T00:00:00Z"
+  "registered_at": "2026-10-14T00:00:00Z",
+  "explanation": {
+    "method": "SHAP LinearExplainer",
+    "output_scale": "log_odds",
+    "optional": true
+  },
+  "zk_proof": {
+    "system": "EZKL Halo2",
+    "enabled": true,
+    "input_visibility": "Hashed (Poseidon commitment with private nonce)",
+    "output_visibility": "Public",
+    "statement": "Proof binds a private feature vector and private random nonce to the public model probability",
+    "decision_output_binding": true
+  }
 }

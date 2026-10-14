@@ -1,0 +1,9 @@
+flask
+cryptography
+numpy
+pandas
+scikit-learn
+onnx
+onnxruntime
+shap
+ezkl==23.0.5

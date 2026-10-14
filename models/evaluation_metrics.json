@@ -1,0 +1,90 @@
+{
+  "dataset": "UCI Statlog German Credit Data (1994)",
+  "n_rows": 1000,
+  "n_features": 11,
+  "target_definition": "default=1 for UCI class 2 (bad risk), default=0 for UCI class 1 (good risk)",
+  "split": {
+    "method": "stratified train/test",
+    "random_state": 42,
+    "test_size": 0.2,
+    "train_rows": 800,
+    "test_rows": 200
+  },
+  "threshold": 0.5,
+  "train": {
+    "accuracy": 0.70875,
+    "balanced_accuracy": 0.7098214285714286,
+    "precision_default": 0.5104477611940299,
+    "recall_default": 0.7125,
+    "f1_default": 0.5947826086956521,
+    "roc_auc": 0.7837053571428572,
+    "average_precision": 0.6094443677296366,
+    "brier_score": 0.1902308613061905,
+    "confusion_matrix": [
+      [
+        396,
+        164
+      ],
+      [
+        69,
+        171
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.71,
+    "balanced_accuracy": 0.7261904761904763,
+    "precision_default": 0.5111111111111111,
+    "recall_default": 0.7666666666666667,
+    "f1_default": 0.6133333333333333,
+    "roc_auc": 0.8032142857142858,
+    "average_precision": 0.6628008089486016,
+    "brier_score": 0.19187484681606293,
+    "confusion_matrix": [
+      [
+        96,
+        44
+      ],
+      [
+        14,
+        46
+      ]
+    ]
+  },
+  "cross_validation_5_fold": {
+    "test_accuracy": {
+      "mean": 0.6980000000000001,
+      "std": 0.03882653731663433
+    },
+    "test_balanced_accuracy": {
+      "mean": 0.7042857142857143,
+      "std": 0.04879936014970287
+    },
+    "test_precision": {
+      "mean": 0.4975058856114112,
+      "std": 0.0464512414176187
+    },
+    "test_recall": {
+      "mean": 0.7200000000000001,
+      "std": 0.08113774296425391
+    },
+    "test_f1": {
+      "mean": 0.5879955633339092,
+      "std": 0.05730165413775556
+    },
+    "test_roc_auc": {
+      "mean": 0.7766904761904762,
+      "std": 0.030815103086494707
+    },
+    "test_average_precision": {
+      "mean": 0.6098904791502077,
+      "std": 0.03667260812688674
+    }
+  },
+  "limitations": [
+    "Historical German credit dataset, not representative of Indian applicants.",
+    "Only 11 of the source predictors are used.",
+    "Ordinal coding of categorical variables imposes ordering assumptions.",
+    "This is a reproducible prototype baseline, not a production credit model."
+  ]
+}

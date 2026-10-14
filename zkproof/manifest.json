@@ -1,0 +1,10 @@
+{
+  "system": "EZKL Halo2",
+  "model_hash": "3307b40b94c6e632bad967f89d71c68ef6b78cee1edfb0778c9b313650e0be4b",
+  "input_visibility": "Hashed (Poseidon commitment with private nonce)",
+  "output_visibility": "Public",
+  "param_visibility": "Fixed",
+  "setup_smoke_test_verified": true,
+  "statement": "There exists a private feature vector and private nonce matching the public Poseidon input commitment whose registered ONNX evaluation yields the public probability.",
+  "decision_output_binding": true
+}

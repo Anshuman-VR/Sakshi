@@ -20,3 +20,15 @@ gateway/merkle_witness.jsonl
 *.log
 .DS_Store
 .vscode/
+
+# EZKL private keys, witnesses, inputs and generated proofs
+zkproof/keys/*
+!zkproof/keys/.gitkeep
+zkproof/proofs/*
+!zkproof/proofs/.gitkeep
+zkproof/tmp/
+zkproof/kzg.srs
+zkproof/compiled.ezkl
+zkproof/sample_input.json
+zkproof/setup_witness.json
+zkproof/sample_witness.json
