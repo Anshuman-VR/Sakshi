@@ -1,0 +1,499 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2600" width="1800" height="2600"
+     font-family="'Segoe UI',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif">
+<defs>
+  <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#f8faff"/>
+    <stop offset="100%" stop-color="#eef2fb"/>
+  </linearGradient>
+  <linearGradient id="hdrMain" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#1e3a8a"/>
+    <stop offset="100%" stop-color="#2563eb"/>
+  </linearGradient>
+  <linearGradient id="laneB"  x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#bae6fd"/></linearGradient>
+  <linearGradient id="laneLSP" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#ddd6fe"/></linearGradient>
+  <linearGradient id="laneGW" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fff7ed"/><stop offset="100%" stop-color="#fed7aa"/></linearGradient>
+  <linearGradient id="laneLND" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d1fae5"/><stop offset="100%" stop-color="#a7f3d0"/></linearGradient>
+
+  <marker id="arr"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#64748b"/></marker>
+  <marker id="arrBlue"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#2563eb"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#16a34a"/></marker>
+  <marker id="arrOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#ea580c"/></marker>
+  <marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#7c3aed"/></marker>
+  <marker id="arrRed"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#dc2626"/></marker>
+  <marker id="arrAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#d97706"/></marker>
+
+  <filter id="sh" x="-4%" y="-4%" width="112%" height="112%">
+    <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.09)"/>
+  </filter>
+  <filter id="shLg" x="-6%" y="-6%" width="116%" height="116%">
+    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.11)"/>
+  </filter>
+</defs>
+
+<!-- BG -->
+<rect width="1800" height="2600" fill="url(#bgGrad)"/>
+
+<!-- ══════════════════════════════════
+     TITLE
+══════════════════════════════════ -->
+<rect x="40" y="28" width="1720" height="90" rx="16" fill="url(#hdrMain)" filter="url(#shLg)"/>
+<text x="900" y="74" text-anchor="middle" font-size="34" font-weight="800" fill="white" letter-spacing="-0.3">Sakshi — System Workflow</text>
+<text x="900" y="100" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.82)">What happens to a borrower's loan application, step by step · Three actor swim lanes</text>
+
+<!-- ══════════════════════════════════
+     SWIM LANE HEADERS (vertical bands)
+══════════════════════════════════ -->
+<!-- Lane widths: Borrower 0-420 | LSP 420-840 | Gateway 840-1340 | Lender 1340-1760 -->
+
+<!-- Lane BG fills (full height) -->
+<rect x="40"   y="150" width="390" height="2380" rx="0" fill="#f0f9ff" opacity="0.7"/>
+<rect x="430"  y="150" width="390" height="2380" rx="0" fill="#faf5ff" opacity="0.7"/>
+<rect x="820"  y="150" width="480" height="2380" rx="0" fill="#fff8f2" opacity="0.7"/>
+<rect x="1300" y="150" width="460" height="2380" rx="0" fill="#f0fdf4" opacity="0.7"/>
+
+<!-- Lane dividers -->
+<line x1="430"  y1="150" x2="430"  y2="2530" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<line x1="820"  y1="150" x2="820"  y2="2530" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<line x1="1300" y1="150" x2="1300" y2="2530" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<line x1="1760" y1="150" x2="1760" y2="2530" stroke="#cbd5e1" stroke-width="1.5"/>
+
+<!-- Lane header bars -->
+<rect x="40"   y="150" width="390" height="52" fill="#0284c7"/>
+<rect x="430"  y="150" width="390" height="52" fill="#6d28d9"/>
+<rect x="820"  y="150" width="480" height="52" fill="#ea580c"/>
+<rect x="1300" y="150" width="460" height="52" fill="#15803d"/>
+
+<text x="235"  y="182" text-anchor="middle" font-size="18" font-weight="700" fill="white">👤 BORROWER</text>
+<text x="625"  y="182" text-anchor="middle" font-size="18" font-weight="700" fill="white">🏢 LSP / LOAN APP</text>
+<text x="1060" y="182" text-anchor="middle" font-size="18" font-weight="700" fill="white">⚙️ SAKSHI GATEWAY</text>
+<text x="1530" y="182" text-anchor="middle" font-size="18" font-weight="700" fill="white">🏦 LENDER COMPLIANCE</text>
+
+<!-- ══════════════════════════════════
+     STEP 1 — Application Submitted
+══════════════════════════════════ -->
+<text x="900" y="244" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 1 — APPLICATION</text>
+<line x1="40" y1="252" x2="1760" y2="252" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Step 1 box: Borrower fills form -->
+<rect x="58" y="268" width="354" height="120" rx="12" fill="white" stroke="#0ea5e9" stroke-width="2" filter="url(#sh)"/>
+<rect x="58" y="268" width="354" height="36" rx="12" fill="#0284c7"/>
+<rect x="58" y="290" width="354" height="14" fill="#0284c7"/>
+<text x="235" y="291" text-anchor="middle" font-size="14" font-weight="700" fill="white">① Borrower Fills Loan Form</text>
+<text x="76" y="320" font-size="12" fill="#334155">• Selects amount (₹5K–₹10L) &amp; tenure</text>
+<text x="76" y="337" font-size="12" fill="#334155">• Enters DOB, employment, income</text>
+<text x="76" y="354" font-size="12" fill="#334155">• Selects savings, repayment history</text>
+<text x="76" y="371" font-size="12" fill="#334155">• Clicks "Check My Eligibility"</text>
+
+<!-- arrow right to LSP -->
+<path d="M412 328 L448 328" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrBlue)" fill="none"/>
+<rect x="413" y="318" width="34" height="14" rx="3" fill="#e0f2fe"/>
+<text x="430" y="329" text-anchor="middle" font-size="9.5" fill="#0369a1">POST</text>
+
+<!-- Step 1 box: LSP receives, validates -->
+<rect x="448" y="268" width="354" height="120" rx="12" fill="white" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+<rect x="448" y="268" width="354" height="36" rx="12" fill="#6d28d9"/>
+<rect x="448" y="290" width="354" height="14" fill="#6d28d9"/>
+<text x="625" y="291" text-anchor="middle" font-size="14" font-weight="700" fill="white">② LSP App Receives Request</text>
+<text x="466" y="320" font-size="12" fill="#334155">• Validates input fields (client-side)</text>
+<text x="466" y="337" font-size="12" fill="#334155">• Generates Application ID (APP-xxxxxx)</text>
+<text x="466" y="354" font-size="12" fill="#334155">• Builds feature vector [11 floats]</text>
+<text x="466" y="371" font-size="12" fill="#334155">• Calls POST /api/decide on Gateway</text>
+
+<!-- arrow right to Gateway -->
+<path d="M802 328 L838 328" stroke="#6d28d9" stroke-width="2.5" marker-end="url(#arrPurple)" fill="none"/>
+<rect x="803" y="318" width="34" height="14" rx="3" fill="#ede9fe"/>
+<text x="820" y="329" text-anchor="middle" font-size="9.5" fill="#6d28d9">JSON</text>
+
+<!-- Step 1 box: Gateway receives -->
+<rect x="838" y="268" width="444" height="120" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="268" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="290" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="291" text-anchor="middle" font-size="14" font-weight="700" fill="white">③ Gateway Receives &amp; Starts Pipeline</text>
+<text x="856" y="320" font-size="12" fill="#334155">• Parses application_id + features dict</text>
+<text x="856" y="337" font-size="12" fill="#334155">• Loads registry.json (lender's approved policy)</text>
+<text x="856" y="354" font-size="12" fill="#334155">• Reads: model_hash, threshold, feature schema</text>
+<text x="856" y="371" font-size="12" fill="#334155">• Begins 6-step evidence pipeline →</text>
+
+<!-- ══════════════════════════════════
+     STEP 2 — Policy Pre-Check
+══════════════════════════════════ -->
+<text x="900" y="416" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 2 — POLICY CHECK</text>
+<line x1="40" y1="424" x2="1760" y2="424" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<rect x="838" y="440" width="444" height="130" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="440" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="462" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="463" text-anchor="middle" font-size="14" font-weight="700" fill="white">④ Policy Pre-Check</text>
+<text x="856" y="492" font-size="12" fill="#334155">• Is age ≥ min_age (18)? → ELSE: POLICY_REJECT</text>
+<text x="856" y="509" font-size="12" fill="#334155">• Is credit_amount ≤ max (20,000)? → ELSE: POLICY_REJECT</text>
+<text x="856" y="526" font-size="12" fill="#334155">• Do feature names match schema? → ELSE: POLICY_REJECT</text>
+<text x="856" y="543" font-size="12" fill="#16a34a" font-weight="600">✅ All pass → continue to Step ⑤</text>
+<text x="856" y="560" font-size="12" fill="#dc2626" font-weight="600">❌ Any fail → logged + returned to LSP (no proof)</text>
+
+<!-- POLICY_REJECT path to borrower -->
+<path d="M838 520 L235 520 L235 412" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrRed)" fill="none"/>
+<rect x="130" y="458" width="110" height="28" rx="6" fill="#fee2e2" stroke="#fecaca"/>
+<text x="185" y="469" text-anchor="middle" font-size="10" fill="#b91c1c" font-weight="600">POLICY REJECT</text>
+<text x="185" y="482" text-anchor="middle" font-size="10" fill="#b91c1c">(age / amount / schema)</text>
+
+<!-- ══════════════════════════════════
+     STEP 3 — Model Hash Check
+══════════════════════════════════ -->
+<text x="900" y="600" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 3 — INTEGRITY VERIFICATION</text>
+<line x1="40" y1="608" x2="1760" y2="608" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<rect x="838" y="624" width="444" height="150" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="624" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="646" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="647" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑤ Model Hash Verification</text>
+<text x="856" y="676" font-size="12" fill="#334155">• Read ONNX file from disk → bytes</text>
+<text x="856" y="693" font-size="12" fill="#334155">• actual_hash = SHA-256(onnx_bytes)</text>
+<text x="856" y="710" font-size="12" fill="#334155">• Compare vs registry['model_hash']</text>
+<text x="856" y="727" font-size="12" fill="#16a34a" font-weight="600">✅ Match → approved model confirmed, proceed</text>
+<text x="856" y="744" font-size="12" fill="#dc2626" font-weight="600">❌ Mismatch → SecurityError raised, gateway HALTS</text>
+<text x="856" y="761" font-size="12" fill="#dc2626">   Alert sent to lender. No decision issued.</text>
+
+<!-- alert to lender -->
+<path d="M1282 700 L1318 700" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrRed)" fill="none"/>
+<rect x="1318" y="686" width="140" height="28" rx="8" fill="#fee2e2" stroke="#fecaca" filter="url(#sh)"/>
+<text x="1388" y="697" text-anchor="middle" font-size="10.5" fill="#b91c1c" font-weight="600">⚠️ HASH MISMATCH ALERT</text>
+<text x="1388" y="710" text-anchor="middle" font-size="10" fill="#b91c1c">Model changed without approval</text>
+
+<!-- ══════════════════════════════════
+     STEP 4 — Input Commitment + Inference
+══════════════════════════════════ -->
+<text x="900" y="800" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 4 — SCORING</text>
+<line x1="40" y1="808" x2="1760" y2="808" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Input commitment -->
+<rect x="838" y="824" width="210" height="130" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="824" width="210" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="846" width="210" height="14" fill="#ea580c"/>
+<text x="943" y="847" text-anchor="middle" font-size="13" font-weight="700" fill="white">⑥ Input Commitment</text>
+<text x="851" y="876" font-size="11.5" fill="#334155">• Serialize features as</text>
+<text x="851" y="893" font-size="11.5" fill="#334155">  canonical JSON list</text>
+<text x="851" y="910" font-size="11.5" fill="#334155">• SHA-256(json_bytes)</text>
+<text x="851" y="927" font-size="11.5" fill="#334155">• = input_commitment</text>
+<text x="851" y="944" font-size="11" fill="#9a3412">Proves WHAT was scored</text>
+
+<!-- ONNX inference -->
+<rect x="1068" y="824" width="214" height="130" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="1068" y="824" width="214" height="36" rx="12" fill="#ea580c"/>
+<rect x="1068" y="846" width="214" height="14" fill="#ea580c"/>
+<text x="1175" y="847" text-anchor="middle" font-size="13" font-weight="700" fill="white">⑦ ONNX Inference</text>
+<text x="1083" y="876" font-size="11.5" fill="#334155">• Input: float32[1, 11]</text>
+<text x="1083" y="893" font-size="11.5" fill="#334155">• StandardScaler → LogReg</text>
+<text x="1083" y="910" font-size="11.5" fill="#334155">• prob_default ∈ [0, 1]</text>
+<text x="1083" y="927" font-size="11.5" fill="#334155">• score = (1−prob) × 100</text>
+<text x="1083" y="944" font-size="11" fill="#9a3412">Model verified BEFORE run</text>
+
+<!-- SHAP box in LSP lane -->
+<rect x="448" y="824" width="354" height="130" rx="12" fill="white" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+<rect x="448" y="824" width="354" height="36" rx="12" fill="#6d28d9"/>
+<rect x="448" y="846" width="354" height="14" fill="#6d28d9"/>
+<text x="625" y="847" text-anchor="middle" font-size="13" font-weight="700" fill="white">⑧ SHAP Explanations (Parallel)</text>
+<text x="466" y="876" font-size="11.5" fill="#334155">• LinearExplainer on StandardScaler output</text>
+<text x="466" y="893" font-size="11.5" fill="#334155">• 11 SHAP values computed (log-odds scale)</text>
+<text x="466" y="910" font-size="11.5" fill="#334155">• Sorted by |shap| descending</text>
+<text x="466" y="927" font-size="11.5" fill="#334155">• impact: "positive" if shap ≤ 0 (less risk)</text>
+<text x="466" y="944" font-size="11" fill="#6d28d9">Loaded lazily in background thread</text>
+
+<!-- arrows: commitment → inference -->
+<path d="M1048 889 L1066 889" stroke="#ea580c" stroke-width="2" marker-end="url(#arrOrange)" fill="none"/>
+
+<!-- SHAP → Gateway (passes SHAP values) -->
+<path d="M802 889 L836 889" stroke="#6d28d9" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrPurple)" fill="none"/>
+<rect x="805" y="878" width="28" height="13" rx="3" fill="#ede9fe"/>
+<text x="819" y="888" text-anchor="middle" font-size="9" fill="#6d28d9">shap</text>
+
+<!-- ══════════════════════════════════
+     STEP 5 — Sign + Record
+══════════════════════════════════ -->
+<text x="900" y="982" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 5 — CRYPTOGRAPHIC SIGNING</text>
+<line x1="40" y1="990" x2="1760" y2="990" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<rect x="838" y="1006" width="444" height="150" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="1006" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="1028" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="1029" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑨ Build &amp; Sign Decision Record</text>
+<text x="856" y="1058" font-size="12" fill="#334155">• Build JSON record: app_id · timestamp · model_name</text>
+<text x="856" y="1075" font-size="12" fill="#334155">  model_version · model_hash · input_commitment</text>
+<text x="856" y="1092" font-size="12" fill="#334155">  decision · credit_score · prob_default</text>
+<text x="856" y="1109" font-size="12" fill="#334155">• RSA-2048 PSS sign(JSON_bytes, SHA-256) → signature</text>
+<text x="856" y="1126" font-size="12" fill="#334155">• record_hash = SHA-256(JSON_bytes)</text>
+<text x="856" y="1143" font-size="12" fill="#334155">• Append full record (+ shap_values) to JSONL log</text>
+
+<!-- ══════════════════════════════════
+     STEP 6 — Merkle Batch
+══════════════════════════════════ -->
+<text x="900" y="1184" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 6 — TAMPER-EVIDENT CHAIN</text>
+<line x1="40" y1="1192" x2="1760" y2="1192" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<rect x="838" y="1208" width="444" height="140" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="1208" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="1230" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="1231" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑩ Merkle Batch &amp; External Witness</text>
+<text x="856" y="1260" font-size="12" fill="#334155">• Add record_hash to pending_records[]</text>
+<text x="856" y="1277" font-size="12" fill="#334155">• Every 10 decisions: compute binary Merkle tree</text>
+<text x="856" y="1294" font-size="12" fill="#334155">  Merkle root = SHA-256 tree over all 10 hashes</text>
+<text x="856" y="1311" font-size="12" fill="#334155">• Publish {batch_id, timestamp, leaves[], root}</text>
+<text x="856" y="1328" font-size="12" fill="#d97706" font-weight="600">→ merkle_witness.jsonl (append-only, shared with lender)</text>
+
+<!-- Merkle box in Lender lane -->
+<rect x="1318" y="1208" width="424" height="140" rx="12" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="1318" y="1208" width="424" height="36" rx="12" fill="#15803d"/>
+<rect x="1318" y="1230" width="424" height="14" fill="#15803d"/>
+<text x="1530" y="1231" text-anchor="middle" font-size="14" font-weight="700" fill="white">Lender Receives Merkle Root</text>
+<text x="1336" y="1260" font-size="12" fill="#334155">• merkle_witness.jsonl accessible by lender</text>
+<text x="1336" y="1277" font-size="12" fill="#334155">• Each root is a snapshot of 10 decisions</text>
+<text x="1336" y="1294" font-size="12" fill="#334155">• Future: publish to blockchain / TSA</text>
+<text x="1336" y="1311" font-size="12" fill="#334155">• Tampering any record → root mismatch</text>
+<text x="1336" y="1328" font-size="12" fill="#16a34a" font-weight="600">Continuous tamper-evidence, no manual audit needed</text>
+
+<!-- arrow Gateway → Lender (merkle) -->
+<path d="M1282 1278 L1316 1278" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrAmber)" fill="none"/>
+<rect x="1284" y="1267" width="30" height="14" rx="3" fill="#fffbeb"/>
+<text x="1299" y="1278" text-anchor="middle" font-size="9" fill="#92400e">root</text>
+
+<!-- ══════════════════════════════════
+     STEP 7 — ZK Proof
+══════════════════════════════════ -->
+<text x="900" y="1376" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 7 — ZERO-KNOWLEDGE PROOF</text>
+<line x1="40" y1="1384" x2="1760" y2="1384" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- ZK in LSP lane -->
+<rect x="448" y="1400" width="354" height="160" rx="12" fill="white" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+<rect x="448" y="1400" width="354" height="36" rx="12" fill="#6d28d9"/>
+<rect x="448" y="1422" width="354" height="14" fill="#6d28d9"/>
+<text x="625" y="1423" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑪ ZK Proof Generation (EZKL)</text>
+<text x="466" y="1452" font-size="12" fill="#334155">• Private: feature_vector (11 floats)</text>
+<text x="466" y="1469" font-size="12" fill="#334155">• Private: random nonce (dims=4, [0, 8191])</text>
+<text x="466" y="1486" font-size="12" fill="#334155">• Circuit: Poseidon(input, nonce) = commitment</text>
+<text x="466" y="1503" font-size="12" fill="#334155">• Public output: prob_default value</text>
+<text x="466" y="1520" font-size="12" fill="#334155">• Proves: approved model H → output O</text>
+<text x="466" y="1537" font-size="11" fill="#6d28d9">EZKL Halo2 SNARK · ~5–60s prover time</text>
+
+<!-- ZK proof sent to Gateway -->
+<path d="M802 1480 L836 1480" stroke="#6d28d9" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrPurple)" fill="none"/>
+<rect x="804" y="1469" width="32" height="14" rx="3" fill="#ede9fe"/>
+<text x="820" y="1480" text-anchor="middle" font-size="9" fill="#6d28d9">proof</text>
+
+<rect x="838" y="1400" width="444" height="160" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="1400" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="1422" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="1423" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑫ Gateway Stores Proof Reference</text>
+<text x="856" y="1452" font-size="12" fill="#334155">• Receives proof.json path from EZKL prover</text>
+<text x="856" y="1469" font-size="12" fill="#334155">• Attaches proof reference to decision record</text>
+<text x="856" y="1486" font-size="12" fill="#334155">• vk.key (verification key) published to lender</text>
+<text x="856" y="1503" font-size="12" fill="#334155">• Proof is self-contained — verifiable offline</text>
+<text x="856" y="1520" font-size="12" fill="#334155">• Trust anchor: open math, no cloud vendor</text>
+<text x="856" y="1537" font-size="11" fill="#9a3412">Verifier sees: commitment + prob · Nothing else</text>
+
+<!-- ══════════════════════════════════
+     STEP 8 — Response to Borrower
+══════════════════════════════════ -->
+<text x="900" y="1590" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 8 — DECISION RETURNED</text>
+<line x1="40" y1="1598" x2="1760" y2="1598" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Gateway → LSP response -->
+<rect x="838" y="1614" width="444" height="110" rx="12" fill="white" stroke="#f97316" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="1614" width="444" height="36" rx="12" fill="#ea580c"/>
+<rect x="838" y="1636" width="444" height="14" fill="#ea580c"/>
+<text x="1060" y="1637" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑬ Full Response Returned</text>
+<text x="856" y="1666" font-size="12" fill="#334155">• JSON: decision, credit_score, prob_default</text>
+<text x="856" y="1683" font-size="12" fill="#334155">• shap_values[11], input_commitment</text>
+<text x="856" y="1700" font-size="12" fill="#334155">• signature (hex), record_hash, model metadata</text>
+<text x="856" y="1717" font-size="12" fill="#334155">• Sent back to LSP → rendered in Borrower UI</text>
+
+<!-- LSP renders result -->
+<rect x="448" y="1614" width="354" height="110" rx="12" fill="white" stroke="#8b5cf6" stroke-width="2" filter="url(#sh)"/>
+<rect x="448" y="1614" width="354" height="36" rx="12" fill="#6d28d9"/>
+<rect x="448" y="1636" width="354" height="14" fill="#6d28d9"/>
+<text x="625" y="1637" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑭ LSP Renders Decision Screen</text>
+<text x="466" y="1666" font-size="12" fill="#334155">• Shows: APPROVED / REJECTED + amount</text>
+<text x="466" y="1683" font-size="12" fill="#334155">• Credit score ring (animated SVG)</text>
+<text x="466" y="1700" font-size="12" fill="#334155">• SHAP bar chart: "What influenced this"</text>
+<text x="466" y="1717" font-size="12" fill="#334155">• Certificate ID displayed prominently</text>
+
+<!-- Borrower sees result -->
+<rect x="58" y="1614" width="354" height="110" rx="12" fill="white" stroke="#0ea5e9" stroke-width="2" filter="url(#sh)"/>
+<rect x="58" y="1614" width="354" height="36" rx="12" fill="#0284c7"/>
+<rect x="58" y="1636" width="354" height="14" fill="#0284c7"/>
+<text x="235" y="1637" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑮ Borrower Sees Result</text>
+<text x="76" y="1666" font-size="12" fill="#334155">• Decision + loan amount/EMI breakdown</text>
+<text x="76" y="1683" font-size="12" fill="#334155">• Credit score + SHAP explanation</text>
+<text x="76" y="1700" font-size="12" fill="#334155">• Certificate ID to save for disputes</text>
+<text x="76" y="1717" font-size="12" fill="#334155">• "Powered by Sakshi Evidence Layer"</text>
+
+<!-- arrows back: Gateway → LSP → Borrower -->
+<path d="M838 1669 L802 1669" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrOrange)" fill="none"/>
+<path d="M448 1669 L412 1669" stroke="#6d28d9" stroke-width="2.5" marker-end="url(#arrPurple)" fill="none"/>
+
+<!-- Lender sees stats too -->
+<rect x="1318" y="1614" width="424" height="110" rx="12" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="1318" y="1614" width="424" height="36" rx="12" fill="#15803d"/>
+<rect x="1318" y="1636" width="424" height="14" fill="#15803d"/>
+<text x="1530" y="1637" text-anchor="middle" font-size="14" font-weight="700" fill="white">Lender Dashboard Updates</text>
+<text x="1336" y="1666" font-size="12" fill="#334155">• Total decisions counter increments</text>
+<text x="1336" y="1683" font-size="12" fill="#334155">• Approve/reject rates update</text>
+<text x="1336" y="1700" font-size="12" fill="#334155">• Audit log shows new signed record</text>
+<text x="1336" y="1717" font-size="12" fill="#334155">• Hash integrity: ✅ (no mismatches)</text>
+
+<!-- arrow Gateway → Lender -->
+<path d="M1282 1669 L1316 1669" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrGreen)" fill="none"/>
+
+<!-- ══════════════════════════════════
+     STEP 9 — Dispute Path
+══════════════════════════════════ -->
+<text x="900" y="1758" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 9 — DISPUTE &amp; VERIFICATION (IF NEEDED)</text>
+<line x1="40" y1="1766" x2="1760" y2="1766" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Borrower disputes -->
+<rect x="58" y="1782" width="354" height="120" rx="12" fill="white" stroke="#0ea5e9" stroke-width="2" filter="url(#sh)"/>
+<rect x="58" y="1782" width="354" height="36" rx="12" fill="#0284c7"/>
+<rect x="58" y="1804" width="354" height="14" fill="#0284c7"/>
+<text x="235" y="1805" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑯ Borrower Raises Dispute</text>
+<text x="76" y="1834" font-size="12" fill="#334155">• Contacts lender (30-day window)</text>
+<text x="76" y="1851" font-size="12" fill="#334155">• Or goes to RBI Ombudsman directly</text>
+<text x="76" y="1868" font-size="12" fill="#334155">• Shares: Certificate ID only</text>
+<text x="76" y="1885" font-size="12" fill="#334155">• No raw data needed from borrower</text>
+
+<!-- Lender verify panel -->
+<rect x="1318" y="1782" width="424" height="120" rx="12" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="1318" y="1782" width="424" height="36" rx="12" fill="#15803d"/>
+<rect x="1318" y="1804" width="424" height="14" fill="#15803d"/>
+<text x="1530" y="1805" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑰ Lender Runs Verification</text>
+<text x="1336" y="1834" font-size="12" fill="#334155">• Enters cert ID in compliance dashboard</text>
+<text x="1336" y="1851" font-size="12" fill="#334155">• GET /api/verify/:id → verifier.py</text>
+<text x="1336" y="1868" font-size="12" fill="#334155">• All 3 checks run automatically</text>
+<text x="1336" y="1885" font-size="12" fill="#334155">• ZIP package: record + Merkle + ZK proof</text>
+
+<!-- ══════════════════════════════════
+     STEP 10 — Three Verification Checks
+══════════════════════════════════ -->
+<text x="900" y="1932" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">PHASE 10 — INDEPENDENT VERIFICATION CHECKS</text>
+<line x1="40" y1="1940" x2="1760" y2="1940" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Check 1 -->
+<rect x="838" y="1956" width="136" height="130" rx="10" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="838" y="1956" width="136" height="32" rx="10" fill="#15803d"/>
+<rect x="838" y="1974" width="136" height="14" fill="#15803d"/>
+<text x="906" y="1975" text-anchor="middle" font-size="12" font-weight="700" fill="white">Check ①</text>
+<text x="906" y="1992" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">Signature</text>
+<text x="848" y="2010" font-size="10.5" fill="#475569">Load public key</text>
+<text x="848" y="2026" font-size="10.5" fill="#475569">Reconstruct</text>
+<text x="848" y="2040" font-size="10.5" fill="#475569">signed payload</text>
+<text x="848" y="2056" font-size="10.5" fill="#475569">RSA-PSS verify</text>
+<text x="848" y="2074" font-size="10.5" fill="#16a34a" font-weight="600">✅ or ❌</text>
+
+<!-- Check 2 -->
+<rect x="994" y="1956" width="136" height="130" rx="10" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="994" y="1956" width="136" height="32" rx="10" fill="#15803d"/>
+<rect x="994" y="1974" width="136" height="14" fill="#15803d"/>
+<text x="1062" y="1975" text-anchor="middle" font-size="12" font-weight="700" fill="white">Check ②</text>
+<text x="1062" y="1992" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">Hash Integrity</text>
+<text x="1004" y="2010" font-size="10.5" fill="#475569">Recompute</text>
+<text x="1004" y="2026" font-size="10.5" fill="#475569">SHA-256 of</text>
+<text x="1004" y="2040" font-size="10.5" fill="#475569">signed payload</text>
+<text x="1004" y="2056" font-size="10.5" fill="#475569">Compare hash</text>
+<text x="1004" y="2074" font-size="10.5" fill="#16a34a" font-weight="600">✅ or ❌</text>
+
+<!-- Check 3 -->
+<rect x="1150" y="1956" width="136" height="130" rx="10" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="1150" y="1956" width="136" height="32" rx="10" fill="#15803d"/>
+<rect x="1150" y="1974" width="136" height="14" fill="#15803d"/>
+<text x="1218" y="1975" text-anchor="middle" font-size="12" font-weight="700" fill="white">Check ③</text>
+<text x="1218" y="1992" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">Merkle Chain</text>
+<text x="1160" y="2010" font-size="10.5" fill="#475569">Find batch in</text>
+<text x="1160" y="2026" font-size="10.5" fill="#475569">witness log</text>
+<text x="1160" y="2040" font-size="10.5" fill="#475569">Recompute root</text>
+<text x="1160" y="2056" font-size="10.5" fill="#475569">Compare root</text>
+<text x="1160" y="2074" font-size="10.5" fill="#16a34a" font-weight="600">✅ or ⚠️</text>
+
+<!-- combined verdict -->
+<rect x="1318" y="1956" width="424" height="130" rx="12" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+<rect x="1318" y="1956" width="424" height="36" rx="12" fill="#15803d"/>
+<rect x="1318" y="1978" width="424" height="14" fill="#15803d"/>
+<text x="1530" y="1979" text-anchor="middle" font-size="14" font-weight="700" fill="white">⑱ Combined Verdict</text>
+<text x="1336" y="2008" font-size="12" fill="#16a34a" font-weight="600">✅ ALL PASS → "Decision Verified"</text>
+<text x="1336" y="2025" font-size="12" fill="#475569">  Record authentic, model approved, unaltered</text>
+<text x="1336" y="2045" font-size="12" fill="#dc2626" font-weight="600">❌ ANY FAIL → "Verification Failed"</text>
+<text x="1336" y="2062" font-size="12" fill="#475569">  Forgery or tampering detected</text>
+<text x="1336" y="2082" font-size="12" fill="#475569">  Regulator / ombudsman receives full report</text>
+
+<!-- arrows: checks → verdict -->
+<path d="M974 2021 L992 2021" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrGreen)" fill="none"/>
+<path d="M1130 2021 L1148 2021" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrGreen)" fill="none"/>
+<path d="M1286 2021 L1316 2021" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrGreen)" fill="none"/>
+
+<!-- ══════════════════════════════════
+     OUTCOME BOXES
+══════════════════════════════════ -->
+<text x="900" y="2122" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="2">OUTCOME</text>
+<line x1="40" y1="2130" x2="1760" y2="2130" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- Outcome: Approved -->
+<rect x="58" y="2146" width="380" height="110" rx="14" fill="white" stroke="#16a34a" stroke-width="2.5" filter="url(#sh)"/>
+<rect x="58" y="2146" width="380" height="40" rx="14" fill="#15803d"/>
+<rect x="58" y="2170" width="380" height="16" fill="#15803d"/>
+<text x="248" y="2172" text-anchor="middle" font-size="15" font-weight="700" fill="white">🎉 APPROVED</text>
+<text x="76" y="2204" font-size="12" fill="#334155">Loan disbursed to borrower's account within 30 min</text>
+<text x="76" y="2221" font-size="12" fill="#334155">Lender holds cryptographic evidence of decision</text>
+<text x="76" y="2238" font-size="12" fill="#334155">Borrower holds Certificate ID for future reference</text>
+
+<!-- Outcome: Rejected with cert -->
+<rect x="460" y="2146" width="380" height="110" rx="14" fill="white" stroke="#dc2626" stroke-width="2.5" filter="url(#sh)"/>
+<rect x="460" y="2146" width="380" height="40" rx="14" fill="#b91c1c"/>
+<rect x="460" y="2170" width="380" height="16" fill="#b91c1c"/>
+<text x="650" y="2172" text-anchor="middle" font-size="15" font-weight="700" fill="white">📋 REJECTED (with Certificate)</text>
+<text x="478" y="2204" font-size="12" fill="#334155">Borrower gets cert ID + SHAP explanation</text>
+<text x="478" y="2221" font-size="12" fill="#334155">Decision verifiable by ombudsman independently</text>
+<text x="478" y="2238" font-size="12" fill="#334155">Lender protected: signed proof of fair process</text>
+
+<!-- Outcome: Dispute resolved -->
+<rect x="862" y="2146" width="420" height="110" rx="14" fill="white" stroke="#7c3aed" stroke-width="2.5" filter="url(#sh)"/>
+<rect x="862" y="2146" width="420" height="40" rx="14" fill="#6d28d9"/>
+<rect x="862" y="2170" width="420" height="16" fill="#6d28d9"/>
+<text x="1072" y="2172" text-anchor="middle" font-size="15" font-weight="700" fill="white">⚖️ DISPUTE RESOLVED</text>
+<text x="880" y="2204" font-size="12" fill="#334155">Ombudsman independently verifies in &lt;5 seconds</text>
+<text x="880" y="2221" font-size="12" fill="#334155">No cooperation from lender/LSP required</text>
+<text x="880" y="2238" font-size="12" fill="#334155">Proof is legally admissible, tamper-evident</text>
+
+<!-- Outcome: Hash mismatch -->
+<rect x="1304" y="2146" width="440" height="110" rx="14" fill="white" stroke="#d97706" stroke-width="2.5" filter="url(#sh)"/>
+<rect x="1304" y="2146" width="440" height="40" rx="14" fill="#b45309"/>
+<rect x="1304" y="2170" width="440" height="16" fill="#b45309"/>
+<text x="1524" y="2172" text-anchor="middle" font-size="15" font-weight="700" fill="white">🚨 HASH MISMATCH (Governance Alert)</text>
+<text x="1322" y="2204" font-size="12" fill="#334155">Gateway halts — no decision issued</text>
+<text x="1322" y="2221" font-size="12" fill="#334155">Lender notified: model changed without approval</text>
+<text x="1322" y="2238" font-size="12" fill="#334155">LSP must re-register new model hash to continue</text>
+
+<!-- ══════════════════════════════════
+     FOOTER KEY
+══════════════════════════════════ -->
+<rect x="40" y="2300" width="1720" height="80" rx="12" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="900" y="2326" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">Legend — Data Flow</text>
+<line x1="80" y1="2348" x2="140" y2="2348" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+<text x="148" y="2352" font-size="12" fill="#334155">Borrower data flow</text>
+<line x1="280" y1="2348" x2="340" y2="2348" stroke="#6d28d9" stroke-width="2.5" marker-end="url(#arrPurple)"/>
+<text x="348" y="2352" font-size="12" fill="#334155">LSP / model flow</text>
+<line x1="480" y1="2348" x2="540" y2="2348" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrOrange)"/>
+<text x="548" y="2352" font-size="12" fill="#334155">Gateway pipeline</text>
+<line x1="680" y1="2348" x2="740" y2="2348" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+<text x="748" y="2352" font-size="12" fill="#334155">Lender compliance</text>
+<line x1="880" y1="2348" x2="940" y2="2348" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrRed)"/>
+<text x="948" y="2352" font-size="12" fill="#334155">Error / reject path</text>
+<line x1="1080" y1="2348" x2="1140" y2="2348" stroke="#d97706" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrAmber)"/>
+<text x="1148" y="2352" font-size="12" fill="#334155">Merkle / witness</text>
+<line x1="1280" y1="2348" x2="1340" y2="2348" stroke="#6d28d9" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrPurple)"/>
+<text x="1348" y="2352" font-size="12" fill="#334155">ZK proof path</text>
+
+<!-- Step number key -->
+<text x="900" y="2385" text-anchor="middle" font-size="12" fill="#64748b">Steps ①–⑱ · Phases 1–10 · Four swim lanes: Borrower · LSP · Sakshi Gateway · Lender</text>
+
+<!-- Footer bar -->
+<rect x="40" y="2410" width="1720" height="48" rx="10" fill="#1e293b"/>
+<text x="900" y="2432" text-anchor="middle" font-size="13" font-weight="600" fill="white">Sakshi · TEJAS045 · SASTRA University · 2026</text>
+<text x="900" y="2450" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,0.6)">Python 3.11 · Flask · ONNX · EZKL Halo2 · RSA-2048 PSS · SHA-256 Merkle · SHAP LinearExplainer · UCI German Credit</text>
+
+</svg>

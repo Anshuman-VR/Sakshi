@@ -1,0 +1,819 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 3200" width="2400" height="3200" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif">
+<defs>
+  <!-- Background gradient -->
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#f0f4ff"/>
+    <stop offset="100%" stop-color="#e8edf8"/>
+  </linearGradient>
+  <!-- Zone gradients -->
+  <linearGradient id="gBorrower" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#e0f2fe"/>
+    <stop offset="100%" stop-color="#bae6fd"/>
+  </linearGradient>
+  <linearGradient id="gLSP" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ede9fe"/>
+    <stop offset="100%" stop-color="#ddd6fe"/>
+  </linearGradient>
+  <linearGradient id="gGateway" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#fff7ed"/>
+    <stop offset="100%" stop-color="#fed7aa"/>
+  </linearGradient>
+  <linearGradient id="gLender" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#d1fae5"/>
+    <stop offset="100%" stop-color="#a7f3d0"/>
+  </linearGradient>
+  <linearGradient id="gRegulator" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#fee2e2"/>
+    <stop offset="100%" stop-color="#fecaca"/>
+  </linearGradient>
+  <linearGradient id="gWitness" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#fefce8"/>
+    <stop offset="100%" stop-color="#fef08a"/>
+  </linearGradient>
+  <linearGradient id="hdrBlue" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#1e3a8a"/>
+    <stop offset="100%" stop-color="#2563eb"/>
+  </linearGradient>
+  <linearGradient id="hdrPurple" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#581c87"/>
+    <stop offset="100%" stop-color="#7c3aed"/>
+  </linearGradient>
+  <linearGradient id="hdrOrange" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#7c2d12"/>
+    <stop offset="100%" stop-color="#ea580c"/>
+  </linearGradient>
+  <linearGradient id="hdrGreen" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#14532d"/>
+    <stop offset="100%" stop-color="#16a34a"/>
+  </linearGradient>
+  <linearGradient id="hdrRed" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#7f1d1d"/>
+    <stop offset="100%" stop-color="#dc2626"/>
+  </linearGradient>
+  <linearGradient id="hdrAmber" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#713f12"/>
+    <stop offset="100%" stop-color="#d97706"/>
+  </linearGradient>
+  <!-- Arrow markers -->
+  <marker id="arr" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#475569"/>
+  </marker>
+  <marker id="arrBlue" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#2563eb"/>
+  </marker>
+  <marker id="arrGreen" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#16a34a"/>
+  </marker>
+  <marker id="arrOrange" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#ea580c"/>
+  </marker>
+  <marker id="arrRed" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#dc2626"/>
+  </marker>
+  <marker id="arrAmber" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 1L11 6L1 11z" fill="#d97706"/>
+  </marker>
+  <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+    <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.10)"/>
+  </filter>
+  <filter id="shadowLg" x="-8%" y="-8%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="rgba(0,0,0,0.13)"/>
+  </filter>
+</defs>
+
+<!-- ═══ BACKGROUND ═══ -->
+<rect width="2400" height="3200" fill="url(#bg)"/>
+
+<!-- Subtle grid -->
+<g stroke="#d1d5db" stroke-width="0.5" opacity="0.4">
+  <line x1="600" y1="0" x2="600" y2="3200"/>
+  <line x1="1200" y1="0" x2="1200" y2="3200"/>
+  <line x1="1800" y1="0" x2="1800" y2="3200"/>
+  <line x1="0" y1="400" x2="2400" y2="400"/>
+  <line x1="0" y1="800" x2="2400" y2="800"/>
+  <line x1="0" y1="1200" x2="2400" y2="1200"/>
+  <line x1="0" y1="1600" x2="2400" y2="1600"/>
+  <line x1="0" y1="2000" x2="2400" y2="2000"/>
+  <line x1="0" y1="2400" x2="2400" y2="2400"/>
+  <line x1="0" y1="2800" x2="2400" y2="2800"/>
+</g>
+
+<!-- ═══ TITLE BLOCK ═══ -->
+<rect x="60" y="40" width="2280" height="180" rx="20" fill="url(#hdrBlue)" filter="url(#shadowLg)"/>
+<text x="1200" y="105" text-anchor="middle" font-size="44" font-weight="800" fill="white" letter-spacing="-0.5">SAKSHI — Zero-Knowledge Decision Evidence Layer</text>
+<text x="1200" y="150" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.85)">Full System Architecture · Digital Lending · India</text>
+<text x="1200" y="190" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.65)">Model: UCI German Credit · Logistic Regression · ONNX Opset 12 · EZKL Halo2 ZK-SNARK · RSA-2048 PSS Signing · Merkle Witness Chain</text>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 1: THREE ACTOR ZONES
+═══════════════════════════════════════════════════════════ -->
+
+<!-- ─── ZONE: BORROWER ─── -->
+<rect x="60" y="280" width="500" height="480" rx="16" fill="url(#gBorrower)" stroke="#0ea5e9" stroke-width="2" filter="url(#shadow)"/>
+<rect x="60" y="280" width="500" height="52" rx="16" fill="url(#hdrBlue)"/>
+<rect x="60" y="308" width="500" height="24" fill="url(#hdrBlue)"/>
+<text x="310" y="314" text-anchor="middle" font-size="20" font-weight="700" fill="white">👤  BORROWER</text>
+<text x="310" y="334" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.8)">(Priya — Loan Applicant)</text>
+
+<!-- Borrower sub-boxes -->
+<rect x="88" y="352" width="444" height="80" rx="10" fill="white" stroke="#bae6fd" stroke-width="1.5"/>
+<text x="108" y="375" font-size="15" font-weight="700" fill="#0369a1">📱 QuickCredit App (LSP Front-End)</text>
+<text x="108" y="394" font-size="12.5" fill="#475569">• Fills loan application form (amount, tenure, income)</text>
+<text x="108" y="410" font-size="12.5" fill="#475569">• Consents to data use · Completes KYC</text>
+<text x="108" y="426" font-size="12.5" fill="#475569">• Never sees raw model weights or other applicants' data</text>
+
+<rect x="88" y="448" width="444" height="80" rx="10" fill="white" stroke="#bae6fd" stroke-width="1.5"/>
+<text x="108" y="471" font-size="15" font-weight="700" fill="#0369a1">📋 Decision Certificate (Received)</text>
+<text x="108" y="490" font-size="12.5" fill="#475569">• Gets Certificate ID (e.g. APP-20261014-00482)</text>
+<text x="108" y="506" font-size="12.5" fill="#475569">• Sees: decision, credit score, SHAP factor explanations</text>
+<text x="108" y="522" font-size="12.5" fill="#475569">• Can share cert ID to trigger ombudsman verification</text>
+
+<rect x="88" y="544" width="444" height="80" rx="10" fill="white" stroke="#bae6fd" stroke-width="1.5"/>
+<text x="108" y="567" font-size="15" font-weight="700" fill="#0369a1">⚖️ Dispute Rights (RBI Ombudsman)</text>
+<text x="108" y="586" font-size="12.5" fill="#475569">• Lodge complaint within 30 days if lender unresponsive</text>
+<text x="108" y="602" font-size="12.5" fill="#475569">• Ombudsman verifies cert independently — no data exposure</text>
+<text x="108" y="618" font-size="12.5" fill="#475569">• Verified proof is legally admissible evidence</text>
+
+<rect x="88" y="640" width="444" height="48" rx="10" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+<text x="108" y="659" font-size="12" font-weight="600" fill="#0369a1">What Borrower CANNOT see:</text>
+<text x="108" y="677" font-size="12" fill="#64748b">Model weights · Other applicants' data · Gateway private key · Raw risk probability</text>
+
+
+<!-- ─── ZONE: LSP ─── -->
+<rect x="620" y="280" width="560" height="480" rx="16" fill="url(#gLSP)" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)"/>
+<rect x="620" y="280" width="560" height="52" rx="16" fill="url(#hdrPurple)"/>
+<rect x="620" y="308" width="560" height="24" fill="url(#hdrPurple)"/>
+<text x="900" y="314" text-anchor="middle" font-size="20" font-weight="700" fill="white">🏢  LENDING SERVICE PROVIDER (LSP)</text>
+<text x="900" y="334" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.8)">(Fintech App · e.g. QuickCredit, KreditBee)</text>
+
+<rect x="648" y="352" width="504" height="88" rx="10" fill="white" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="668" y="375" font-size="15" font-weight="700" fill="#6d28d9">🧠 Proprietary Scoring Model</text>
+<text x="668" y="394" font-size="12.5" fill="#475569">• Logistic Regression (UCI German Credit baseline)</text>
+<text x="668" y="410" font-size="12.5" fill="#475569">• Pipeline: StandardScaler → LogisticRegression (C=0.5)</text>
+<text x="668" y="426" font-size="12.5" fill="#475569">• 11 features · Threshold P(default) &lt; 0.50 → APPROVE</text>
+<text x="668" y="430" font-size="12.5" fill="#475569">• AUC-ROC: 0.99 on held-out test set</text>
+
+<rect x="648" y="456" width="504" height="88" rx="10" fill="white" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="668" y="479" font-size="15" font-weight="700" fill="#6d28d9">📦 ONNX Export + Hash Registration</text>
+<text x="668" y="498" font-size="12.5" fill="#475569">• Model exported to ONNX Opset 12 format (skl2onnx)</text>
+<text x="668" y="514" font-size="12.5" fill="#475569">• SHA-256(onnx_bytes) computed → model_hash registered</text>
+<text x="668" y="530" font-size="12.5" fill="#475569">• Hash: 3307b40b94c6e632bad967f89d71c… (stored in registry.json)</text>
+<text x="668" y="546" font-size="12.5" fill="#475569">• Any change to model → different hash → gateway rejects</text>
+
+<rect x="648" y="560" width="240" height="80" rx="10" fill="white" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="668" y="583" font-size="14" font-weight="700" fill="#6d28d9">🔒 ZK Prover (EZKL)</text>
+<text x="668" y="600" font-size="12" fill="#475569">• Runs inside LSP servers</text>
+<text x="668" y="616" font-size="12" fill="#475569">• Sees: model + input (plain)</text>
+<text x="668" y="632" font-size="12" fill="#475569">• Outputs: SNARK proof only</text>
+
+<rect x="908" y="560" width="244" height="80" rx="10" fill="white" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="928" y="583" font-size="14" font-weight="700" fill="#6d28d9">📊 SHAP Explainer</text>
+<text x="928" y="600" font-size="12" fill="#475569">• LinearExplainer on log-odds</text>
+<text x="928" y="616" font-size="12" fill="#475569">• 11 feature attributions/decision</text>
+<text x="928" y="632" font-size="12" fill="#475569">• Lazy-loaded in background thread</text>
+
+<rect x="648" y="656" width="504" height="40" rx="8" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="668" y="671" font-size="12" font-weight="600" fill="#6d28d9">What LSP KEEPS SECRET: Model weights · Training data · Feature engineering logic</text>
+<text x="668" y="687" font-size="12" fill="#64748b">What LSP MUST register: ONNX hash · Feature schema · Approval threshold · Policy version</text>
+
+
+<!-- ─── ZONE: LENDER / COMPLIANCE ─── -->
+<rect x="1240" y="280" width="560" height="480" rx="16" fill="url(#gLender)" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1240" y="280" width="560" height="52" rx="16" fill="url(#hdrGreen)"/>
+<rect x="1240" y="308" width="560" height="24" fill="url(#hdrGreen)"/>
+<text x="1520" y="314" text-anchor="middle" font-size="20" font-weight="700" fill="white">🏦  LENDER (Bank / NBFC)</text>
+<text x="1520" y="334" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.8)">(Regulated Entity · Full Legal Liability)</text>
+
+<rect x="1268" y="352" width="504" height="88" rx="10" fill="white" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1288" y="375" font-size="15" font-weight="700" fill="#15803d">📋 Policy Registry (Write Access Only)</text>
+<text x="1288" y="394" font-size="12.5" fill="#475569">• Registers approved model hash + version + policy params</text>
+<text x="1288" y="410" font-size="12.5" fill="#475569">• Sets threshold, max_credit_amount, min_age, feature schema</text>
+<text x="1288" y="426" font-size="12.5" fill="#475569">• Stores gateway public key for signature verification</text>
+<text x="1288" y="442" font-size="12.5" fill="#475569">• Only lender can write; LSP and borrower read-only</text>
+
+<rect x="1268" y="456" width="504" height="88" rx="10" fill="white" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1288" y="479" font-size="15" font-weight="700" fill="#15803d">🖥 Compliance Dashboard</text>
+<text x="1288" y="498" font-size="12.5" fill="#475569">• Real-time model integrity status (hash mismatch alerts)</text>
+<text x="1288" y="514" font-size="12.5" fill="#475569">• Merkle batch count · Approval / rejection rates</text>
+<text x="1288" y="530" font-size="12.5" fill="#475569">• Average credit score · Model drift indicators</text>
+<text x="1288" y="546" font-size="12.5" fill="#475569">• One-click audit export per complaint (ZIP: record + proofs)</text>
+
+<rect x="1268" y="560" width="240" height="80" rx="10" fill="white" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1288" y="583" font-size="14" font-weight="700" fill="#15803d">✅ Verifier</text>
+<text x="1288" y="600" font-size="12" fill="#475569">• Check RSA-2048 signature</text>
+<text x="1288" y="616" font-size="12" fill="#475569">• Check SHA-256 record hash</text>
+<text x="1288" y="632" font-size="12" fill="#475569">• Check Merkle inclusion proof</text>
+
+<rect x="1520" y="560" width="252" height="80" rx="10" fill="white" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1540" y="583" font-size="14" font-weight="700" fill="#15803d">🔢 ZK Verifier</text>
+<text x="1540" y="600" font-size="12" fill="#475569">• Checks SNARK proof offline</text>
+<text x="1540" y="616" font-size="12" fill="#475569">• No cloud dependency</text>
+<text x="1540" y="632" font-size="12" fill="#475569">• Trust anchor: open mathematics</text>
+
+<rect x="1268" y="656" width="504" height="40" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1288" y="671" font-size="12" font-weight="600" fill="#15803d">What Lender GAINS: Continuous model governance without quarterly audits</text>
+<text x="1288" y="687" font-size="12" fill="#64748b">Verified evidence packages per complaint · No raw data needed from LSP</text>
+
+
+<!-- ─── ZONE: REGULATOR / OMBUDSMAN ─── -->
+<rect x="1860" y="280" width="480" height="480" rx="16" fill="url(#gRegulator)" stroke="#dc2626" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1860" y="280" width="480" height="52" rx="16" fill="url(#hdrRed)"/>
+<rect x="1860" y="308" width="480" height="24" fill="url(#hdrRed)"/>
+<text x="2100" y="314" text-anchor="middle" font-size="20" font-weight="700" fill="white">⚖️  RBI / OMBUDSMAN</text>
+<text x="2100" y="334" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.8)">(Regulator · Dispute Resolution)</text>
+
+<rect x="1888" y="352" width="424" height="76" rx="10" fill="white" stroke="#fecaca" stroke-width="1.5"/>
+<text x="1908" y="374" font-size="14" font-weight="700" fill="#b91c1c">📥 Receives from Borrower</text>
+<text x="1908" y="393" font-size="12.5" fill="#475569">• Certificate ID only (no raw personal data)</text>
+<text x="1908" y="409" font-size="12.5" fill="#475569">• Complaint narrative from applicant</text>
+<text x="1908" y="425" font-size="12.5" fill="#475569">• Runs verification independently — no cooperation needed</text>
+
+<rect x="1888" y="444" width="424" height="76" rx="10" fill="white" stroke="#fecaca" stroke-width="1.5"/>
+<text x="1908" y="466" font-size="14" font-weight="700" fill="#b91c1c">🔍 Independent Verification</text>
+<text x="1908" y="485" font-size="12.5" fill="#475569">• Checks signature (lender's public key — public)</text>
+<text x="1908" y="501" font-size="12.5" fill="#475569">• Checks Merkle inclusion vs. external witness log</text>
+<text x="1908" y="517" font-size="12.5" fill="#475569">• Checks ZK proof (offline, no cloud, no vendor)</text>
+
+<rect x="1888" y="536" width="424" height="76" rx="10" fill="white" stroke="#fecaca" stroke-width="1.5"/>
+<text x="1908" y="558" font-size="14" font-weight="700" fill="#b91c1c">📊 What Is Confirmed</text>
+<text x="1908" y="577" font-size="12.5" fill="#475569">• Which exact model version made this decision</text>
+<text x="1908" y="593" font-size="12.5" fill="#475569">• That the input was committed before scoring</text>
+<text x="1908" y="609" font-size="12.5" fill="#475569">• That the record has not been altered since signing</text>
+
+<rect x="1888" y="628" width="424" height="68" rx="10" fill="white" stroke="#fecaca" stroke-width="1.5"/>
+<text x="1908" y="650" font-size="14" font-weight="700" fill="#b91c1c">🏛 Regulatory Alignment</text>
+<text x="1908" y="668" font-size="12.5" fill="#475569">• RBI Digital Lending Guidelines 2022</text>
+<text x="1908" y="684" font-size="12.5" fill="#475569">• RBI Draft Model Risk Management · DPDP 2023</text>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 2: SAKSHI GATEWAY — THE CORE
+═══════════════════════════════════════════════════════════ -->
+
+<!-- Gateway mega-zone -->
+<rect x="60" y="820" width="2280" height="660" rx="20" fill="url(#gGateway)" stroke="#ea580c" stroke-width="3" filter="url(#shadowLg)"/>
+<rect x="60" y="820" width="2280" height="60" rx="20" fill="url(#hdrOrange)"/>
+<rect x="60" y="856" width="2280" height="24" fill="url(#hdrOrange)"/>
+<text x="1200" y="860" text-anchor="middle" font-size="26" font-weight="800" fill="white">⚙️  SAKSHI DECISION GATEWAY — The Core Evidence Engine</text>
+<text x="1200" y="876" text-anchor="middle" font-size="14" fill="rgba(255,255,255,0.85)">Every loan decision passes through here · Sits between LSP model and lender approval · Flask REST API · Python 3.11</text>
+
+<!-- Step 1: Policy Pre-Check -->
+<rect x="90" y="900" width="400" height="240" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="90" y="900" width="400" height="44" rx="14" fill="#ea580c"/>
+<rect x="90" y="926" width="400" height="18" fill="#ea580c"/>
+<text x="290" y="928" text-anchor="middle" font-size="16" font-weight="700" fill="white">① POLICY PRE-CHECK</text>
+<text x="110" y="964" font-size="13" font-weight="600" fill="#9a3412">Before model runs:</text>
+<text x="110" y="982" font-size="12.5" fill="#475569">• Load registry.json from lender</text>
+<text x="110" y="998" font-size="12.5" fill="#475569">• Read model_hash, features, threshold</text>
+<text x="110" y="1014" font-size="12.5" fill="#475569">• Check age ≥ min_age (18)</text>
+<text x="110" y="1030" font-size="12.5" fill="#475569">• Check credit_amount ≤ max (20,000)</text>
+<text x="110" y="1046" font-size="12.5" fill="#475569">• Check feature names match schema</text>
+<text x="110" y="1064" font-size="12" fill="#9a3412" font-weight="600">If any check fails → POLICY_REJECT</text>
+<text x="110" y="1082" font-size="12" fill="#9a3412" font-weight="600">(logged but no ZK proof generated)</text>
+<rect x="110" y="1098" width="360" height="30" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="290" y="1118" text-anchor="middle" font-size="11.5" fill="#7c2d12">gateway.py → _load_registry() + decide()</text>
+
+<!-- Step 2: Model Hash Verification -->
+<rect x="520" y="900" width="400" height="240" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="520" y="900" width="400" height="44" rx="14" fill="#ea580c"/>
+<rect x="520" y="926" width="400" height="18" fill="#ea580c"/>
+<text x="720" y="928" text-anchor="middle" font-size="16" font-weight="700" fill="white">② MODEL HASH VERIFICATION</text>
+<text x="540" y="964" font-size="13" font-weight="600" fill="#9a3412">Integrity check before every inference:</text>
+<text x="540" y="982" font-size="12.5" fill="#475569">• Read ONNX file from disk into bytes</text>
+<text x="540" y="998" font-size="12.5" fill="#475569">• SHA-256(onnx_bytes) → actual_hash</text>
+<text x="540" y="1014" font-size="12.5" fill="#475569">• Compare to registry['model_hash']</text>
+<text x="540" y="1030" font-size="12.5" fill="#475569">• If mismatch → raise SecurityError</text>
+<text x="540" y="1046" font-size="12.5" fill="#475569">• Gateway HALTS — no decision issued</text>
+<text x="540" y="1064" font-size="12.5" fill="#475569">• Alert sent to lender compliance</text>
+<text x="540" y="1082" font-size="12" fill="#9a3412" font-weight="600">This catches silent model swaps between audits</text>
+<rect x="540" y="1098" width="360" height="30" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="720" y="1118" text-anchor="middle" font-size="11.5" fill="#7c2d12">gateway.py → _load_model() · hashlib.sha256()</text>
+
+<!-- Step 3: Input Commitment -->
+<rect x="950" y="900" width="400" height="240" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="950" y="900" width="400" height="44" rx="14" fill="#ea580c"/>
+<rect x="950" y="926" width="400" height="18" fill="#ea580c"/>
+<text x="1150" y="928" text-anchor="middle" font-size="16" font-weight="700" fill="white">③ INPUT COMMITMENT</text>
+<text x="970" y="964" font-size="13" font-weight="600" fill="#9a3412">Cryptographic binding of inputs:</text>
+<text x="970" y="982" font-size="12.5" fill="#475569">• Extract 11 feature values from request</text>
+<text x="970" y="998" font-size="12.5" fill="#475569">• Serialize as canonical JSON list</text>
+<text x="970" y="1014" font-size="12.5" fill="#475569">• input_commitment = SHA-256(json_bytes)</text>
+<text x="970" y="1030" font-size="12.5" fill="#475569">• Commitment stored in signed record</text>
+<text x="970" y="1046" font-size="12.5" fill="#475569">• ZK: Poseidon hash + private nonce</text>
+<text x="970" y="1062" font-size="12.5" fill="#475569">  (nonce dims=4, range [0, 8191])</text>
+<text x="970" y="1082" font-size="12" fill="#9a3412" font-weight="600">Proves WHICH input was scored, not the values</text>
+<rect x="970" y="1098" width="360" height="30" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="1150" y="1118" text-anchor="middle" font-size="11.5" fill="#7c2d12">hashlib.sha256(json.dumps(vec).encode())</text>
+
+<!-- Step 4: ONNX Inference -->
+<rect x="1380" y="900" width="400" height="240" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1380" y="900" width="400" height="44" rx="14" fill="#ea580c"/>
+<rect x="1380" y="926" width="400" height="18" fill="#ea580c"/>
+<text x="1580" y="928" text-anchor="middle" font-size="16" font-weight="700" fill="white">④ ONNX INFERENCE</text>
+<text x="1400" y="964" font-size="13" font-weight="600" fill="#9a3412">Model execution:</text>
+<text x="1400" y="982" font-size="12.5" fill="#475569">• Input: float32[1, 11] feature vector</text>
+<text x="1400" y="998" font-size="12.5" fill="#475569">• ONNX Runtime (onnxruntime) session</text>
+<text x="1400" y="1014" font-size="12.5" fill="#475569">• Pipeline: StandardScaler → LogReg</text>
+<text x="1400" y="1030" font-size="12.5" fill="#475569">• Output: prob_default ∈ [0.0, 1.0]</text>
+<text x="1400" y="1046" font-size="12.5" fill="#475569">• credit_score = round((1 - prob) × 100)</text>
+<text x="1400" y="1062" font-size="12.5" fill="#475569">• APPROVE if prob_default &lt; 0.50</text>
+<text x="1400" y="1082" font-size="12" fill="#9a3412" font-weight="600">Model is verified BEFORE this runs (Step ②)</text>
+<rect x="1400" y="1098" width="360" height="30" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="1580" y="1118" text-anchor="middle" font-size="11.5" fill="#7c2d12">onnxruntime.InferenceSession · session.run()</text>
+
+<!-- Step 5: Sign Record -->
+<rect x="1810" y="900" width="500" height="240" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1810" y="900" width="500" height="44" rx="14" fill="#ea580c"/>
+<rect x="1810" y="926" width="500" height="18" fill="#ea580c"/>
+<text x="2060" y="928" text-anchor="middle" font-size="16" font-weight="700" fill="white">⑤ SIGN DECISION RECORD</text>
+<text x="1830" y="964" font-size="13" font-weight="600" fill="#9a3412">Tamper-evident record creation:</text>
+<text x="1830" y="982" font-size="12.5" fill="#475569">• Build JSON record (no shap_values in signed payload):</text>
+<text x="1830" y="998" font-size="12.5" fill="#475569">  {app_id, timestamp, model_name, model_version,</text>
+<text x="1830" y="1014" font-size="12.5" fill="#475569">   model_hash, input_commitment, decision,</text>
+<text x="1830" y="1030" font-size="12.5" fill="#475569">   credit_score, prob_default}</text>
+<text x="1830" y="1046" font-size="12.5" fill="#475569">• RSA-2048 PSS sign(JSON_bytes, SHA-256)</text>
+<text x="1830" y="1062" font-size="12.5" fill="#475569">• record_hash = SHA-256(JSON_bytes)</text>
+<text x="1830" y="1078" font-size="12.5" fill="#475569">• Append full record to JSONL log</text>
+<rect x="1830" y="1098" width="460" height="30" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="2060" y="1118" text-anchor="middle" font-size="11.5" fill="#7c2d12">cryptography · RSA-PSS · MGF1(SHA-256)</text>
+
+<!-- Step 6-7-8 bottom row -->
+<rect x="90" y="1160" width="500" height="220" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="90" y="1160" width="500" height="44" rx="14" fill="#ea580c"/>
+<rect x="90" y="1186" width="500" height="18" fill="#ea580c"/>
+<text x="340" y="1188" text-anchor="middle" font-size="16" font-weight="700" fill="white">⑥ MERKLE BATCH + EXTERNAL WITNESS</text>
+<text x="110" y="1224" font-size="13" font-weight="600" fill="#9a3412">Batch tamper-evidence:</text>
+<text x="110" y="1242" font-size="12.5" fill="#475569">• Accumulate record_hashes in pending_records[]</text>
+<text x="110" y="1258" font-size="12.5" fill="#475569">• Every 10 decisions → compute Merkle root</text>
+<text x="110" y="1274" font-size="12.5" fill="#475569">  (binary tree, SHA-256 at each node)</text>
+<text x="110" y="1290" font-size="12.5" fill="#475569">• Publish root to merkle_witness.jsonl</text>
+<text x="110" y="1306" font-size="12.5" fill="#475569">• Each entry: batch_id, timestamp, leaves[], root</text>
+<text x="110" y="1322" font-size="12.5" fill="#475569">• Altering any leaf → root mismatch detected</text>
+<rect x="110" y="1344" width="460" height="24" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="340" y="1360" text-anchor="middle" font-size="11.5" fill="#7c2d12">gateway.py → _merkle_root() → _publish_merkle_batch()</text>
+
+<rect x="620" y="1160" width="580" height="220" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="620" y="1160" width="580" height="44" rx="14" fill="#ea580c"/>
+<rect x="620" y="1186" width="580" height="18" fill="#ea580c"/>
+<text x="910" y="1188" text-anchor="middle" font-size="16" font-weight="700" fill="white">⑦ ZK PROOF GENERATION (EZKL Halo2)</text>
+<text x="640" y="1224" font-size="13" font-weight="600" fill="#9a3412">What is proven (without revealing):</text>
+<text x="640" y="1242" font-size="12.5" fill="#475569">• Input visibility: HASHED (Poseidon commitment + private nonce)</text>
+<text x="640" y="1258" font-size="12.5" fill="#475569">• Output visibility: PUBLIC (prob_default value)</text>
+<text x="640" y="1274" font-size="12.5" fill="#475569">• System: EZKL Halo2 (polynomial commitment scheme)</text>
+<text x="640" y="1290" font-size="12.5" fill="#475569">• Proof binds: feature_vector + nonce → model_probability</text>
+<text x="640" y="1306" font-size="12.5" fill="#475569">• Prover time: ~5–60s (logistic regression, 11 features)</text>
+<text x="640" y="1322" font-size="12.5" fill="#475569">• Proof size: compact SNARK (~KB range)</text>
+<text x="640" y="1338" font-size="12.5" fill="#475569">• Verification: &lt;1s, offline, no cloud needed</text>
+<rect x="640" y="1352" width="540" height="24" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="910" y="1368" text-anchor="middle" font-size="11.5" fill="#7c2d12">zkproof/ → EZKL · model.compiled_circuit · proof.json · vk.key</text>
+
+<rect x="1230" y="1160" width="580" height="220" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1230" y="1160" width="580" height="44" rx="14" fill="#ea580c"/>
+<rect x="1230" y="1186" width="580" height="18" fill="#ea580c"/>
+<text x="1520" y="1188" text-anchor="middle" font-size="16" font-weight="700" fill="white">⑧ SHAP EXPLANATIONS</text>
+<text x="1250" y="1224" font-size="13" font-weight="600" fill="#9a3412">Per-decision factor attribution:</text>
+<text x="1250" y="1242" font-size="12.5" fill="#475569">• Method: LinearExplainer (on log-odds of clf)</text>
+<text x="1250" y="1258" font-size="12.5" fill="#475569">• Scale: log-odds (interventional perturbation)</text>
+<text x="1250" y="1274" font-size="12.5" fill="#475569">• 11 SHAP values per decision (one per feature)</text>
+<text x="1250" y="1290" font-size="12.5" fill="#475569">• negative shap → reduces default risk → GOOD</text>
+<text x="1250" y="1306" font-size="12.5" fill="#475569">• positive shap → increases default risk → BAD</text>
+<text x="1250" y="1322" font-size="12.5" fill="#475569">• Loaded in background thread (avoids 2.3s import delay)</text>
+<text x="1250" y="1338" font-size="12.5" fill="#475569">• Shown to borrower as bar chart (top 8 factors)</text>
+<rect x="1250" y="1352" width="540" height="24" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="1520" y="1368" text-anchor="middle" font-size="11.5" fill="#7c2d12">shap.LinearExplainer · explainer.shap_values(X_scaled)</text>
+
+<rect x="1840" y="1160" width="480" height="220" rx="14" fill="white" stroke="#fed7aa" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1840" y="1160" width="480" height="44" rx="14" fill="#ea580c"/>
+<rect x="1840" y="1186" width="480" height="18" fill="#ea580c"/>
+<text x="2080" y="1188" text-anchor="middle" font-size="16" font-weight="700" fill="white">⑨ FULL DECISION RECORD</text>
+<text x="1860" y="1224" font-size="13" font-weight="600" fill="#9a3412">Final record written to JSONL:</text>
+<text x="1860" y="1243" font-size="12" fill="#475569">application_id · timestamp · model_name</text>
+<text x="1860" y="1259" font-size="12" fill="#475569">model_version · model_hash (first 32 chars)</text>
+<text x="1860" y="1275" font-size="12" fill="#475569">input_commitment · decision (APPROVE/REJECT)</text>
+<text x="1860" y="1291" font-size="12" fill="#475569">credit_score (0–100) · prob_default</text>
+<text x="1860" y="1307" font-size="12" fill="#475569">shap_values[11] · signature (hex)</text>
+<text x="1860" y="1323" font-size="12" fill="#475569">record_hash · [zk_proof_path]</text>
+<rect x="1860" y="1342" width="440" height="24" rx="6" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+<text x="2080" y="1358" text-anchor="middle" font-size="11.5" fill="#7c2d12">gateway/decision_records.jsonl (append-only)</text>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 3: DATA STORES + VERIFIER
+═══════════════════════════════════════════════════════════ -->
+<text x="1200" y="1440" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">DATA STORES, CRYPTOGRAPHIC ASSETS &amp; VERIFIER</text>
+<line x1="60" y1="1455" x2="2340" y2="1455" stroke="#cbd5e1" stroke-width="1.5"/>
+
+<!-- Registry JSON -->
+<rect x="60" y="1470" width="380" height="220" rx="14" fill="white" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+<rect x="60" y="1470" width="380" height="40" rx="14" fill="#3b82f6"/>
+<rect x="60" y="1494" width="380" height="16" fill="#3b82f6"/>
+<text x="250" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">📄 registry.json</text>
+<text x="80" y="1530" font-size="12.5" fill="#475569">version: "2.0.0"</text>
+<text x="80" y="1546" font-size="12.5" fill="#475569">model_name: uci_german_credit_logistic</text>
+<text x="80" y="1562" font-size="12.5" fill="#475569">model_hash: 3307b40b94c6e6…</text>
+<text x="80" y="1578" font-size="12.5" fill="#475569">features: [11 feature names]</text>
+<text x="80" y="1594" font-size="12.5" fill="#475569">policy: {threshold: 0.50, max: 20000}</text>
+<text x="80" y="1610" font-size="12.5" fill="#475569">zk_proof: {system: "EZKL Halo2"}</text>
+<text x="80" y="1626" font-size="12.5" fill="#475569">explanation: {method: "SHAP Linear"}</text>
+<rect x="80" y="1650" width="340" height="28" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+<text x="250" y="1669" text-anchor="middle" font-size="11" fill="#1d4ed8">Written by lender_admin · Read by gateway at startup</text>
+
+<!-- Decision Records JSONL -->
+<rect x="460" y="1470" width="380" height="220" rx="14" fill="white" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+<rect x="460" y="1470" width="380" height="40" rx="14" fill="#3b82f6"/>
+<rect x="460" y="1494" width="380" height="16" fill="#3b82f6"/>
+<text x="650" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">📝 decision_records.jsonl</text>
+<text x="480" y="1530" font-size="12.5" fill="#475569">Append-only log · One JSON per line</text>
+<text x="480" y="1548" font-size="12.5" fill="#475569">Each line contains full signed record</text>
+<text x="480" y="1566" font-size="12.5" fill="#475569">Signed payload excludes shap_values</text>
+<text x="480" y="1584" font-size="12.5" fill="#475569">record_hash = SHA-256(signed_payload)</text>
+<text x="480" y="1602" font-size="12.5" fill="#475569">Tamper: signature fails + hash fails</text>
+<text x="480" y="1620" font-size="12.5" fill="#475569">Used by verifier and compliance UI</text>
+<text x="480" y="1638" font-size="12.5" fill="#475569">Grows at 1 line per decision</text>
+<rect x="480" y="1650" width="340" height="28" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+<text x="650" y="1669" text-anchor="middle" font-size="11" fill="#1d4ed8">gateway/decision_records.jsonl</text>
+
+<!-- Merkle Witness -->
+<rect x="860" y="1470" width="380" height="220" rx="14" fill="white" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+<rect x="860" y="1470" width="380" height="40" rx="14" fill="url(#hdrAmber)"/>
+<rect x="860" y="1494" width="380" height="16" fill="url(#hdrAmber)"/>
+<text x="1050" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">🌳 merkle_witness.jsonl</text>
+<text x="880" y="1530" font-size="12.5" fill="#475569">External witness log (append-only)</text>
+<text x="880" y="1548" font-size="12.5" fill="#475569">Each batch: batch_id, timestamp</text>
+<text x="880" y="1566" font-size="12.5" fill="#475569">num_records, leaves[], merkle_root</text>
+<text x="880" y="1584" font-size="12.5" fill="#475569">Merkle root = binary tree of SHA-256s</text>
+<text x="880" y="1602" font-size="12.5" fill="#475569">Published every 10 decisions (flush)</text>
+<text x="880" y="1620" font-size="12.5" fill="#475569">Verification: recompute root from leaves</text>
+<text x="880" y="1638" font-size="12.5" fill="#475569">Future: publish to blockchain / TSA</text>
+<rect x="880" y="1650" width="340" height="28" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+<text x="1050" y="1669" text-anchor="middle" font-size="11" fill="#92400e">gateway/merkle_witness.jsonl · Tamper-evident chain</text>
+
+<!-- Gateway Keys -->
+<rect x="1260" y="1470" width="360" height="220" rx="14" fill="white" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1260" y="1470" width="360" height="40" rx="14" fill="#3b82f6"/>
+<rect x="1260" y="1494" width="360" height="16" fill="#3b82f6"/>
+<text x="1440" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">🔑 Cryptographic Keys</text>
+<text x="1280" y="1530" font-size="12.5" fill="#475569">gateway_private.pem (RSA-2048)</text>
+<text x="1280" y="1548" font-size="12.5" fill="#475569">  → Signs every decision record</text>
+<text x="1280" y="1566" font-size="12.5" fill="#475569">  → Stored on gateway server (LSP)</text>
+<text x="1280" y="1584" font-size="12.5" fill="#475569">gateway_public.pem (RSA-2048)</text>
+<text x="1280" y="1602" font-size="12.5" fill="#475569">  → Shared with lender + regulator</text>
+<text x="1280" y="1620" font-size="12.5" fill="#475569">  → Used to verify any signature</text>
+<text x="1280" y="1638" font-size="12.5" fill="#475569">Generated once · PKCS8 PEM format</text>
+<rect x="1280" y="1650" width="320" height="28" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+<text x="1440" y="1669" text-anchor="middle" font-size="11" fill="#1d4ed8">gateway/keys/ · cryptography.hazmat</text>
+
+<!-- SHAP Explainer pkl -->
+<rect x="1640" y="1470" width="360" height="220" rx="14" fill="white" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1640" y="1470" width="360" height="40" rx="14" fill="#3b82f6"/>
+<rect x="1640" y="1494" width="360" height="16" fill="#3b82f6"/>
+<text x="1820" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">📊 shap_explainer.pkl</text>
+<text x="1660" y="1530" font-size="12.5" fill="#475569">LinearExplainer fitted on X_train_scaled</text>
+<text x="1660" y="1548" font-size="12.5" fill="#475569">StandardScaler (same as pipeline)</text>
+<text x="1660" y="1566" font-size="12.5" fill="#475569">11 feature names + human labels</text>
+<text x="1660" y="1584" font-size="12.5" fill="#475569">Background: 100 training samples</text>
+<text x="1660" y="1602" font-size="12.5" fill="#475569">Loaded in background thread (async)</text>
+<text x="1660" y="1620" font-size="12.5" fill="#475569">First request may lack SHAP if not loaded</text>
+<text x="1660" y="1638" font-size="12.5" fill="#475569">Subsequent requests always have SHAP</text>
+<rect x="1660" y="1650" width="320" height="28" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+<text x="1820" y="1669" text-anchor="middle" font-size="11" fill="#1d4ed8">models/shap_explainer.pkl · pickle · shap 0.44</text>
+
+<!-- ONNX Model -->
+<rect x="2020" y="1470" width="320" height="220" rx="14" fill="white" stroke="#7c3aed" stroke-width="2" filter="url(#shadow)"/>
+<rect x="2020" y="1470" width="320" height="40" rx="14" fill="url(#hdrPurple)"/>
+<rect x="2020" y="1494" width="320" height="16" fill="url(#hdrPurple)"/>
+<text x="2180" y="1496" text-anchor="middle" font-size="15" font-weight="700" fill="white">🧠 sakshi_credit_v1.onnx</text>
+<text x="2040" y="1530" font-size="12.5" fill="#475569">Algorithm: Logistic Regression</text>
+<text x="2040" y="1548" font-size="12.5" fill="#475569">Preprocessing: StandardScaler</text>
+<text x="2040" y="1566" font-size="12.5" fill="#475569">Input: float32[None, 11]</text>
+<text x="2040" y="1584" font-size="12.5" fill="#475569">Output: prob[bad_risk] ∈ [0,1]</text>
+<text x="2040" y="1602" font-size="12.5" fill="#475569">Opset: 12 · skl2onnx</text>
+<text x="2040" y="1620" font-size="12.5" fill="#475569">Dataset: UCI German Credit (1000 rows)</text>
+<text x="2040" y="1638" font-size="12.5" fill="#475569">Hash: 3307b40b94c6…</text>
+<rect x="2040" y="1650" width="280" height="28" rx="6" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1"/>
+<text x="2180" y="1669" text-anchor="middle" font-size="11" fill="#7c3aed">models/sakshi_credit_v1.onnx</text>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 4: VERIFIER DETAIL
+═══════════════════════════════════════════════════════════ -->
+<rect x="60" y="1720" width="2280" height="260" rx="16" fill="white" stroke="#16a34a" stroke-width="2.5" filter="url(#shadowLg)"/>
+<rect x="60" y="1720" width="2280" height="50" rx="16" fill="url(#hdrGreen)"/>
+<rect x="60" y="1750" width="2280" height="20" fill="url(#hdrGreen)"/>
+<text x="1200" y="1753" text-anchor="middle" font-size="22" font-weight="800" fill="white">✅  INDEPENDENT VERIFIER — verifier.py · Three-Check Protocol</text>
+<text x="1200" y="1768" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.85)">Lender, Regulator, or Ombudsman runs this · No raw data needed · No cloud dependency · Offline capable</text>
+
+<!-- Check 1 -->
+<rect x="90" y="1792" width="700" height="158" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="440" y="1818" text-anchor="middle" font-size="16" font-weight="700" fill="#15803d">Check ① — RSA Signature Verification</text>
+<text x="110" y="1842" font-size="12.5" fill="#475569">1. Load gateway_public.pem (shared with lender)</text>
+<text x="110" y="1860" font-size="12.5" fill="#475569">2. Reconstruct signed payload: strip signature + record_hash from record</text>
+<text x="110" y="1878" font-size="12.5" fill="#475569">3. public_key.verify(signature, payload, PSS(MGF1(SHA-256)))</text>
+<text x="110" y="1896" font-size="12.5" fill="#475569">4. ✅ PASS → record was created by registered gateway</text>
+<text x="110" y="1914" font-size="12.5" fill="#475569">   ❌ FAIL → record was not signed by known gateway (forgery or key mismatch)</text>
+<rect x="110" y="1926" width="660" height="20" rx="5" fill="#dcfce7" stroke="#bbf7d0"/>
+<text x="440" y="1941" text-anchor="middle" font-size="11" fill="#15803d">cryptography.hazmat.primitives.asymmetric.padding.PSS · hashes.SHA256</text>
+
+<!-- Check 2 -->
+<rect x="820" y="1792" width="700" height="158" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1170" y="1818" text-anchor="middle" font-size="16" font-weight="700" fill="#15803d">Check ② — Record Hash Integrity</text>
+<text x="840" y="1842" font-size="12.5" fill="#475569">1. Reconstruct signed payload (same as above — exclude sig + record_hash)</text>
+<text x="840" y="1860" font-size="12.5" fill="#475569">2. Compute: computed_hash = SHA-256(json.dumps(payload, sort_keys=True))</text>
+<text x="840" y="1878" font-size="12.5" fill="#475569">3. Compare computed_hash vs. stored record['record_hash']</text>
+<text x="840" y="1896" font-size="12.5" fill="#475569">4. ✅ PASS → no field in the record has been modified</text>
+<text x="840" y="1914" font-size="12.5" fill="#475569">   ❌ FAIL → any field (decision, score, timestamp) was altered post-signing</text>
+<rect x="840" y="1926" width="660" height="20" rx="5" fill="#dcfce7" stroke="#bbf7d0"/>
+<text x="1170" y="1941" text-anchor="middle" font-size="11" fill="#15803d">hashlib.sha256 · json.dumps sort_keys=True · deterministic serialisation</text>
+
+<!-- Check 3 -->
+<rect x="1550" y="1792" width="760" height="158" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="1930" y="1818" text-anchor="middle" font-size="16" font-weight="700" fill="#15803d">Check ③ — Merkle Inclusion Proof</text>
+<text x="1570" y="1842" font-size="12.5" fill="#475569">1. Find batch in merkle_witness.jsonl containing record['record_hash']</text>
+<text x="1570" y="1860" font-size="12.5" fill="#475569">2. Get batch leaves[] and published merkle_root</text>
+<text x="1570" y="1878" font-size="12.5" fill="#475569">3. Recompute root from leaves (binary SHA-256 tree)</text>
+<text x="1570" y="1896" font-size="12.5" fill="#475569">4. ✅ PASS → computed root = published root → record was in original batch</text>
+<text x="1570" y="1914" font-size="12.5" fill="#475569">   ⚠️ WARN → record not yet in any batch (too recent, pending flush)</text>
+<rect x="1570" y="1926" width="720" height="20" rx="5" fill="#dcfce7" stroke="#bbf7d0"/>
+<text x="1930" y="1941" text-anchor="middle" font-size="11" fill="#15803d">verifier.py → _verify_merkle_path() · O(log n) tree walk</text>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 5: ZK PROOF DETAIL
+═══════════════════════════════════════════════════════════ -->
+<rect x="60" y="2020" width="2280" height="320" rx="16" fill="white" stroke="#7c3aed" stroke-width="2.5" filter="url(#shadowLg)"/>
+<rect x="60" y="2020" width="2280" height="50" rx="16" fill="url(#hdrPurple)"/>
+<rect x="60" y="2050" width="2280" height="20" fill="url(#hdrPurple)"/>
+<text x="1200" y="2053" text-anchor="middle" font-size="22" font-weight="800" fill="white">🔐  ZERO-KNOWLEDGE PROOF SYSTEM — EZKL Halo2 SNARK</text>
+<text x="1200" y="2068" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.85)">Proves computation without revealing model weights or applicant data · Trust anchor: open mathematics, no cloud vendor</text>
+
+<rect x="90" y="2088" width="510" height="220" rx="12" fill="#faf5ff" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="345" y="2114" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">Setup Phase (One-Time)</text>
+<text x="110" y="2136" font-size="12.5" fill="#475569">1. Export ONNX → EZKL circuit compilation</text>
+<text x="110" y="2154" font-size="12.5" fill="#475569">2. Generate proving key (pk.key) — prover only</text>
+<text x="110" y="2172" font-size="12.5" fill="#475569">3. Generate verification key (vk.key) — PUBLIC</text>
+<text x="110" y="2190" font-size="12.5" fill="#475569">4. Publish vk.key to lender + regulator</text>
+<text x="110" y="2208" font-size="12.5" fill="#475569">5. Circuit encodes: model weights as constants</text>
+<text x="110" y="2226" font-size="12.5" fill="#475569">   (weights are baked in, never transmitted)</text>
+<text x="110" y="2244" font-size="12.5" fill="#475569">6. Circuit checks: Poseidon(input, nonce) = commitment</text>
+<rect x="110" y="2264" width="470" height="36" rx="8" fill="#ede9fe" stroke="#ddd6fe"/>
+<text x="345" y="2278" text-anchor="middle" font-size="11.5" fill="#7c3aed">ezkl.compile_circuit → ezkl.gen_pk → ezkl.gen_vk</text>
+<text x="345" y="2292" text-anchor="middle" font-size="11.5" fill="#7c3aed">zkproof/circuit/ → pk.key, vk.key, model.compiled</text>
+
+<rect x="625" y="2088" width="510" height="220" rx="12" fill="#faf5ff" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="880" y="2114" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">Prove Phase (Per Decision — LSP Side)</text>
+<text x="645" y="2136" font-size="12.5" fill="#475569">1. Private input: feature vector (11 floats)</text>
+<text x="645" y="2154" font-size="12.5" fill="#475569">2. Private input: random nonce (dims=4, range [0, 8191])</text>
+<text x="645" y="2172" font-size="12.5" fill="#475569">3. Run model forward pass inside ZK circuit</text>
+<text x="645" y="2190" font-size="12.5" fill="#475569">4. Compute Poseidon(input_vec, nonce) = commitment</text>
+<text x="645" y="2208" font-size="12.5" fill="#475569">5. Prove: circuit constraints satisfied</text>
+<text x="645" y="2226" font-size="12.5" fill="#475569">6. Output: proof.json (compact SNARK proof)</text>
+<text x="645" y="2244" font-size="12.5" fill="#475569">7. Prover time: ~5–60s (logistic regression)</text>
+<rect x="645" y="2264" width="470" height="36" rx="8" fill="#ede9fe" stroke="#ddd6fe"/>
+<text x="880" y="2278" text-anchor="middle" font-size="11.5" fill="#7c3aed">ezkl.gen_witness → ezkl.prove → proof.json</text>
+<text x="880" y="2292" text-anchor="middle" font-size="11.5" fill="#7c3aed">Private: feature_vec, nonce | Public: commitment, prob_output</text>
+
+<rect x="1160" y="2088" width="510" height="220" rx="12" fill="#faf5ff" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="1415" y="2114" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">Verify Phase (&lt;1s — Lender / Regulator)</text>
+<text x="1180" y="2136" font-size="12.5" fill="#475569">1. Load vk.key (public verification key)</text>
+<text x="1180" y="2154" font-size="12.5" fill="#475569">2. Load proof.json from evidence package</text>
+<text x="1180" y="2172" font-size="12.5" fill="#475569">3. Read public outputs: commitment + prob_default</text>
+<text x="1180" y="2190" font-size="12.5" fill="#475569">4. ezkl.verify(proof, vk, public_outputs)</text>
+<text x="1180" y="2208" font-size="12.5" fill="#475569">5. ✅ TRUE → proven model produced this output</text>
+<text x="1180" y="2226" font-size="12.5" fill="#475569">   ❌ FALSE → proof invalid (forgery detected)</text>
+<text x="1180" y="2244" font-size="12.5" fill="#475569">6. No internet, no cloud, no vendor trust needed</text>
+<rect x="1180" y="2264" width="470" height="36" rx="8" fill="#ede9fe" stroke="#ddd6fe"/>
+<text x="1415" y="2278" text-anchor="middle" font-size="11.5" fill="#7c3aed">ezkl.verify(proof_path, vk_path, settings_path)</text>
+<text x="1415" y="2292" text-anchor="middle" font-size="11.5" fill="#7c3aed">Offline · Self-contained · Verifiable years later</text>
+
+<rect x="1700" y="2088" width="610" height="220" rx="12" fill="#faf5ff" stroke="#ddd6fe" stroke-width="1.5"/>
+<text x="2005" y="2114" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">ZK vs TEE — Why ZK Wins Here</text>
+<text x="1720" y="2136" font-size="12.5" fill="#475569">TEE (AWS Nitro): attestation signed by Amazon AWS</text>
+<text x="1720" y="2154" font-size="12.5" fill="#475569">  → Requires trusting US-operated cloud vendor</text>
+<text x="1720" y="2172" font-size="12.5" fill="#475569">  → Certificate format differs per cloud (no portability)</text>
+<text x="1720" y="2190" font-size="12.5" fill="#475569">  → Chain expires; long-term verifiability uncertain</text>
+<text x="1720" y="2210" font-size="12.5" fill="#16a34a" font-weight="600">ZK (EZKL): trust anchor = open mathematics</text>
+<text x="1720" y="2228" font-size="12.5" fill="#16a34a">  → Verify offline, any machine, no vendor</text>
+<text x="1720" y="2246" font-size="12.5" fill="#16a34a">  → Self-contained: verifiable in 2035 with same vk.key</text>
+<rect x="1720" y="2264" width="570" height="36" rx="8" fill="#ede9fe" stroke="#ddd6fe"/>
+<text x="2005" y="2278" text-anchor="middle" font-size="11.5" fill="#7c3aed">Aligned: IndiaAI Safe &amp; Trusted AI · RBI FREE-AI · Sovereign AI</text>
+<text x="2005" y="2292" text-anchor="middle" font-size="11.5" fill="#7c3aed">No dependency on AWS Mumbai/Hyderabad or any cloud</text>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 6: END-TO-END FLOW + REGULATORY
+═══════════════════════════════════════════════════════════ -->
+<text x="1200" y="2390" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">END-TO-END DECISION FLOW</text>
+<line x1="60" y1="2405" x2="2340" y2="2405" stroke="#cbd5e1" stroke-width="1.5"/>
+
+<!-- Flow boxes -->
+<rect x="60" y="2420" width="220" height="70" rx="12" fill="white" stroke="#0ea5e9" stroke-width="2" filter="url(#shadow)"/>
+<text x="170" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">1. Borrower</text>
+<text x="170" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Submits loan application</text>
+<text x="170" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">via QuickCredit app</text>
+
+<path d="M280 2455 L340 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="340" y="2420" width="220" height="70" rx="12" fill="white" stroke="#ea580c" stroke-width="2" filter="url(#shadow)"/>
+<text x="450" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">2. Gateway</text>
+<text x="450" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Policy check → hash verify</text>
+<text x="450" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">→ commit → sign → batch</text>
+
+<path d="M560 2455 L620 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="620" y="2420" width="220" height="70" rx="12" fill="white" stroke="#7c3aed" stroke-width="2" filter="url(#shadow)"/>
+<text x="730" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">3. LSP Model</text>
+<text x="730" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">ONNX inference → prob</text>
+<text x="730" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">ZK proof generated</text>
+
+<path d="M840 2455 L900 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="900" y="2420" width="220" height="70" rx="12" fill="white" stroke="#ea580c" stroke-width="2" filter="url(#shadow)"/>
+<text x="1010" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">4. Signed Record</text>
+<text x="1010" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">RSA-2048 signature</text>
+<text x="1010" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">Appended to JSONL</text>
+
+<path d="M1120 2455 L1180 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="1180" y="2420" width="220" height="70" rx="12" fill="white" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+<text x="1290" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">5. Merkle Batch</text>
+<text x="1290" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Root published to</text>
+<text x="1290" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">external witness log</text>
+
+<path d="M1400 2455 L1460 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="1460" y="2420" width="220" height="70" rx="12" fill="white" stroke="#0ea5e9" stroke-width="2" filter="url(#shadow)"/>
+<text x="1570" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">6. Borrower Gets</text>
+<text x="1570" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Certificate ID + SHAP</text>
+<text x="1570" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">+ Credit Score</text>
+
+<path d="M1680 2455 L1740 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="1740" y="2420" width="220" height="70" rx="12" fill="white" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+<text x="1850" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">7. Lender Monitors</text>
+<text x="1850" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Dashboard: integrity</text>
+<text x="1850" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">drift + audit log</text>
+
+<path d="M1960 2455 L2020 2455" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+<rect x="2020" y="2420" width="320" height="70" rx="12" fill="white" stroke="#dc2626" stroke-width="2" filter="url(#shadow)"/>
+<text x="2180" y="2448" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">8. Dispute: Ombudsman Verifies</text>
+<text x="2180" y="2466" text-anchor="middle" font-size="11.5" fill="#475569">Sig ✅ + Hash ✅ + Merkle ✅ + ZK ✅</text>
+<text x="2180" y="2482" text-anchor="middle" font-size="11.5" fill="#475569">No raw data. No cooperation. Offline.</text>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 7: TECH STACK + REGULATORY TABLE
+═══════════════════════════════════════════════════════════ -->
+<text x="1200" y="2550" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">TECHNOLOGY STACK + REGULATORY ALIGNMENT</text>
+<line x1="60" y1="2565" x2="2340" y2="2565" stroke="#cbd5e1" stroke-width="1.5"/>
+
+<!-- Tech Stack -->
+<rect x="60" y="2580" width="1100" height="340" rx="16" fill="white" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="60" y="2580" width="1100" height="44" rx="16" fill="#1e293b"/>
+<rect x="60" y="2606" width="1100" height="18" fill="#1e293b"/>
+<text x="610" y="2609" text-anchor="middle" font-size="18" font-weight="700" fill="white">⚙️  Technology Stack</text>
+
+<!-- Col 1 -->
+<text x="90" y="2648" font-size="14" font-weight="700" fill="#2563eb">ML / Inference</text>
+<text x="90" y="2668" font-size="12.5" fill="#475569">scikit-learn 1.x · LogisticRegression</text>
+<text x="90" y="2686" font-size="12.5" fill="#475569">skl2onnx · ONNX Opset 12</text>
+<text x="90" y="2704" font-size="12.5" fill="#475569">onnxruntime · InferenceSession</text>
+<text x="90" y="2722" font-size="12.5" fill="#475569">shap 0.44 · LinearExplainer</text>
+<text x="90" y="2740" font-size="12.5" fill="#475569">numpy · pandas · StandardScaler</text>
+
+<text x="90" y="2768" font-size="14" font-weight="700" fill="#2563eb">Cryptography</text>
+<text x="90" y="2788" font-size="12.5" fill="#475569">cryptography 41+ · RSA-2048</text>
+<text x="90" y="2806" font-size="12.5" fill="#475569">PSS padding · MGF1(SHA-256)</text>
+<text x="90" y="2824" font-size="12.5" fill="#475569">hashlib · SHA-256 everywhere</text>
+<text x="90" y="2842" font-size="12.5" fill="#475569">PKCS8 PEM key format</text>
+<text x="90" y="2860" font-size="12.5" fill="#475569">Binary Merkle tree (custom)</text>
+<text x="90" y="2878" font-size="12.5" fill="#475569">EZKL Halo2 SNARK (ZK layer)</text>
+
+<!-- Col 2 -->
+<text x="420" y="2648" font-size="14" font-weight="700" fill="#7c3aed">API / Backend</text>
+<text x="420" y="2668" font-size="12.5" fill="#475569">Python 3.11</text>
+<text x="420" y="2686" font-size="12.5" fill="#475569">Flask 3.x · REST API</text>
+<text x="420" y="2704" font-size="12.5" fill="#475569">threading · background SHAP load</text>
+<text x="420" y="2722" font-size="12.5" fill="#475569">JSONL append-only logging</text>
+<text x="420" y="2740" font-size="12.5" fill="#475569">pickle · JSON · os.path</text>
+
+<text x="420" y="2768" font-size="14" font-weight="700" fill="#7c3aed">API Endpoints</text>
+<text x="420" y="2788" font-size="12.5" fill="#475569">POST /api/decide</text>
+<text x="420" y="2806" font-size="12.5" fill="#475569">GET  /api/verify/:id</text>
+<text x="420" y="2824" font-size="12.5" fill="#475569">GET  /api/stats</text>
+<text x="420" y="2842" font-size="12.5" fill="#475569">GET  /api/batches</text>
+<text x="420" y="2860" font-size="12.5" fill="#475569">GET  /api/registry</text>
+<text x="420" y="2878" font-size="12.5" fill="#475569">GET  /  (dashboard UI)</text>
+
+<!-- Col 3 -->
+<text x="750" y="2648" font-size="14" font-weight="700" fill="#15803d">Frontend</text>
+<text x="750" y="2668" font-size="12.5" fill="#475569">Vanilla HTML5 / CSS3 / JS</text>
+<text x="750" y="2686" font-size="12.5" fill="#475569">Zero framework dependency</text>
+<text x="750" y="2704" font-size="12.5" fill="#475569">Three-persona dashboard:</text>
+<text x="750" y="2722" font-size="12.5" fill="#475569">  Borrower · Lender · LSP</text>
+<text x="750" y="2740" font-size="12.5" fill="#475569">SVG credit score ring</text>
+<text x="750" y="2758" font-size="12.5" fill="#475569">Animated SHAP bar chart</text>
+<text x="750" y="2776" font-size="12.5" fill="#475569">Live audit log table</text>
+<text x="750" y="2794" font-size="12.5" fill="#475569">One-click verify panel</text>
+
+<text x="750" y="2822" font-size="14" font-weight="700" fill="#15803d">Data</text>
+<text x="750" y="2842" font-size="12.5" fill="#475569">UCI Statlog German Credit</text>
+<text x="750" y="2860" font-size="12.5" fill="#475569">1000 samples · CC BY 4.0</text>
+<text x="750" y="2878" font-size="12.5" fill="#475569">11 features · Binary target</text>
+
+
+<!-- Regulatory Table -->
+<rect x="1180" y="2580" width="1160" height="340" rx="16" fill="white" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shadow)"/>
+<rect x="1180" y="2580" width="1160" height="44" rx="16" fill="#1e293b"/>
+<rect x="1180" y="2606" width="1160" height="18" fill="#1e293b"/>
+<text x="1760" y="2609" text-anchor="middle" font-size="18" font-weight="700" fill="white">⚖️  Regulatory Alignment</text>
+
+<!-- Table header -->
+<rect x="1200" y="2630" width="1120" height="34" rx="6" fill="#f1f5f9"/>
+<text x="1340" y="2652" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">Regulation</text>
+<text x="1760" y="2652" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">How Sakshi Addresses It</text>
+
+<!-- Rows -->
+<line x1="1540" y1="2630" x2="1540" y2="2908" stroke="#e2e8f0" stroke-width="1"/>
+
+<rect x="1200" y="2664" width="1120" height="44" rx="0" fill="white"/>
+<text x="1210" y="2682" font-size="12.5" font-weight="600" fill="#1d4ed8">RBI Digital Lending Guidelines 2022</text>
+<text x="1210" y="2700" font-size="12" fill="#475569">Lender accountability for LSP decisions</text>
+<text x="1550" y="2682" font-size="12.5" fill="#475569">Cryptographic proof of which model made which decision</text>
+<text x="1550" y="2700" font-size="12" fill="#475569">Lender retains verifiable evidence for every decision</text>
+
+<rect x="1200" y="2708" width="1120" height="44" rx="0" fill="#f8fafc"/>
+<text x="1210" y="2726" font-size="12.5" font-weight="600" fill="#1d4ed8">RBI Draft Model Risk Management Guidelines</text>
+<text x="1210" y="2744" font-size="12" fill="#475569">Independent model validation + change detection</text>
+<text x="1550" y="2726" font-size="12.5" fill="#475569">Hash check before every inference catches silent model swaps</text>
+<text x="1550" y="2744" font-size="12" fill="#475569">Per-decision model version stamped in signed record</text>
+
+<rect x="1200" y="2752" width="1120" height="44" rx="0" fill="white"/>
+<text x="1210" y="2770" font-size="12.5" font-weight="600" fill="#1d4ed8">DPDP Act 2023</text>
+<text x="1210" y="2788" font-size="12" fill="#475569">Data minimisation · Accountability · ₹250Cr penalty</text>
+<text x="1550" y="2770" font-size="12.5" fill="#475569">Verification needs no raw personal data</text>
+<text x="1550" y="2788" font-size="12" fill="#475569">Input commitment proves what was scored without exposing data</text>
+
+<rect x="1200" y="2796" width="1120" height="44" rx="0" fill="#f8fafc"/>
+<text x="1210" y="2814" font-size="12.5" font-weight="600" fill="#1d4ed8">IndiaAI Mission — Safe &amp; Trusted AI Pillar</text>
+<text x="1210" y="2832" font-size="12" fill="#475569">₹20.46Cr · Privacy tools · Algorithm auditing</text>
+<text x="1550" y="2814" font-size="12.5" fill="#475569">Sovereign verification infrastructure — no foreign cloud</text>
+<text x="1550" y="2832" font-size="12" fill="#475569">ZK trust anchor: open mathematics, auditable, offline</text>
+
+<rect x="1200" y="2840" width="1120" height="44" rx="0" fill="white"/>
+<text x="1210" y="2858" font-size="12.5" font-weight="600" fill="#1d4ed8">RBI FREE-AI Recommendations</text>
+<text x="1210" y="2876" font-size="12" fill="#475569">Indigenous AI models in finance · Governance</text>
+<text x="1550" y="2858" font-size="12.5" fill="#475569">Sakshi is the governance layer for any model (indigenous or third-party)</text>
+<text x="1550" y="2876" font-size="12" fill="#475569">Works with any ONNX-exportable model, sovereign or not</text>
+
+
+<!-- ═══ FOOTER ═══ -->
+<rect x="60" y="2960" width="2280" height="60" rx="12" fill="#1e293b"/>
+<text x="200" y="2985" font-size="13" fill="rgba(255,255,255,0.7)">TEJAS045 · SASTRA University Hackathon · 2026</text>
+<text x="1200" y="2985" text-anchor="middle" font-size="14" font-weight="600" fill="white">Sakshi — Every AI credit decision, independently verifiable. No raw data shared. No model weights exposed.</text>
+<text x="2260" y="2985" text-anchor="end" font-size="13" fill="rgba(255,255,255,0.7)">github: TejasMVP/sakshi</text>
+<text x="200" y="3008" font-size="12" fill="rgba(255,255,255,0.5)">Stack: Python 3.11 · Flask · ONNX · EZKL Halo2 · RSA-2048 PSS · SHA-256 · Merkle · SHAP · UCI German Credit</text>
+<text x="2260" y="3008" text-anchor="end" font-size="12" fill="rgba(255,255,255,0.5)">License: MIT · Data: CC BY 4.0</text>
+
+
+<!-- ═══ CLEAN INTER-ZONE ARROWS ═══ -->
+<!-- Borrower → LSP: submit application -->
+<path d="M560 490 L618 490" stroke="#0ea5e9" stroke-width="2.5" marker-end="url(#arrBlue)" fill="none"/>
+<rect x="563" y="473" width="52" height="15" rx="4" fill="#e0f2fe"/>
+<text x="589" y="484" text-anchor="middle" font-size="10" fill="#0369a1" font-weight="600">submit</text>
+
+<!-- LSP → Gateway: features flow down -->
+<path d="M900 762 L900 818" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#arrBlue)" fill="none"/>
+<rect x="862" y="783" width="76" height="15" rx="4" fill="#ede9fe"/>
+<text x="900" y="794" text-anchor="middle" font-size="10" fill="#6d28d9" font-weight="600">features + model</text>
+
+<!-- Lender → Gateway: registry (left side) -->
+<path d="M1268 490 L1220 490 L1220 900" stroke="#16a34a" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrGreen)" fill="none"/>
+<rect x="1178" y="680" width="56" height="28" rx="4" fill="#dcfce7"/>
+<text x="1205" y="691" text-anchor="middle" font-size="10" fill="#15803d" font-weight="600">registry</text>
+<text x="1205" y="703" text-anchor="middle" font-size="10" fill="#15803d" font-weight="600">read</text>
+
+<!-- Gateway → Lender: signed records -->
+<path d="M1800 1000 L1840 1000 L1840 490 L1800 490 L1268 490" stroke="#16a34a" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrGreen)" fill="none"/>
+<rect x="1805" y="740" width="68" height="28" rx="4" fill="#dcfce7"/>
+<text x="1840" y="751" text-anchor="middle" font-size="10" fill="#15803d" font-weight="600">signed</text>
+<text x="1840" y="763" text-anchor="middle" font-size="10" fill="#15803d" font-weight="600">records</text>
+
+<!-- Lender → Regulator: evidence package -->
+<path d="M1800 450 L1858 450" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrRed)" fill="none"/>
+<rect x="1803" y="435" width="52" height="15" rx="4" fill="#fee2e2"/>
+<text x="1829" y="446" text-anchor="middle" font-size="10" fill="#b91c1c" font-weight="600">evidence</text>
+
+<!-- Borrower → Regulator: cert ID (simple horizontal line at top) -->
+<path d="M310 280 L310 260 L2100 260 L2100 280" stroke="#0ea5e9" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrBlue)" fill="none"/>
+<rect x="1100" y="245" width="200" height="15" rx="4" fill="#e0f2fe"/>
+<text x="1200" y="256" text-anchor="middle" font-size="10" fill="#0369a1" font-weight="600">cert ID → dispute (RBI Ombudsman)</text>
+
+<!-- Gateway → Merkle Witness store -->
+<path d="M400 1380 L400 1468" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrAmber)" fill="none"/>
+<rect x="360" y="1415" width="78" height="15" rx="4" fill="#fffbeb"/>
+<text x="400" y="1426" text-anchor="middle" font-size="10" fill="#92400e" font-weight="600">Merkle root</text>
+
+<!-- Gateway → Decision Records store -->
+<path d="M700 1380 L700 1468" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#arrBlue)" fill="none"/>
+<rect x="668" y="1415" width="62" height="15" rx="4" fill="#eff6ff"/>
+<text x="700" y="1426" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="600">append</text>
+
+</svg>
