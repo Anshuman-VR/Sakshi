@@ -1,0 +1,22 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local secrets: never commit the gateway signing private key
+gateway/keys/gateway_private.pem
+.env
+.env.*
+!.env.example
+
+# Runtime decision records / local verification artifacts
+gateway/decision_records.jsonl
+gateway/decision_records_backup.jsonl
+gateway/decision_records_tampered.jsonl
+gateway/merkle_witness.jsonl
+
+# Local logs and OS/editor files
+*.log
+.DS_Store
+.vscode/

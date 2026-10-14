@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuickCredit — Instant Personal Loans</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2563eb;--blue-dk:#1d4ed8;--blue-lt:#eff6ff;--blue-mid:#dbeafe;
+  --green:#16a34a;--green-lt:#f0fdf4;--green-bd:#bbf7d0;
+  --red:#dc2626;--red-lt:#fef2f2;--red-bd:#fecaca;
+  --amber:#d97706;--amber-lt:#fffbeb;
+  --gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;
+  --gray-600:#475569;--gray-700:#334155;--gray-800:#1e293b;--gray-900:#0f172a;
+  --white:#ffffff;
+  --r8:8px;--r12:12px;--r16:16px;--r24:24px;
+  --sh1:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 12px rgba(0,0,0,.08);
+  --sh3:0 8px 24px rgba(0,0,0,.1);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Inter',sans-serif;
+     background:var(--gray-50);color:var(--gray-800);line-height:1.5;min-height:100vh}
+
+/* NAV */
+.topnav{background:var(--white);border-bottom:1px solid var(--gray-200);position:sticky;top:0;z-index:200;box-shadow:var(--sh1)}
+.topnav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-icon{width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;letter-spacing:-1px;flex-shrink:0}
+.brand-name{font-size:20px;font-weight:700;color:var(--gray-900)}
+.brand-tag{font-size:11px;color:var(--gray-400);margin-top:-2px}
+.nav-pills{display:flex;background:var(--gray-100);border-radius:10px;padding:3px;gap:2px}
+.nav-pill{padding:7px 18px;border-radius:8px;font-size:13.5px;font-weight:500;cursor:pointer;color:var(--gray-500);border:none;background:none;transition:all .15s;white-space:nowrap}
+.nav-pill:hover{color:var(--gray-800)}
+.nav-pill.active{background:var(--white);color:var(--gray-900);font-weight:600;box-shadow:var(--sh1)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-badge{font-size:11.5px;background:var(--green-lt);color:var(--green);padding:4px 10px;border-radius:20px;font-weight:600;border:1px solid var(--green-bd)}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+.page{max-width:1200px;margin:0 auto;padding:32px 24px}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--r16);border:1px solid var(--gray-200);box-shadow:var(--sh1)}
+.card-body{padding:24px}
+.card-sm{padding:20px}
+
+/* TYPOGRAPHY */
+.page-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.page-sub{font-size:14px;color:var(--gray-500);margin-bottom:24px}
+.sec-title{font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gray-100);letter-spacing:.01em}
+
+/* HERO */
+.hero-banner{background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 50%,#2563eb 100%);border-radius:var(--r16);padding:36px 40px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden}
+.hero-banner::before{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;background:rgba(255,255,255,.05);border-radius:50%}
+.hero-banner::after{content:'';position:absolute;right:80px;bottom:-80px;width:180px;height:180px;background:rgba(255,255,255,.04);border-radius:50%}
+.hero-content{position:relative;z-index:1}
+.hero-banner h1{font-size:28px;font-weight:700;margin-bottom:8px}
+.hero-banner p{font-size:15px;opacity:.85;margin-bottom:24px;max-width:500px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px}
+.hero-pill{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);border-radius:24px;padding:7px 18px;font-size:13px;cursor:pointer;transition:all .15s;backdrop-filter:blur(8px);color:#fff;font-weight:500}
+.hero-pill:hover,.hero-pill.sel{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
+.hero-features{display:flex;gap:24px;margin-top:20px;opacity:.85;flex-wrap:wrap}
+.hero-feat{display:flex;align-items:center;gap:6px;font-size:13px}
+
+/* FORM ELEMENTS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;font-weight:600;color:var(--gray-600);letter-spacing:.02em;text-transform:uppercase}
+.field input,.field select{padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r8);font-size:14px;color:var(--gray-800);background:var(--white);outline:none;transition:border .15s,box-shadow .15s;width:100%;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.field .sub{font-size:11.5px;color:var(--gray-400)}
+.pfx{position:relative}.pfx input{padding-left:30px}
+.pfx::before{content:'₹';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--gray-400);pointer-events:none;z-index:1}
+
+/* SLIDER */
+.slider-section{margin-bottom:8px}
+.slider-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.slider-top .lbl{font-size:13px;font-weight:500;color:var(--gray-600)}
+.slider-top .val{font-size:26px;font-weight:700;color:var(--blue)}
+input[type=range]{width:100%;height:5px;-webkit-appearance:none;appearance:none;border-radius:3px;background:var(--gray-200);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blue);border:3px solid var(--white);box-shadow:var(--sh2)}
+.slider-range{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400);margin-top:5px}
+
+/* TENURE CHIPS */
+.tenure-row{display:flex;gap:8px;flex-wrap:wrap}
+.tenure-chip{padding:8px 16px;border-radius:var(--r8);border:1.5px solid var(--gray-200);font-size:13px;font-weight:500;cursor:pointer;background:var(--white);color:var(--gray-600);transition:all .15s}
+.tenure-chip:hover{border-color:var(--blue);color:var(--blue)}
+.tenure-chip.sel{border-color:var(--blue);background:var(--blue-lt);color:var(--blue);font-weight:600}
+
+/* SUMMARY WIDGET */
+.summary-box{background:var(--blue-lt);border:1.5px solid var(--blue-mid);border-radius:var(--r12);padding:20px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(37,99,235,.1)}
+.summary-row:last-child{border-bottom:none}
+.summary-row .k{font-size:13px;color:var(--gray-600)}
+.summary-row .v{font-size:13px;font-weight:700;color:var(--gray-800)}
+.summary-row .v.big{font-size:18px;color:var(--blue)}
+
+/* TRUST STRIP */
+.trust-strip{background:var(--gray-100);border-radius:var(--r8);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--gray-600);line-height:1.5;border:1px solid var(--gray-200)}
+.trust-strip .icon{font-size:16px;margin-top:1px;flex-shrink:0}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:var(--r12);font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;padding:14px 28px;width:100%}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:var(--blue-dk);box-shadow:0 4px 12px rgba(37,99,235,.3);transform:translateY(-1px)}
+.btn-blue:active{transform:none;box-shadow:none}
+.btn-blue:disabled{background:var(--gray-300);color:var(--gray-400);cursor:not-allowed;transform:none;box-shadow:none}
+.btn-outline{background:var(--white);color:var(--blue);border:1.5px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-lt)}
+.btn-sm{padding:9px 18px;font-size:13.5px;width:auto;border-radius:var(--r8)}
+
+/* SPINNER */
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite;display:none;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── RESULT SCREEN ── */
+.result-wrap{display:none}.result-wrap.on{display:block}
+
+.verdict-card-approve{background:linear-gradient(135deg,#14532d,#15803d,#16a34a);border-radius:var(--r16);padding:32px;color:#fff;text-align:center;margin-bottom:20px}
+.verdict-card-reject{background:linear-gradient(135deg,#7f1d1d,#991b1b,#b91c1c);border-radius:var(--r16);padding:28px;color:#fff;text-align:center;margin-bottom:20px}
+.verdict-icon{font-size:52px;margin-bottom:12px}
+.verdict-amount{font-size:38px;font-weight:800;margin:8px 0 4px}
+.verdict-msg{font-size:15px;opacity:.88}
+.verdict-eta{margin-top:14px;background:rgba(255,255,255,.15);border-radius:24px;display:inline-block;padding:6px 20px;font-size:13px;backdrop-filter:blur(4px)}
+
+/* EMI GRID */
+.emi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.emi-box{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);padding:16px 12px;text-align:center;box-shadow:var(--sh1)}
+.emi-box .n{font-size:20px;font-weight:700;color:var(--gray-900)}
+.emi-box .l{font-size:11.5px;color:var(--gray-400);margin-top:3px}
+
+/* SCORE */
+.score-panel{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.score-ring{position:relative;width:110px;height:110px;flex-shrink:0}
+.score-ring svg{display:block}
+.score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num{font-size:26px;font-weight:800;color:var(--gray-900);line-height:1}
+.score-denom{font-size:11px;color:var(--gray-400);margin-top:1px}
+.score-info{flex:1}
+.score-label{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.score-desc{font-size:13px;color:var(--gray-500);line-height:1.5}
+
+/* SHAP */
+.shap-legend{display:flex;gap:16px;margin-bottom:14px}
+.shap-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-500)}
+.shap-leg-dot{width:10px;height:10px;border-radius:2px}
+.shap-rows{display:flex;flex-direction:column;gap:11px}
+.shap-row{display:grid;grid-template-columns:150px 1fr 60px;align-items:center;gap:10px}
+.shap-lbl{font-size:12.5px;color:var(--gray-700);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shap-track{background:var(--gray-100);border-radius:4px;height:8px;overflow:hidden}
+.shap-bar{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.shap-bar.g{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.shap-bar.r{background:linear-gradient(90deg,#ef4444,#f87171)}
+.shap-v{font-size:11.5px;font-weight:700;text-align:right}
+.shap-v.g{color:var(--green)}.shap-v.r{color:var(--red)}
+
+/* CERT */
+.cert-panel{background:linear-gradient(135deg,#f8faff,#eff6ff);border:1.5px solid #c7d7fe;border-radius:var(--r16);padding:22px;margin-bottom:16px;position:relative;overflow:hidden}
+.cert-panel::before{content:'🛡';position:absolute;right:20px;top:14px;font-size:36px;opacity:.12}
+.cert-eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:6px}
+.cert-id{font-size:17px;font-weight:700;color:var(--gray-900);font-family:monospace;margin-bottom:4px}
+.cert-sub{font-size:12px;color:var(--gray-500)}
+.cert-rows{margin-top:16px;display:flex;flex-direction:column;gap:0}
+.cert-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(37,99,235,.08)}
+.cert-row:last-child{border-bottom:none}
+.cert-row .k{font-size:12.5px;color:var(--gray-500)}
+.cert-row .v{font-size:12px;font-weight:600;color:var(--gray-700);font-family:monospace;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.verified-chip{display:inline-flex;align-items:center;gap:5px;background:var(--green-lt);color:var(--green);border:1px solid var(--green-bd);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;margin-top:12px}
+
+/* INFO ROWS */
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--gray-100)}
+.info-row:last-child{border-bottom:none}
+.info-row .k{font-size:13px;color:var(--gray-500)}
+.info-row .v{font-size:13px;font-weight:600;color:var(--gray-800)}
+
+/* LENDER DASHBOARD */
+.dash-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.dash-stat{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);padding:20px;box-shadow:var(--sh1)}
+.dash-stat .n{font-size:30px;font-weight:700;color:var(--gray-900)}
+.dash-stat .l{font-size:12px;color:var(--gray-400);margin-top:3px}
+.dash-stat .tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-top:8px}
+.tag-g{background:var(--green-lt);color:var(--green);border:1px solid var(--green-bd)}
+.tag-b{background:var(--blue-lt);color:var(--blue);border:1px solid var(--blue-mid)}
+.tag-a{background:var(--amber-lt);color:var(--amber);border:1px solid #fde68a}
+.tag-r{background:var(--red-lt);color:var(--red);border:1px solid var(--red-bd)}
+
+.integrity-bar{background:linear-gradient(135deg,#1e3a8a,#1d4ed8,#2563eb);border-radius:var(--r16);padding:24px 28px;color:#fff;margin-bottom:24px}
+.integrity-bar h3{font-size:15px;font-weight:700;margin-bottom:16px;opacity:.9}
+.integrity-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.int-m{background:rgba(255,255,255,.1);border-radius:var(--r8);padding:14px;backdrop-filter:blur(4px)}
+.int-m .n{font-size:22px;font-weight:700}
+.int-m .l{font-size:11px;opacity:.7;margin-top:3px}
+
+/* VERIFY PANEL */
+.verify-checks{margin-top:16px;display:flex;flex-direction:column;gap:0}
+.vcheck{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
+.vcheck:last-child{border-bottom:none}
+.vcheck-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.vcheck-icon.pass{background:var(--green-lt)}
+.vcheck-icon.fail{background:var(--red-lt)}
+.vcheck-icon.warn{background:var(--amber-lt)}
+.vcheck-name{font-size:14px;font-weight:600;color:var(--gray-900)}
+.vcheck-detail{font-size:12px;color:var(--gray-500);margin-top:2px;line-height:1.4}
+
+.verdict-pass{background:var(--green-lt);border:1.5px solid var(--green-bd);color:var(--green);border-radius:var(--r8);padding:12px 16px;font-size:14px;font-weight:600;margin-bottom:16px}
+.verdict-fail{background:var(--red-lt);border:1.5px solid var(--red-bd);color:var(--red);border-radius:var(--r8);padding:12px 16px;font-size:14px;font-weight:600;margin-bottom:16px}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;padding:11px 16px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);border-bottom:2px solid var(--gray-100);white-space:nowrap}
+.tbl td{padding:13px 16px;font-size:13px;color:var(--gray-700);border-bottom:1px solid var(--gray-50)}
+.tbl tr:hover td{background:var(--gray-50)}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.pill-a{background:var(--green-lt);color:var(--green)}
+.pill-r{background:var(--red-lt);color:var(--red)}
+
+/* LSP CONSOLE */
+.code-block{background:var(--gray-900);border-radius:var(--r8);padding:14px 16px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:#86efac;margin-bottom:12px}
+.code-block .mth{color:#93c5fd}
+.code-block .url{color:#fde68a}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--gray-100)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:9px;height:9px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.tl-dot-g{background:var(--green)}.tl-dot-b{background:var(--blue)}.tl-dot-a{background:var(--amber)}
+.tl-title{font-size:13.5px;font-weight:600;color:var(--gray-800)}
+.tl-sub{font-size:12px;color:var(--gray-400);margin-top:2px;font-family:monospace;word-break:break-all}
+
+/* MODEL STATUS */
+.model-status{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--gray-50);border-radius:var(--r8);border:1px solid var(--gray-200);margin-bottom:10px;font-size:13.5px;font-weight:500;color:var(--gray-700)}
+.status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.status-dot-g{background:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.15)}
+.status-dot-b{background:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+
+/* LAYOUT HELPERS */
+.gap4{margin-bottom:4px}.gap8{margin-bottom:8px}.gap12{margin-bottom:12px}
+.gap16{margin-bottom:16px}.gap20{margin-bottom:20px}.gap24{margin-bottom:24px}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.row-side{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.row-main{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.full{grid-column:1/-1}
+
+@media(max-width:768px){
+  .grid2,.grid3,.row-2,.row-side,.row-main{grid-template-columns:1fr}
+  .dash-stat-row{grid-template-columns:1fr 1fr}
+  .integrity-metrics{grid-template-columns:1fr 1fr}
+  .shap-row{grid-template-columns:110px 1fr 50px}
+  .hero-banner{padding:24px 20px}
+  .page{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon">Q</div>
+      <div><div class="brand-name">QuickCredit</div><div class="brand-tag">Instant Loans</div></div>
+    </a>
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="switchView('borrow',this)">Apply for Loan</button>
+      <button class="nav-pill" onclick="switchView('lender',this)">Lender Portal</button>
+      <button class="nav-pill" onclick="switchView('lsp',this)">LSP Console</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-badge">🛡 Sakshi Verified</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════ BORROWER ════════════════════════ -->
+<div id="view-borrow" class="view active">
+<div class="page">
+
+  <!-- Step progress -->
+  <div id="step-bar" style="display:flex;align-items:center;gap:0;margin-bottom:24px">
+    <div id="s1" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">1</div>
+      Loan Details
+    </div>
+    <div style="flex:1;height:2px;background:var(--gray-200);margin:0 12px" id="sl1"></div>
+    <div id="s2" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--gray-400)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">2</div>
+      Your Profile
+    </div>
+    <div style="flex:1;height:2px;background:var(--gray-200);margin:0 12px" id="sl2"></div>
+    <div id="s3" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--gray-400)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">3</div>
+      Decision
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div id="apply-form">
+    <div class="hero-banner gap24">
+      <div class="hero-content">
+        <h1>Check eligibility for a personal loan</h1>
+        <p>Digital application · Transparent eligibility assessment · Decision evidence</p>
+        <div class="hero-pills">
+          <div class="hero-pill" onclick="quickAmt(10000,this)">₹10,000</div>
+          <div class="hero-pill sel" onclick="quickAmt(25000,this)">₹25,000</div>
+          <div class="hero-pill" onclick="quickAmt(35000,this)">₹35,000</div>
+          <div class="hero-pill" onclick="quickAmt(50000,this)">₹50,000</div>
+        </div>
+        <div class="hero-features">
+          <div class="hero-feat">✅ No collateral needed</div>
+          <div class="hero-feat">✅ Instant eligibility assessment</div>
+          <div class="hero-feat">✅ Flexible EMI options</div>
+          <div class="hero-feat">✅ Decision evidence for lender review</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-side gap20">
+      <!-- Left col -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card card-body">
+          <div class="sec-title">Loan Amount</div>
+          <div class="slider-section">
+            <div class="slider-top">
+              <span class="lbl">Select amount</span>
+              <span class="val" id="amt-disp">₹25,000</span>
+            </div>
+            <input type="range" id="amt-range" min="5000" max="50000" step="1000" value="25000" oninput="onAmt(this.value)">
+            <div class="slider-range"><span>₹5,000</span><span>₹50,000</span></div>
+          </div>
+        </div>
+
+        <div class="card card-body">
+          <div class="sec-title">Loan Tenure</div>
+          <div class="tenure-row" id="tenure-row">
+            <div class="tenure-chip" onclick="onTenure(3,this)">3 mo</div>
+            <div class="tenure-chip" onclick="onTenure(6,this)">6 mo</div>
+            <div class="tenure-chip sel" onclick="onTenure(12,this)">12 mo</div>
+            <div class="tenure-chip" onclick="onTenure(18,this)">18 mo</div>
+            <div class="tenure-chip" onclick="onTenure(24,this)">24 mo</div>
+            <div class="tenure-chip" onclick="onTenure(36,this)">36 mo</div>
+            <div class="tenure-chip" onclick="onTenure(48,this)">48 mo</div>
+            <div class="tenure-chip" onclick="onTenure(60,this)">60 mo</div>
+          </div>
+        </div>
+
+        <div class="card card-body">
+          <div class="sec-title">Your Details</div>
+          <div class="grid2 gap16">
+            <div class="field">
+              <label>Date of Birth</label>
+              <input type="date" id="f-dob" value="1993-04-10">
+              <span class="sub" id="age-hint">Age: 31 years</span>
+            </div>
+            <div class="field">
+              <label>Employment Type</label>
+              <select id="f-emp">
+                <option value="4">Salaried — Govt / PSU</option>
+                <option value="3" selected>Salaried — Private</option>
+                <option value="2">Self-Employed Professional</option>
+                <option value="1">Business Owner</option>
+                <option value="0">Unemployed / Student</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid2 gap16" style="margin-top:16px">
+            <div class="field">
+              <label>Monthly Net Income</label>
+              <div class="pfx"><input type="number" id="f-income" value="55000" placeholder="After tax"></div>
+            </div>
+            <div class="field">
+              <label>Existing Monthly EMIs</label>
+              <div class="pfx"><input type="number" id="f-existing" value="0" placeholder="0 if none"></div>
+            </div>
+          </div>
+          <div class="grid3 gap16" style="margin-top:16px">
+            <div class="field">
+              <label>Checking / Salary A/c</label>
+              <select id="f-check">
+                <option value="0">No account</option>
+                <option value="1">Balance &lt; ₹0</option>
+                <option value="2" selected>₹0 – ₹5,000</option>
+                <option value="3">&gt; ₹5,000</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Savings Balance</label>
+              <select id="f-sav">
+                <option value="0">No savings</option>
+                <option value="1">&lt; ₹5,000</option>
+                <option value="2" selected>₹5K – ₹20K</option>
+                <option value="3">₹20K – ₹50K</option>
+                <option value="4">&gt; ₹50,000</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Repayment History</label>
+              <select id="f-hist">
+                <option value="0">Defaults on record</option>
+                <option value="1">Critical arrears</option>
+                <option value="2">Mostly on time</option>
+                <option value="3" selected>Always on time</option>
+                <option value="4">No prior credit</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid2 gap16" style="margin-top:16px">
+            <div class="field">
+              <label>Active Loans (incl. this)</label>
+              <select id="f-credits">
+                <option value="1" selected>1 — First loan</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4 or more</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Dependents</label>
+              <select id="f-dep">
+                <option value="1" selected>0 – 2</option>
+                <option value="2">3 or more</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <label class="trust-strip gap16" style="cursor:pointer"><input id="f-consent" type="checkbox" style="margin-top:3px;flex-shrink:0;width:16px;height:16px"><span>I consent to processing the profile details entered here for this eligibility assessment. I understand this prototype does not submit a real loan application or disburse funds.</span></label>
+
+      <div class="trust-strip gap16">
+          <div class="icon">🔒</div>
+          <div>This prototype creates a <strong>cryptographically signed decision record</strong> and a local audit trail. External witnessing and zero-knowledge proofs are not enabled in this build.</div>
+        </div>
+
+        <button class="btn btn-blue" id="apply-btn" onclick="doApply()">
+          <div class="spin" id="apply-spin"></div>
+          <span id="apply-lbl">Check My Eligibility →</span>
+        </button>
+      </div>
+
+      <!-- Right col — Loan Summary -->
+      <div style="display:flex;flex-direction:column;gap:16px;position:sticky;top:80px">
+        <div class="card card-body">
+          <div class="sec-title">Loan Summary</div>
+          <div class="summary-box">
+            <div class="summary-row"><span class="k">Loan Amount</span><span class="v big" id="sum-amt">₹25,000</span></div>
+            <div class="summary-row"><span class="k">Tenure</span><span class="v" id="sum-ten">12 months</span></div>
+            <div class="summary-row"><span class="k">Interest Rate</span><span class="v">18% p.a.</span></div>
+            <div class="summary-row"><span class="k">Monthly EMI</span><span class="v" id="sum-emi">₹2,291</span></div>
+            <div class="summary-row"><span class="k">Total Interest</span><span class="v" id="sum-int">₹2,492</span></div>
+            <div class="summary-row"><span class="k">Total Repayment</span><span class="v" id="sum-total">₹27,492</span></div>
+            <div class="summary-row"><span class="k">Processing Fee</span><span class="v">₹499 (one-time)</span></div>
+          </div>
+        </div>
+        <div class="card card-body" style="background:var(--gray-50)">
+          <div style="font-size:13px;color:var(--gray-500);line-height:1.6">
+            <div style="font-weight:600;color:var(--gray-700);margin-bottom:8px">Why QuickCredit?</div>
+            <div class="gap8">📋 Completely digital — no paperwork</div>
+            <div class="gap8">⚡ Instant approval in seconds</div>
+            <div class="gap8">🏦 Disbursed by RBI-regulated NBFC</div>
+            <div>🔒 Cryptographic audit trail on every decision</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /apply-form -->
+
+  <!-- RESULT -->
+  <div id="result-wrap" class="result-wrap">
+    <div id="r-approve" style="display:none">
+      <div class="verdict-card-approve gap20">
+        <div class="verdict-icon">🎉</div>
+        <div class="verdict-amount" id="r-amt">₹25,000</div>
+        <div class="verdict-msg">Your application passed this model’s eligibility threshold. Final sanction is subject to lender review.</div>
+        <div class="verdict-eta">Eligibility result only · No funds are disbursed by this prototype</div>
+      </div>
+      <div class="emi-row gap20">
+        <div class="emi-box"><div class="n" id="r-emi">₹2,291</div><div class="l">Monthly EMI</div></div>
+        <div class="emi-box"><div class="n" id="r-ten">12 mo</div><div class="l">Tenure</div></div>
+        <div class="emi-box"><div class="n">18%</div><div class="l">Interest p.a.</div></div>
+      </div>
+    </div>
+
+    <div id="r-reject" style="display:none">
+      <div class="verdict-card-reject gap20">
+        <div class="verdict-icon">📋</div>
+        <div style="font-size:22px;font-weight:700;margin-bottom:8px">We couldn't approve your application</div>
+        <div class="verdict-msg" id="r-rej-reason">Your current profile does not meet our lending criteria.</div>
+        <div class="verdict-eta">This is an automated model result, not a final lender decision. Contact the lender for review options.</div>
+      </div>
+    </div>
+
+    <div class="row-2 gap20">
+      <!-- Score -->
+      <div class="card card-body">
+        <div class="sec-title">Your Credit Score</div>
+        <div class="score-panel">
+          <div class="score-ring">
+            <svg width="110" height="110" viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="46" fill="none" stroke="var(--gray-200)" stroke-width="9"/>
+              <circle id="score-arc" cx="55" cy="55" r="46" fill="none" stroke="var(--green)" stroke-width="9" stroke-linecap="round"
+                stroke-dasharray="289" stroke-dashoffset="289" style="transform:rotate(-90deg);transform-origin:55px 55px;transition:stroke-dashoffset 1.2s ease,stroke .5s"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-num" id="sc-num">—</div>
+              <div class="score-denom">/100</div>
+            </div>
+          </div>
+          <div class="score-info">
+            <div class="score-label" id="sc-label">Calculating…</div>
+            <div class="score-desc" id="sc-desc">Your creditworthiness is being assessed based on your profile and repayment history.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHAP -->
+      <div class="card card-body">
+        <div class="sec-title">What Influenced This Decision</div>
+        <div class="shap-legend">
+          <div class="shap-leg-item"><div class="shap-leg-dot" style="background:#16a34a"></div>Positive factor</div>
+          <div class="shap-leg-item"><div class="shap-leg-dot" style="background:#ef4444"></div>Negative factor</div>
+        </div>
+        <div class="shap-rows" id="shap-rows">
+          <div style="color:var(--gray-400);font-size:13px">Loading factors…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate -->
+    <div class="card card-body gap20">
+      <div class="sec-title">🔒 Decision Evidence Receipt</div>
+      <div class="cert-panel">
+        <div class="cert-eyebrow">Certificate of Decision</div>
+        <div class="cert-id" id="c-id">—</div>
+        <div class="cert-sub">Keep this ID for support and technical verification. This prototype is not connected to a lender or regulator.</div>
+        <div class="cert-rows">
+          <div class="cert-row"><span class="k">Issuing Model</span><span class="v" id="c-model">—</span></div>
+          <div class="cert-row"><span class="k">Decision Time</span><span class="v" id="c-time">—</span></div>
+          <div class="cert-row"><span class="k">Input Commitment (SHA-256)</span><span class="v" id="c-commit">—</span></div>
+          <div class="cert-row"><span class="k">Record Hash (SHA-256)</span><span class="v" id="c-hash">—</span></div>
+          <div class="cert-row"><span class="k">Cryptographic Signature</span><span class="v" id="c-sig">—</span></div>
+        </div>
+        <div class="verified-chip">🛡 Cryptographically Signed &amp; Tamper-Evident</div>
+      </div>
+      <p style="font-size:12.5px;color:var(--gray-500);line-height:1.7">
+        This prototype records a signed decision and a local Merkle witness entry when a batch is published.
+        The external witness and zero-knowledge proof integrations are not enabled in this build. Treat this
+        as a technical demonstration, not an RBI-issued certificate or a guarantee of regulatory acceptance.
+      </p>
+    </div>
+
+    <button class="btn btn-outline gap20" style="width:auto;padding:11px 24px" onclick="resetApply()">← Apply Again</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════ LENDER ════════════════════════ -->
+<div id="view-lender" class="view">
+<div class="page">
+  <div class="page-title">Lender Compliance Portal</div>
+  <div class="page-sub">Decision audit log, model registry, and integrity checks. Demo data only — not a production lending system.</div>
+
+  <div class="integrity-bar">
+    <h3>Model Integrity — sakshi_credit_v1 v1.0.0</h3>
+    <div class="integrity-metrics">
+      <div class="int-m"><div class="n">✅ Active</div><div class="l">Model Status</div></div>
+      <div class="int-m"><div class="n" id="l-total">—</div><div class="l">Total Decisions</div></div>
+      <div class="int-m"><div class="n">0</div><div class="l">Hash Mismatches</div></div>
+      <div class="int-m"><div class="n" id="l-batches">—</div><div class="l">Merkle Batches Published</div></div>
+    </div>
+  </div>
+
+  <div class="dash-stat-row">
+    <div class="dash-stat">
+      <div class="n" id="l-approve">—</div>
+      <div class="l">Approved</div>
+      <div class="tag tag-g">Model v1.0.0</div>
+    </div>
+    <div class="dash-stat">
+      <div class="n" id="l-reject">—</div>
+      <div class="l">Rejected</div>
+      <div class="tag tag-a">Threshold 0.45</div>
+    </div>
+    <div class="dash-stat">
+      <div class="n" id="l-avg-score">—</div>
+      <div class="l">Avg Credit Score</div>
+      <div class="tag tag-b">Last 50</div>
+    </div>
+    <div class="dash-stat">
+      <div class="n">—</div>
+      <div class="l">Model Performance</div>
+      <div class="tag tag-a">Metric not verified</div>
+    </div>
+  </div>
+
+  <div class="row-main gap24">
+    <!-- Verify panel -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card card-body">
+        <div class="sec-title">Verify a Decision</div>
+        <div class="field gap16">
+          <label>Certificate / Application ID</label>
+          <input type="text" id="v-id" placeholder="APP-001 or any certificate ID" style="font-family:monospace;font-size:13px">
+        </div>
+        <button class="btn btn-blue" id="v-btn" onclick="doVerify()">
+          <div class="spin" id="v-spin"></div>
+          <span id="v-lbl">Run Independent Verification</span>
+        </button>
+
+        <div id="v-result" style="display:none">
+          <div id="v-verdict" style="margin-top:16px"></div>
+          <div class="verify-checks" id="v-checks"></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--gray-100)">
+            <div class="info-row"><span class="k">Decision</span><span class="v" id="vd-dec">—</span></div>
+            <div class="info-row"><span class="k">Credit Score</span><span class="v" id="vd-sc">—</span></div>
+            <div class="info-row"><span class="k">Model</span><span class="v" id="vd-mod">—</span></div>
+            <div class="info-row"><span class="k">Timestamp</span><span class="v" id="vd-ts">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audit log -->
+    <div class="card" style="overflow:hidden">
+      <div class="card-body" style="padding-bottom:0">
+        <div class="sec-title">Decision Audit Log</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Certificate ID</th>
+              <th>Decision</th>
+              <th>Score</th>
+              <th>Risk</th>
+              <th>Model</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="l-log-body">
+            <tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:28px">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════ LSP ════════════════════════ -->
+<div id="view-lsp" class="view">
+<div class="page">
+  <div class="page-title">LSP Integration Console</div>
+  <div class="page-sub">Model registry, evidence generation, and API testing. ZK proofs and external witnessing are not enabled.</div>
+
+  <div class="row-main gap24">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card card-body">
+        <div class="sec-title">Model Registry</div>
+        <div class="model-status"><div class="status-dot status-dot-g"></div>sakshi_credit_v1 v1.0.0 — Active</div>
+        <div class="model-status"><div class="status-dot status-dot-b"></div>SHAP explainer — LinearExplainer (lazy-loaded)</div>
+        <div class="model-status"><div class="status-dot status-dot-b"></div>Zero-knowledge proof — planned / not enabled in this MVP</div>
+        <div class="info-row" style="margin-top:8px"><span class="k">SHA-256</span><span class="v" style="font-family:monospace;font-size:12px" id="lsp-hash">loading…</span></div>
+        <div class="info-row"><span class="k">Format</span><span class="v">ONNX Opset 12</span></div>
+        <div class="info-row"><span class="k">Algorithm</span><span class="v">Logistic Regression + StandardScaler</span></div>
+        <div class="info-row"><span class="k">Features</span><span class="v">11 credit factors</span></div>
+        <div class="info-row"><span class="k">Threshold</span><span class="v">P(default) &lt; 0.45 → APPROVE</span></div>
+      </div>
+      <div class="card card-body">
+        <div class="sec-title">API Endpoints</div>
+        <div class="code-block"><span class="mth">POST</span> <span class="url">/api/decide</span></div>
+        <div class="code-block"><span class="mth">GET </span> <span class="url">/api/verify/:id</span></div>
+        <div class="code-block"><span class="mth">GET </span> <span class="url">/api/stats</span></div>
+        <div class="code-block"><span class="mth">GET </span> <span class="url">/api/registry</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card card-body">
+        <div class="sec-title">Test a Decision Request</div>
+        <div class="grid2 gap12">
+          <div class="field">
+            <label>Application ID</label>
+            <input type="text" id="lsp-appid" value="APP-LSP-001" style="font-family:monospace">
+          </div>
+          <div class="field">
+            <label>Credit Amount (₹)</label>
+            <div class="pfx"><input type="number" id="lsp-amt" value="20000"></div>
+          </div>
+        </div>
+        <div class="grid3 gap12" style="margin-top:12px">
+          <div class="field"><label>Duration (months)</label><input type="number" id="lsp-dur" value="12"></div>
+          <div class="field"><label>Age</label><input type="number" id="lsp-age" value="30"></div>
+          <div class="field"><label>Employment</label>
+            <select id="lsp-emp">
+              <option value="4">4 — Govt/7+yr</option>
+              <option value="3" selected>3 — Pvt/4-7yr</option>
+              <option value="2">2 — 1-4yr</option>
+              <option value="1">1 — &lt;1yr</option>
+              <option value="0">0 — None</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-blue btn-sm gap16" style="margin-top:16px" onclick="lspDecide()">
+          <div class="spin" id="lsp-spin"></div>
+          <span id="lsp-lbl">Submit via API</span>
+        </button>
+        <div id="lsp-result" style="display:none;margin-top:16px">
+          <div class="sec-title">Evidence Generated</div>
+          <div class="timeline" id="lsp-tl"></div>
+        </div>
+      </div>
+
+      <div class="card card-body">
+        <div class="sec-title">Recent Evidence Activity</div>
+        <div class="timeline" id="lsp-activity"><div style="color:var(--gray-400);font-size:13px">No activity yet</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────
+let AMT=25000, TEN=12;
+
+function switchView(v, el) {
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  el.classList.add('active');
+  if(v==='lender') loadLenderData();
+  if(v==='lsp')    loadLspData();
+}
+
+// ── Loan calc ─────────────────────────────────────────
+function calcEMI(p,r,n){const rm=r/12/100;return rm?Math.round(p*rm*Math.pow(1+rm,n)/(Math.pow(1+rm,n)-1)):Math.round(p/n)}
+function fmtRs(n){return '₹'+n.toLocaleString('en-IN')}
+
+function updateSummary(){
+  const emi=calcEMI(AMT,18,TEN), total=emi*TEN, interest=total-AMT;
+  document.getElementById('amt-disp').textContent=fmtRs(AMT);
+  document.getElementById('sum-amt').textContent=fmtRs(AMT);
+  document.getElementById('sum-ten').textContent=TEN+' months';
+  document.getElementById('sum-emi').textContent=fmtRs(emi);
+  document.getElementById('sum-int').textContent=fmtRs(interest);
+  document.getElementById('sum-total').textContent=fmtRs(total);
+  document.getElementById('r-emi').textContent=fmtRs(emi);
+  document.getElementById('r-ten').textContent=TEN+' mo';
+}
+
+function quickAmt(v,el){
+  AMT=v; document.getElementById('amt-range').value=v;
+  document.querySelectorAll('.hero-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel'); updateSummary();
+}
+function onAmt(v){AMT=+v; document.querySelectorAll('.hero-pill').forEach(p=>p.classList.remove('sel')); updateSummary();}
+function onTenure(m,el){TEN=m; document.querySelectorAll('.tenure-chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); updateSummary();}
+
+// Age hint
+document.getElementById('f-dob').addEventListener('input', function(){
+  const age=Math.floor((Date.now()-new Date(this.value))/(365.25*864e5));
+  document.getElementById('age-hint').textContent = isNaN(age)?'':'Age: '+age+' years';
+});
+updateSummary();
+
+// ── Apply ─────────────────────────────────────────────
+async function doApply(){
+  if(!document.getElementById('f-consent').checked){alert('Please provide consent before running the eligibility assessment.');return;}
+  const btn=document.getElementById('apply-btn');
+  btn.disabled=true;
+  document.getElementById('apply-spin').style.display='block';
+  document.getElementById('apply-lbl').textContent='Analysing your profile…';
+
+  const dob=document.getElementById('f-dob').value;
+  const age=dob?Math.floor((Date.now()-new Date(dob))/(365.25*864e5)):30;
+  const income=+document.getElementById('f-income').value||1;
+  const emi=calcEMI(AMT,18,TEN);
+  const installRate=Math.min(4,Math.max(1,Math.ceil(emi/income*4)));
+  const appId='APP-'+Date.now().toString().slice(-8);
+
+  const body={application_id:appId, features:{
+    duration_months:TEN, credit_amount:AMT, installment_rate:installRate,
+    present_residence:2, age:age,
+    existing_credits:+document.getElementById('f-credits').value,
+    num_dependents:+document.getElementById('f-dep').value,
+    checking_account:+document.getElementById('f-check').value,
+    credit_history:+document.getElementById('f-hist').value,
+    employment_years:+document.getElementById('f-emp').value,
+    savings_account:+document.getElementById('f-sav').value,
+  }};
+
+  try{
+    const r=await fetch('/api/decide',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.error||'Request failed');
+    showResult(data);
+  }catch(e){alert('Could not process application: '+e.message);}
+  btn.disabled=false;
+  document.getElementById('apply-spin').style.display='none';
+  document.getElementById('apply-lbl').textContent='Check My Eligibility →';
+}
+
+function showResult(d){
+  document.getElementById('apply-form').style.display='none';
+  document.getElementById('result-wrap').classList.add('on');
+  document.getElementById('step-bar').style.display='none';
+
+  const ok=d.decision==='APPROVE';
+  document.getElementById('r-approve').style.display=ok?'block':'none';
+  document.getElementById('r-reject').style.display=ok?'none':'block';
+  document.getElementById('r-amt').textContent=fmtRs(AMT);
+  if(!ok && d.reason) document.getElementById('r-rej-reason').textContent=d.reason;
+
+  // Score ring
+  const sc=d.credit_score||0;
+  document.getElementById('sc-num').textContent=sc;
+  const circ=289, offset=circ-(sc/100)*circ;
+  const arc=document.getElementById('score-arc');
+  setTimeout(()=>{arc.style.strokeDashoffset=offset;},80);
+  arc.style.stroke=sc>=70?'#16a34a':sc>=40?'#d97706':'#dc2626';
+  document.getElementById('sc-label').textContent=sc>=70?'Excellent Credit Profile':sc>=55?'Good Credit Profile':sc>=40?'Fair Credit Profile':'Poor Credit Profile';
+  document.getElementById('sc-desc').textContent=sc>=70?'You have a strong credit history and stable income. Lenders view you as low-risk.':sc>=40?'Your profile shows moderate risk. Improving your repayment history or reducing outstanding loans can help.':'Consider building your credit history before reapplying.';
+
+  // SHAP
+  const shaps=d.shap_values||[];
+  const maxS=Math.max(...shaps.map(s=>Math.abs(s.shap)),.001);
+  document.getElementById('shap-rows').innerHTML=shaps.slice(0,8).map(s=>{
+    const pct=Math.round(Math.abs(s.shap)/maxS*100);
+    const g=s.impact==='positive';
+    return `<div class="shap-row">
+      <div class="shap-lbl" title="${s.label}">${s.label}</div>
+      <div class="shap-track"><div class="shap-bar ${g?'g':'r'}" style="width:0%" data-w="${pct}%"></div></div>
+      <div class="shap-v ${g?'g':'r'}">${g?'▲':'▼'} ${Math.abs(s.shap).toFixed(3)}</div>
+    </div>`;
+  }).join('')||'<div style="color:var(--gray-400);font-size:13px">Explanation available after SHAP loads (first request)</div>';
+  setTimeout(()=>document.querySelectorAll('.shap-bar[data-w]').forEach(b=>{b.style.width=b.dataset.w;}),100);
+
+  // Cert
+  document.getElementById('c-id').textContent=d.application_id||'—';
+  document.getElementById('c-model').textContent=(d.model_name||'')+(d.model_version?' v'+d.model_version:'');
+  document.getElementById('c-time').textContent=d.timestamp?new Date(d.timestamp).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'medium'}):'—';
+  document.getElementById('c-commit').textContent=(d.input_commitment||'').slice(0,32)+'…';
+  document.getElementById('c-hash').textContent=(d.record_hash||'').slice(0,32)+'…';
+  document.getElementById('c-sig').textContent=(d.signature||'').slice(0,32)+'…';
+}
+
+function resetApply(){
+  document.getElementById('apply-form').style.display='block';
+  document.getElementById('result-wrap').classList.remove('on');
+  document.getElementById('step-bar').style.display='flex';
+}
+
+// ── Lender ────────────────────────────────────────────
+async function loadLenderData(){
+  const [sr, br] = await Promise.all([fetch('/api/stats'), fetch('/api/batches')]);
+  const sd=await sr.json(), bd=await br.json();
+  const recs=sd.records||[];
+  document.getElementById('l-total').textContent=sd.total;
+  document.getElementById('l-batches').textContent=bd.count||0;
+  document.getElementById('l-approve').textContent=recs.filter(r=>r.decision==='APPROVE').length;
+  document.getElementById('l-reject').textContent=recs.filter(r=>r.decision==='REJECT').length;
+  const scores=recs.filter(r=>r.credit_score).map(r=>r.credit_score);
+  document.getElementById('l-avg-score').textContent=scores.length?Math.round(scores.reduce((a,b)=>a+b)/scores.length):'—';
+
+  document.getElementById('l-log-body').innerHTML=recs.slice(0,20).map(r=>`
+    <tr>
+      <td style="font-family:monospace;font-size:12px;color:var(--blue);cursor:pointer" onclick="document.getElementById('v-id').value='${r.application_id}';switchView('lender',document.querySelectorAll('.nav-pill')[1])">${r.application_id}</td>
+      <td><span class="pill pill-${r.decision==='APPROVE'?'a':'r'}">${r.decision}</span></td>
+      <td><strong>${r.credit_score||'—'}</strong>/100</td>
+      <td style="color:var(--gray-500)">${r.prob_default!=null?(r.prob_default*100).toFixed(1)+'%':'—'}</td>
+      <td style="color:var(--gray-400);font-size:12px">${r.model_name||'—'}</td>
+      <td style="color:var(--gray-400);font-size:12px">${r.timestamp?new Date(r.timestamp).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}):''}</td>
+    </tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:28px">No decisions recorded yet</td></tr>';
+}
+
+async function doVerify(){
+  const id=document.getElementById('v-id').value.trim();
+  if(!id)return;
+  document.getElementById('v-btn').disabled=true;
+  document.getElementById('v-spin').style.display='block';
+  document.getElementById('v-lbl').textContent='Running checks…';
+  document.getElementById('v-result').style.display='none';
+
+  let d;
+  try { const response=await fetch('/api/verify/'+encodeURIComponent(id)); d=await response.json(); if(!response.ok) throw new Error(d.error||'Verification failed'); }
+  catch(e) { alert('Verification request failed: '+e.message); return; }
+  finally { document.getElementById('v-btn').disabled=false; document.getElementById('v-spin').style.display='none'; document.getElementById('v-lbl').textContent='Run Independent Verification'; }
+  
+  document.getElementById('v-result').style.display='block';
+
+  const pass=(d.verdict||'').includes('✅ VERIFIED');
+  const vd=document.getElementById('v-verdict');
+  vd.className=pass?'verdict-pass':'verdict-fail';
+  vd.textContent=d.verdict||'Unknown';
+
+  const icons={signature:{icon:'✍️',name:'Cryptographic Signature'},record_integrity:{icon:'🔗',name:'Record Integrity'},merkle_inclusion:{icon:'📦',name:'Merkle Chain Inclusion'}};
+  document.getElementById('v-checks').innerHTML=Object.entries(d.checks||{}).map(([k,v])=>{
+    const p=v.includes('✅'),w=v.includes('⚠️');
+    const info=icons[k]||{icon:'🔍',name:k};
+    const cls=p?'pass':w?'warn':'fail';
+    const clean=v.replace(/[✅❌⚠️]/g,'').replace(/\s+/g,' ').trim();
+    return `<div class="vcheck">
+      <div class="vcheck-icon ${cls}">${info.icon}</div>
+      <div><div class="vcheck-name">${info.name}</div><div class="vcheck-detail">${clean}</div></div>
+    </div>`;
+  }).join('');
+
+  const rec=d.record||{};
+  document.getElementById('vd-dec').innerHTML=rec.decision?`<span class="pill pill-${rec.decision==='APPROVE'?'a':'r'}">${rec.decision}</span>`:(d.message||'—');
+  document.getElementById('vd-sc').textContent=rec.credit_score!=null?rec.credit_score+'/100':'—';
+  document.getElementById('vd-mod').textContent=rec.model_name?(rec.model_name+' v'+rec.model_version):'—';
+  document.getElementById('vd-ts').textContent=rec.timestamp?new Date(rec.timestamp).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'medium'}):'—';
+}
+
+// ── LSP ───────────────────────────────────────────────
+async function loadLspData(){
+  const r=await(await fetch('/api/registry')).json();
+  document.getElementById('lsp-hash').textContent=(r.model_hash||'').slice(0,32)+'…';
+  const s=await(await fetch('/api/stats')).json();
+  const recs=(s.records||[]).slice(0,8);
+  document.getElementById('lsp-activity').innerHTML=recs.length?recs.map(r=>`
+    <div class="tl-item">
+      <div class="tl-dot ${r.decision==='APPROVE'?'tl-dot-g':'tl-dot-a'}"></div>
+      <div>
+        <div class="tl-title">${r.application_id} — ${r.decision} (${r.credit_score||0}/100)</div>
+        <div class="tl-sub">hash: ${(r.record_hash||'N/A').slice(0,24)}… · ${r.timestamp?new Date(r.timestamp).toLocaleTimeString('en-IN'):''}</div>
+      </div>
+    </div>`).join(''):'<div style="color:var(--gray-400);font-size:13px">No activity yet</div>';
+}
+
+async function lspDecide(){
+  const sp=document.getElementById('lsp-spin');
+  sp.style.display='block';
+  document.getElementById('lsp-lbl').textContent='Processing…';
+  const body={
+    application_id:document.getElementById('lsp-appid').value,
+    features:{
+      duration_months:+document.getElementById('lsp-dur').value,
+      credit_amount:+document.getElementById('lsp-amt').value,
+      installment_rate:2,present_residence:2,
+      age:+document.getElementById('lsp-age').value,
+      existing_credits:1,num_dependents:1,
+      checking_account:2,credit_history:3,
+      employment_years:+document.getElementById('lsp-emp').value,
+      savings_account:2
+    }
+  };
+  let d;
+  try { const response=await fetch('/api/decide',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); d=await response.json(); if(!response.ok) throw new Error(d.error||'Decision request failed'); }
+  catch(e) { alert('API request failed: '+e.message); sp.style.display='none'; document.getElementById('lsp-lbl').textContent='Submit via API'; return; }
+  sp.style.display='none';
+  document.getElementById('lsp-lbl').textContent='Submit via API';
+  document.getElementById('lsp-result').style.display='block';
+  document.getElementById('lsp-tl').innerHTML=[
+    {dot:'tl-dot-g',t:`Decision: <strong>${d.decision}</strong> — Credit Score ${d.credit_score}/100`,s:'P(default) = '+d.prob_default},
+    {dot:'tl-dot-b',t:'Input committed (SHA-256)',s:(d.input_commitment||'').slice(0,40)+'…'},
+    {dot:'tl-dot-b',t:`SHAP generated — ${(d.shap_values||[]).length} feature attributions`,s:(d.shap_values||[]).slice(0,3).map(s=>s.label+': '+s.shap).join(' · ')},
+    {dot:'tl-dot-b',t:'Record signed — RSA-2048 PSS',s:(d.signature||'').slice(0,40)+'…'},
+    {dot:'tl-dot-b',t:'Decision record hashed; batch inclusion depends on publication',s:'record_hash: '+(d.record_hash||'').slice(0,32)+'…'},
+    {dot:'tl-dot-g',t:'Local evidence receipt created — external witness / ZK proof not enabled',s:'Verifier checks the signed record and local Merkle log'},
+  ].map(i=>`<div class="tl-item"><div class="tl-dot ${i.dot}"></div><div><div class="tl-title">${i.t}</div><div class="tl-sub">${i.s}</div></div></div>`).join('');
+  loadLspData();
+}
+</script>
+</body>
+</html>

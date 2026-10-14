@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "model_name": "sakshi_credit_v1",
+  "onnx_path": "../models/sakshi_credit_v1.onnx",
+  "model_hash": "77bfa616926886bac5f67755dbaf120b3cea8dbbf224103340d9859afb74931e",
+  "features": [
+    "duration_months",
+    "credit_amount",
+    "installment_rate",
+    "present_residence",
+    "age",
+    "existing_credits",
+    "num_dependents",
+    "checking_account",
+    "credit_history",
+    "employment_years",
+    "savings_account"
+  ],
+  "feature_labels": {
+    "duration_months": "Loan Duration",
+    "credit_amount": "Loan Amount",
+    "installment_rate": "EMI-to-Income Ratio",
+    "present_residence": "Residence Stability",
+    "age": "Age",
+    "existing_credits": "Existing Loans",
+    "num_dependents": "Dependents",
+    "checking_account": "Checking Account Balance",
+    "credit_history": "Repayment History",
+    "employment_years": "Employment Duration",
+    "savings_account": "Savings Balance"
+  },
+  "policy": {
+    "approve_threshold": 0.45,
+    "max_credit_amount": 50000,
+    "min_age": 21
+  },
+  "registered_by": "lender_admin",
+  "registered_at": "2026-10-14T00:00:00Z"
+}
