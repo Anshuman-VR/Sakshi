@@ -561,13 +561,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <!-- ════════════════════════ LENDER ════════════════════════ -->
 <div id="view-lender" class="view">
 <div class="page">
-  <div class="page-title">Lender Evidence Portal</div>
-  <div class="page-sub">Review LSP model registrations, validate model integrity, and independently inspect decision evidence.</div>
+  <div class="page-title">Bank Verification Portal</div>
+  <div class="page-sub">As the lender, verify the LSP's registered model and independently validate decision receipts before relying on their results.</div>
 
   <div class="integrity-bar">
-    <h3>Model Integrity — sakshi_credit_v1 v2.0.0</h3>
+    <h3>LSP Model Verification</h3>
     <div class="integrity-metrics">
-      <div class="int-m"><div class="n"> Active</div><div class="l">Model Status</div></div>
+      <div class="int-m"><div class="n" id="l-model-status">Pending</div><div class="l">Verification Status</div></div>
       <div class="int-m"><div class="n" id="l-total">—</div><div class="l">Total Decisions</div></div>
       <div class="int-m"><div class="n" id="l-hash-mismatches">—</div><div class="l">Hash Mismatches</div></div>
       <div class="int-m"><div class="n" id="l-batches">—</div><div class="l">Merkle Batches Published</div></div>
@@ -578,12 +578,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     <div class="dash-stat">
       <div class="n" id="l-approve">—</div>
       <div class="l">Approved</div>
-      <div class="tag tag-g">Model v2.0.0</div>
+      <div class="tag tag-g">LSP submissions</div>
     </div>
     <div class="dash-stat">
       <div class="n" id="l-reject">—</div>
       <div class="l">Rejected</div>
-      <div class="tag tag-a">Threshold 0.50</div>
+      <div class="tag tag-a">Decision outcomes</div>
     </div>
     <div class="dash-stat">
       <div class="n" id="l-avg-score">—</div>
@@ -591,14 +591,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="tag tag-b">Last 50</div>
     </div>
     <div class="dash-stat">
-      <div class="n" id="l-model-check">Pending</div>
-      <div class="l">Registered Model Integrity</div>
-      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="verifyLspModel()">Verify LSP Model</button>
+      <div class="n" id="l-model-check">Not checked</div>
+      <div class="l">LSP Model Integrity</div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="verifyLspModel()">Verify Registered Model</button>
     </div>
   </div>
 
   <div id="l-model-verification" class="card card-body gap20" style="display:none">
-    <div class="sec-title">LSP Model Verification Results</div><div id="l-model-checks" class="verify-checks"></div>
+    <div class="sec-title">Independent Model Verification Results</div><div id="l-model-checks" class="verify-checks"></div>
     <div class="info-row"><span class="k">Registered SHA-256</span><span class="v" id="l-model-registered-hash" style="font-family:monospace;overflow-wrap:anywhere">—</span></div>
     <div class="info-row"><span class="k">Computed SHA-256</span><span class="v" id="l-model-actual-hash" style="font-family:monospace;overflow-wrap:anywhere">—</span></div>
   </div>
@@ -659,8 +659,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <!-- ════════════════════════ LSP ════════════════════════ -->
 <div id="view-lsp" class="view">
 <div class="page">
-  <div class="page-title">LSP Integration Console</div>
-  <div class="page-sub">Manage the registered model, review evaluation results, and generate cryptographic decision evidence.</div>
+  <div class="page-title">LSP Model Console</div>
+  <div class="page-sub">Manage the model you provide to lenders: inspect its registered artifact, feature contract, evaluation metrics, and decision-evidence integration.</div>
 
   <div class="row-main gap24">
     <div style="display:flex;flex-direction:column;gap:16px">
@@ -734,8 +734,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
 <!-- ════════════════════════ INDEPENDENT VERIFIER ════════════════════════ -->
 <div id="view-verifier" class="view"><div class="page">
-  <div class="page-title">Independent Verification</div>
-  <div class="page-sub">Validate a decision receipt without relying on the borrower or LSP interface.</div>
+  <div class="page-title">Independent Decision Verifier</div>
+  <div class="page-sub">Verify a signed decision receipt independently of the borrower, bank, and LSP portals.</div>
   <div class="row-main gap24">
     <div class="card card-body">
       <div class="sec-title">Verify Evidence Receipt</div>
@@ -914,13 +914,14 @@ async function verifyLspModel(){
   try {
     const r=await fetch('/api/model/verify'); const d=await r.json();
     status.textContent=d.verified?'Verified':'Review required';
+    document.getElementById('l-model-status').textContent=d.verified?'Verified':'Review required';
     document.getElementById('l-hash-mismatches').textContent=d.checks?.model_hash_matches_registry?'0':(d.checks?.model_hash_matches_registry===false?'1':'—');
     document.getElementById('l-model-verification').style.display='block';
     document.getElementById('l-model-registered-hash').textContent=d.registered_hash||'Unavailable';
     document.getElementById('l-model-actual-hash').textContent=d.actual_hash||'Model file missing';
     const names={model_file_present:'Registered model file',model_hash_matches_registry:'SHA-256 registry match',evaluation_report_present:'Evaluation report',registered_features_present:'Feature contract',decision_threshold_configured:'Decision threshold'};
     document.getElementById('l-model-checks').innerHTML=Object.entries(d.checks||{}).map(([k,v])=>`<div class="vcheck"><div class="vcheck-icon ${v?'pass':'fail'}">${v?'PASS':'FAIL'}</div><div><div class="vcheck-name">${names[k]||k}</div><div class="vcheck-detail">${v?'PASS':'FAIL'}</div></div></div>`).join('');
-  } catch(e){status.textContent='Unavailable';alert('Model verification failed: '+e.message);}
+  } catch(e){status.textContent='Unavailable';document.getElementById('l-model-status').textContent='Unavailable';alert('Model verification failed: '+e.message);}
 }
 
 // ── Lender ────────────────────────────────────────────
