@@ -1,0 +1,9 @@
+{
+  "dataset": "LendingClub Real Loan Records (9,578 samples)",
+  "features_evaluated": 10,
+  "test_sample_size": 1000,
+  "threshold": 0.2,
+  "agreement_pct": 100.0,
+  "max_probability_delta": 0.0,
+  "status": "PASS"
+}
