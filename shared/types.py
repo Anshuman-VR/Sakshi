@@ -232,6 +232,7 @@ class DecisionStatusResponse(BaseModel):
     """
     decision_id: str
     status: DecisionStatusLiteral
+    decision: Optional[int] = None
     model_commitment: Optional[str] = None
     policy_id: Optional[str] = None
     verified_at: Optional[str] = None

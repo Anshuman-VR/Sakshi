@@ -1,6 +1,6 @@
 export type DecisionStatus = 'NOT_FOUND' | 'NOTICE_RECEIVED' | 'VERIFIED' | 'FAILED' | 'EXPIRED';
 export interface DecisionRecord {
-  decision_id: string; status: DecisionStatus; model_commitment?: string | null; policy_id?: string | null;
+  decision_id: string; status: DecisionStatus; decision?: number | null; model_commitment?: string | null; policy_id?: string | null;
   verified_at?: string | null; ledger_seq?: number | null; failure_reason?: string | null; sla_deadline?: string | null;
 }
 export interface DashboardSummary {

@@ -12,6 +12,7 @@ router = APIRouter(tags=["disbursal gate"])
 
 def _response(decision: Decision) -> DecisionStatusResponse:
     return DecisionStatusResponse(decision_id=decision.decision_id, status=decision.status,
+        decision=decision.decision,
         model_commitment=decision.model_commitment, policy_id=decision.policy_id,
         verified_at=decision.verified_at.isoformat() if decision.verified_at else None,
         ledger_seq=decision.ledger_seq, failure_reason=decision.failure_reason,

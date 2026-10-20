@@ -13,6 +13,7 @@ router = APIRouter(tags=["dashboard"])
 
 def decision_response(d: Decision) -> DecisionStatusResponse:
     return DecisionStatusResponse(decision_id=d.decision_id, status=d.status,
+        decision=d.decision,
         model_commitment=d.model_commitment, policy_id=d.policy_id,
         verified_at=d.verified_at.isoformat() if d.verified_at else None,
         ledger_seq=d.ledger_seq, failure_reason=d.failure_reason,

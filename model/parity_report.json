@@ -4,7 +4,7 @@
   "test_sample_size": 1000,
   "threshold": 0.2,
   "decision_agreement_pct": 100.0,
-  "max_probability_delta": 3.3e-07,
+  "max_probability_delta": 4e-07,
   "comparison": "scikit-learn float32 input vs ONNX Runtime float32 output; not EZKL quantization parity",
   "status": "PASS"
 }
