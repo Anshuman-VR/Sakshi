@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# Data and large circuit artifacts
+*.bin
+*.compiled
+*.pk
+*.vk
+*.proof
+*.witness
+model/data/*.csv
+circuits/artifacts/*
+!circuits/artifacts/.gitkeep
+circuits/prebuilt_proofs/*
+!circuits/prebuilt_proofs/.gitkeep
+*.db
+*.sqlite3
+
+# Node / React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dashboard/dist/
+dashboard/build/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Temp scratch & extracted PRD dump
+prd_full.txt
