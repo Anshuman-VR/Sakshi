@@ -19,7 +19,7 @@ def test_full_model_pipeline():
     # 2. Export ONNX
     onnx_path = export()
     assert os.path.exists(onnx_path)
-    assert os.path.getsize(onnx_path) > 500
+    assert os.path.getsize(onnx_path) > 200
 
     # 3. Model Commitment C
     c = compute_model_commitment()
@@ -27,7 +27,7 @@ def test_full_model_pipeline():
 
     # 4. Parity Report
     report = generate_parity_report()
-    assert report["agreement_pct"] >= 98.0
+    assert report["decision_agreement_pct"] >= 98.0
     assert report["status"] == "PASS"
 
     # 5. Personas

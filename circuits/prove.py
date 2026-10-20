@@ -23,7 +23,8 @@ ARTIFACTS_DIR = CIRCUITS_DIR / "artifacts"
 COMPILED_PATH = ARTIFACTS_DIR / "scorecard.compiled"
 VK_PATH = ARTIFACTS_DIR / "scorecard.vk"
 PK_PATH = ARTIFACTS_DIR / "scorecard.pk"
-SETTINGS_PATH = CIRCUITS_DIR / "settings.json"
+SETTINGS_PATH = ARTIFACTS_DIR / "scorecard.settings.json"
+SRS_PATH = ARTIFACTS_DIR / "scorecard.srs"
 BACKEND_PATH = ARTIFACTS_DIR / "backend.json"
 _writable_data_dir = Path("/app/data")
 _default_mock_key_dir = _writable_data_dir if _writable_data_dir.is_dir() else ARTIFACTS_DIR
@@ -106,6 +107,31 @@ def _mock_proof(statement: bytes) -> bytes:
     return json.dumps(envelope, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
+class DecisionMismatchError(ValueError):
+    """Raised when the supplied decision disagrees with the proved model score."""
+
+
+class CircuitBindingMismatchError(RuntimeError):
+    """Raised when the policy model commitment differs from the compiled circuit."""
+
+
+def decode_ezkl_probability(encoded: str, settings: dict[str, Any]) -> tuple[int, float, int]:
+    """Decode EZKL's little-endian public probability instance at its fixed-point scale."""
+    raw = bytes.fromhex(encoded.removeprefix("0x"))
+    quantized = int.from_bytes(raw, byteorder="little", signed=False)
+    scales = settings.get("model_output_scales") or []
+    if not scales:
+        raise ValueError("EZKL settings do not declare model_output_scales")
+    scale = int(scales[0])
+    return quantized, quantized / float(1 << scale), scale
+
+
+def decision_from_quantized_score(quantized_score: int, threshold: float, scale: int) -> int:
+    """Compare at the same fixed-point scale as the circuit's public score."""
+    threshold_quantized = int(round(float(threshold) * (1 << scale)))
+    return int(quantized_score >= threshold_quantized)
+
+
 def generate_zk_proof(
     decision_id: str,
     policy_id: str,
@@ -139,28 +165,48 @@ def generate_zk_proof(
         allow_mock = os.getenv("SAKSHI_ALLOW_MOCK_PROOFS", "true").strip().lower() in {"1", "true", "yes"}
     try:
         import ezkl  # type: ignore[import-not-found]
-        if not all(path.is_file() for path in (COMPILED_PATH, PK_PATH, SETTINGS_PATH, BACKEND_PATH)):
-            raise FileNotFoundError("EZKL compiled circuit/proving key/settings missing; run python -m circuits.compile")
+        if not all(path.is_file() for path in (COMPILED_PATH, PK_PATH, SETTINGS_PATH, BACKEND_PATH, SRS_PATH)):
+            raise FileNotFoundError("EZKL circuit, keys, settings, or SRS missing; run python -m circuits.compile")
         backend_metadata = json.loads(BACKEND_PATH.read_text(encoding="utf-8"))
-        # The current ONNX-only circuit proves inference, not the full contract statement.
-        # Never label that as contract-conformance proof until the metadata is in-circuit.
-        if backend_metadata.get("backend") != "ezkl" or backend_metadata.get("statement_binding") != "full-policy-binding":
-            raise RuntimeError("compiled circuit does not constrain policy hash, C, X, decision, and threshold as public inputs")
-        # EZKL witness input order is deliberately sourced from shared.types.FEATURE_ORDER.
+        if backend_metadata.get("backend") != "ezkl" or backend_metadata.get("statement_binding") != "model-inference-only":
+            raise RuntimeError("native circuit is missing or does not prove the expected EZKL inference statement")
+        expected_commitment = backend_metadata.get("model_commitment")
+        if expected_commitment and model_commitment != expected_commitment:
+            raise CircuitBindingMismatchError(
+                "policy model commitment does not match the model commitment recorded at circuit compilation"
+            )
+
         witness_input = {"input_data": [vector]}
         ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
-        # Temporary inputs/witnesses may contain personal features; delete them on every exit.
+        # Raw features, input JSON and witness are removed on every exit.
         with tempfile.TemporaryDirectory(prefix="sakshi-prove-", dir=str(ARTIFACTS_DIR)) as temp_dir:
             temp_root = Path(temp_dir)
             witness_input_path = temp_root / "input.json"
             witness_path = temp_root / "witness.json"
             proof_path = temp_root / "proof.json"
             witness_input_path.write_text(json.dumps(witness_input), encoding="utf-8")
-            ezkl.gen_witness(str(witness_input_path), str(COMPILED_PATH), str(witness_path))
-            started = time.perf_counter()
-            ezkl.prove(str(witness_path), str(COMPILED_PATH), str(PK_PATH), str(proof_path), "single")
+            witness = ezkl.gen_witness(
+                str(witness_input_path), str(COMPILED_PATH), str(witness_path), srs_path=str(SRS_PATH)
+            )
+            outputs = witness.get("outputs") if isinstance(witness, dict) else None
+            if not outputs or not outputs[0]:
+                raise RuntimeError("EZKL witness did not return the public probability output")
+            settings = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
+            quantized_score, _, output_scale = decode_ezkl_probability(str(outputs[0][0]), settings)
+            expected_decision = decision_from_quantized_score(quantized_score, threshold, output_scale)
+            if expected_decision != decision:
+                raise DecisionMismatchError(
+                    f"claimed decision {decision} disagrees with EZKL model score at threshold {threshold} "
+                    f"(quantized probability={quantized_score}/2^{output_scale})"
+                )
+            ezkl.prove(
+                str(witness_path), str(COMPILED_PATH), str(PK_PATH), str(proof_path), srs_path=str(SRS_PATH)
+            )
             proof_bytes = proof_path.read_bytes()
-        backend = "ezkl"
+        backend = "ezkl-model-inference-only"
+    except (DecisionMismatchError, CircuitBindingMismatchError):
+        # Never turn a semantic or model-binding mismatch into a mock attestation.
+        raise
     except Exception as exc:
         if not allow_mock:
             raise RuntimeError(f"EZKL proving failed and mock fallback is disabled: {exc}") from exc

@@ -31,7 +31,7 @@ FEATURES = {
 def test_circuit_compilation_and_proving(tmp_path, monkeypatch):
     # This environment has no EZKL installation; force the documented, labelled fallback.
     monkeypatch.setenv("SAKSHI_ALLOW_MOCK_PROOFS", "true")
-    circuit_hash = compile_circuit(allow_mock=True)
+    circuit_hash = compile_circuit(allow_mock=True, force_mock=True)
     assert len(circuit_hash) == 64
 
     commitment = "0x" + hashlib.sha256(b"test-model-commitment").hexdigest()
