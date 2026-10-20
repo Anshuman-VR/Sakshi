@@ -224,7 +224,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     # 3. Generate Proof Payload
     proof_threshold = 0.05 if request.tamper == "threshold" else policy.decision_threshold
     proof_commitment = "0x" + "dead" * 16 if request.tamper == "model" else policy.model_commitment
-    proof_bytes = b"SAKSHI_TEST_VALID_PROOF:demo_pipeline_v1"
+    proof_bytes = f"SAKSHI_TEST_VALID_PROOF:{decision_id}".encode("utf-8")
     proof_b64 = base64.b64encode(proof_bytes).decode("ascii")
 
     proof_payload = ProofPayload(
