@@ -1,0 +1,35 @@
+{
+  "circuit_hash": "0xd3b2dc63f9c9520b6d22069a015b36288d90676f45cf9bd5a41ec133911b6729",
+  "decision_threshold": 0.2,
+  "feature_schema_hash": "71dbb8d4f57eec37feb01e1434ccdd9efc4b45bd92119eb88a31caf3243779d3",
+  "fixed_point_scale": 1024,
+  "hard_rules": [
+    {
+      "feature": "bureau_score",
+      "id": "R1",
+      "op": "gte",
+      "value": 600.0
+    },
+    {
+      "feature": "foir",
+      "id": "R2",
+      "op": "lte",
+      "value": 0.65
+    }
+  ],
+  "lender_id": "nbfc42_capital",
+  "lender_pubkey": "ed8976c0add040cad9deaf28460a02b3da80d1fa0c9caf80377814715680910d",
+  "lender_sig": "1c829621bedd289a699022d2dba1bec6d02b575135e850237345c58ffd4f4fd41d146686411b5445f9875d11be17bb384b55e3948882c696e472c6ffaf71950a",
+  "lsp_id": "lspX_fintech",
+  "lsp_pubkey": "bbce578fdc8db2fdc27764eed4ce988bf671b5d546dce0c3101b8d9ed83ed94e",
+  "lsp_sig": "aaacd1a2cbdd6ced1fab7b285911495ab29cd0786d50be8a02b94e7aecbed39d5f78b3d687afe0a1b305879c97d32a975ba5c44c60c1a16520a195da4dd99a0f",
+  "model_commitment": "0xd031786a1e637500b6c16c661f33e751cc13e0c614eeb03045866660aeb09b80",
+  "policy_hash": "447930887ea48c1d40442e0a7c3ba681d9168e663df2d9920ddb814cfb5cbf47",
+  "policy_id": "pol_nbfc42_lspX_personal_v1",
+  "product": "personal_loan",
+  "proof_sla_minutes": 10,
+  "signing_mode": "demo-local-keys-not-production-trust",
+  "valid_from": "2026-10-20T18:51:36Z",
+  "valid_to": "2027-10-20T18:51:36Z",
+  "version": 1
+}

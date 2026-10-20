@@ -1,9 +1,8 @@
 # ==============================================================================
 # SAKSHI - 2-CONTAINER DEPLOYMENT TOPOLOGY
-# Zone 1 (LSP Private): sakshi-lsp
-# Zone 3 (Lender / RE): sakshi-lender (Node API + Mock LMS + Static Frontends)
+# Zone 1 (LSP Private): sakshi-lsp (Model, Prover Sidecar, Outbox)
+# Zone 3 (Lender / RE): sakshi-lender (Node API, Mock LMS, Static Frontends)
 # ==============================================================================
-version: '3.8'
 
 networks:
   lsp_net:
@@ -32,10 +31,11 @@ services:
     ports: []         # ZERO public ports. Completely isolated inside LSP VPC.
     environment:
       - SAKSHI_SIDECAR_LENDER_NODE_URL=http://sakshi-lender:8000
-      - SAKSHI_SIDECAR_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-key}
+      - SAKSHI_SIDECAR_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-secret-key-2026}
       - SAKSHI_SIDECAR_POLICY_ID=${POLICY_ID:-pol_nbfc42_lspX_personal_v1}
       - SAKSHI_SIDECAR_NUM_WORKERS=2
       - SAKSHI_SIDECAR_DB_PATH=/app/data/sidecar.db
+      - SAKSHI_ALLOW_MOCK_PROOFS=${ALLOW_MOCK_PROOFS:-true}
     volumes:
       - lsp_data:/app/data
       - circuit_artifacts:/app/circuits/artifacts:ro
@@ -61,12 +61,14 @@ services:
     networks:
       - lender_net
     ports:
-      - "8000:8000"   # Single unified entrypoint: APIs, Lender Dashboard, Borrower DLA
+      - "127.0.0.1:8000:8000"   # Local-only entrypoint: APIs, Lender Dashboard, Borrower DLA
     environment:
-      - SAKSHI_NODE_DATABASE_URL=sqlite+aiosqlite:////app/data/sakshi.db
-      - SAKSHI_NODE_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-key}
-      - SAKSHI_NODE_LENDER_ADMIN_KEY=${LENDER_ADMIN_KEY:-lender-admin-key}
-      - SAKSHI_NODE_MOCK_VERIFY=${MOCK_VERIFY:-false}
+      - SAKSHI_NODE_DATABASE_URL=sqlite:////app/data/sakshi.db
+      - SAKSHI_NODE_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-secret-key-2026}
+      - SAKSHI_NODE_LENDER_ADMIN_KEY=${LENDER_ADMIN_KEY:-lender-admin-secret-key-2026}
+      - SAKSHI_NODE_MOCK_VERIFY=${MOCK_VERIFY:-true}
+      - SAKSHI_NODE_ENVIRONMENT=${ENVIRONMENT:-development}
+      - SAKSHI_NODE_ALLOW_INSECURE_MOCK_VERIFY=${ALLOW_INSECURE_MOCK_VERIFY:-true}
     volumes:
       - lender_data:/app/data
       - circuit_artifacts:/app/circuits/artifacts:ro
