@@ -3,7 +3,6 @@
 # Zone 1 (LSP Private): sakshi-lsp (Model, Prover Sidecar, Outbox)
 # Zone 3 (Lender / RE): sakshi-lender (Node API, Mock LMS, Static Frontends)
 # ==============================================================================
-version: '3.8'
 
 networks:
   lsp_net:
