@@ -13,7 +13,7 @@ from node.services.crypto import canonical_json
 from node.services.policy_engine import parse_iso_datetime, validate_policy_signatures, policy_to_document
 
 router = APIRouter(tags=["policies"])
-_ALLOWED_OPS = {"eq", "neq", "gte", "lte", "gt", "lt"}
+_ALLOWED_OPS = {"eq", "neq", "gte", "lte"}  # Must match the immutable shared HardRule schema.
 
 
 @router.post("/v1/policies", status_code=201)

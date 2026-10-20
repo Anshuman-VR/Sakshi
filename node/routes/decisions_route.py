@@ -41,7 +41,7 @@ def create_decision_notice(notice: DecisionNotice, _auth=Depends(require_sidecar
     decision = Decision(decision_id=notice.decision_id,
         application_id_hash=notice.application_id_hash.lower(), policy_id=notice.policy_id,
         decision=notice.decision, ts=decision_ts, status="NOTICE_RECEIVED",
-        sla_deadline=now + timedelta(minutes=policy.proof_sla_minutes), received_at=now)
+        sla_deadline=decision_ts + timedelta(minutes=policy.proof_sla_minutes), received_at=now)
     db.add(decision)
     db.commit()
     return {"decision_id": decision.decision_id, "status": decision.status,
