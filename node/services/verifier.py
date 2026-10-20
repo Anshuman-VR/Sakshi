@@ -204,7 +204,14 @@ class VerifierEngine:
             if (config.environment.lower() in {"production", "prod"}
                     or (config.environment.lower() != "test" and not config.allow_insecure_mock_verify)):
                 return _failed(payload, proof_hash, "V8_ZK_VERIFY", "INVALID_PROOF", verification_id)
-            proof_valid = proof_bytes.startswith(b"SAKSHI_TEST_VALID_PROOF:")
+            if proof_bytes.startswith(b"SAKSHI_TEST_VALID_PROOF:"):
+                proof_valid = True
+            else:
+                try:
+                    envelope = json.loads(proof_bytes.decode("utf-8"))
+                    proof_valid = isinstance(envelope, dict) and envelope.get("format") == "SAKSHI_MOCK_ATTESTATION_NOT_ZK_V1"
+                except Exception:
+                    proof_valid = False
         else:
             proof_valid = _real_ezkl_verify(proof_bytes, model.vk, config.ezkl_settings_path,
                 config.compiled_circuit_path, model.circuit_hash, pub_dict,

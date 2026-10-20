@@ -17,6 +17,7 @@ from node.routes.ledger_route import router as ledger_router
 from node.routes.dashboard_route import router as dashboard_router
 from node.routes.bindings_route import router as bindings_router
 from node.routes.webhooks_route import router as webhooks_router
+from node.routes.demo_route import router as demo_router
 from node.services.ledger import LedgerService
 from node.services.sla_monitor import sla_monitor_loop
 from node.services.metrics import render_metrics
@@ -47,9 +48,37 @@ app.add_middleware(CORSMiddleware, allow_origins=config.cors_origins,
                    allow_credentials=False, allow_methods=["GET", "POST", "OPTIONS"],
                    allow_headers=["Authorization", "Content-Type", "Idempotency-Key", "X-Sakshi-Key", "X-Lender-Key"])
 
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
 for router in (models_router, policies_router, decisions_router, proofs_router, gate_router,
-               ledger_router, dashboard_router, bindings_router, webhooks_router):
+               ledger_router, dashboard_router, bindings_router, webhooks_router, demo_router):
     app.include_router(router)
+
+
+# Mount static assets and SPA fallback for React frontend
+dist_path = Path("dashboard/dist")
+if not dist_path.is_dir():
+    dist_path = Path("/app/dashboard/dist")
+
+if dist_path.is_dir():
+    assets_dir = dist_path / "assets"
+    if assets_dir.is_dir():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def spa_fallback(request: Request, full_path: str):
+        # Allow API routes, health, metrics, and docs to pass through
+        if full_path.startswith(("v1/", "healthz", "metrics", "docs", "openapi.json")):
+            return JSONResponse(status_code=404, content={"detail": "NOT_FOUND"})
+        file_path = dist_path / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        index_file = dist_path / "index.html"
+        if index_file.is_file():
+            return FileResponse(index_file)
+        return JSONResponse(status_code=404, content={"detail": "NOT_FOUND"})
 
 
 @app.exception_handler(Exception)
