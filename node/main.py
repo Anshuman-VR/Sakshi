@@ -57,7 +57,29 @@ for router in (models_router, policies_router, decisions_router, proofs_router, 
     app.include_router(router)
 
 
-# Mount static assets and SPA fallback for React frontend
+@app.get("/healthz")
+def healthz():
+    try:
+        with SessionLocal() as db:
+            db.execute(text("SELECT 1"))
+            ledger_seq = LedgerService.current_sequence(db)
+        return {"status": "ok", "service": "sakshi-lender-node", "db": "ok", "ledger_seq": ledger_seq}
+    except Exception:
+        logger.exception("Health check failed")
+        return JSONResponse(status_code=503, content={"status": "unavailable", "db": "error"})
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+def metrics():
+    try:
+        with SessionLocal() as db:
+            return PlainTextResponse(render_metrics(db), media_type="text/plain; version=0.0.4; charset=utf-8")
+    except Exception:
+        logger.exception("Metrics collection failed")
+        return PlainTextResponse("# metrics unavailable\n", status_code=503)
+
+
+# Mount static assets and SPA fallback for React frontend (Must be registered last)
 dist_path = Path("dashboard/dist")
 if not dist_path.is_dir():
     dist_path = Path("/app/dashboard/dist")
@@ -85,28 +107,6 @@ if dist_path.is_dir():
 async def unexpected_exception_handler(request: Request, exc: Exception):
     logger.exception("Unhandled request error method=%s path=%s", request.method, request.url.path)
     return JSONResponse(status_code=500, content={"detail": "INTERNAL_ERROR"})
-
-
-@app.get("/healthz")
-def healthz():
-    try:
-        with SessionLocal() as db:
-            db.execute(text("SELECT 1"))
-            ledger_seq = LedgerService.current_sequence(db)
-        return {"status": "ok", "service": "sakshi-lender-node", "db": "ok", "ledger_seq": ledger_seq}
-    except Exception:
-        logger.exception("Health check failed")
-        return JSONResponse(status_code=503, content={"status": "unavailable", "db": "error"})
-
-
-@app.get("/metrics", response_class=PlainTextResponse)
-def metrics():
-    try:
-        with SessionLocal() as db:
-            return PlainTextResponse(render_metrics(db), media_type="text/plain; version=0.0.4; charset=utf-8")
-    except Exception:
-        logger.exception("Metrics collection failed")
-        return PlainTextResponse("# metrics unavailable\n", status_code=503)
 
 
 if __name__ == "__main__":
