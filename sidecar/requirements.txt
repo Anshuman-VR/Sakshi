@@ -1,0 +1,10 @@
+# Python 3.11 image. EZKL version is pinned for reproducible circuit behavior.
+ezkl==23.0.5
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+httpx==0.27.0
+sqlalchemy==2.0.30
+aiosqlite==0.20.0
+cryptography==42.0.8
+pydantic==2.7.1
+pydantic-settings==2.3.0
