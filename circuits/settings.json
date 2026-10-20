@@ -1,0 +1,13 @@
+{
+  "run_args": {
+    "input_scale": 10,
+    "param_scale": 10,
+    "scale": 10,
+    "bits": 16,
+    "logrows": 12,
+    "tolerance": {"val": 0.0, "scale": 1.0}
+  },
+  "num_rows": 4096,
+  "total_assignments": 2048,
+  "required_lookups": []
+}

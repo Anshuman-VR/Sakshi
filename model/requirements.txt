@@ -1,0 +1,6 @@
+# Model training/export/test environment. Pin the estimator version used by scorecard.pkl.
+numpy>=1.26,<3
+pandas>=2.2,<4
+scikit-learn==1.8.0
+onnx>=1.16,<2
+onnxruntime>=1.18,<2

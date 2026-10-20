@@ -1,0 +1,58 @@
+{
+  "personas": [
+    {
+      "id": "persona_priya",
+      "name": "Priya Sharma",
+      "profile": "Prime Salaried Software Engineer",
+      "expected_outcome": "APPROVE",
+      "features": {
+        "bureau_score": 758.0,
+        "monthly_income": 95000.0,
+        "foir": 0.28,
+        "loan_tenure_months": 36.0,
+        "num_active_loans": 1.0,
+        "num_enquiries_6m": 0.0,
+        "bank_account_age_months": 84.0,
+        "loan_amount_requested": 150000.0,
+        "behaviour_idx": 0.18,
+        "employment_type": 0.0
+      }
+    },
+    {
+      "id": "persona_rahul",
+      "name": "Rahul Verma",
+      "profile": "Subprime High-Obligation Applicant",
+      "expected_outcome": "REJECT",
+      "features": {
+        "bureau_score": 542.0,
+        "monthly_income": 32000.0,
+        "foir": 0.68,
+        "loan_tenure_months": 36.0,
+        "num_active_loans": 5.0,
+        "num_enquiries_6m": 4.0,
+        "bank_account_age_months": 22.0,
+        "loan_amount_requested": 200000.0,
+        "behaviour_idx": 0.88,
+        "employment_type": 1.0
+      }
+    },
+    {
+      "id": "persona_amit",
+      "name": "Amit Patel",
+      "profile": "Borderline Credit Profile",
+      "expected_outcome": "APPROVE",
+      "features": {
+        "bureau_score": 672.0,
+        "monthly_income": 52000.0,
+        "foir": 0.44,
+        "loan_tenure_months": 36.0,
+        "num_active_loans": 2.0,
+        "num_enquiries_6m": 1.0,
+        "bank_account_age_months": 45.0,
+        "loan_amount_requested": 80000.0,
+        "behaviour_idx": 0.45,
+        "employment_type": 0.0
+      }
+    }
+  ]
+}
