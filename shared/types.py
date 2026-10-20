@@ -50,10 +50,13 @@ DecisionStatusLiteral = Literal[
 FailureReason = Literal[
     'MODEL_MISMATCH',        # V2: commitment C not in approved models
     'POLICY_NOT_FOUND',      # V1: policy_id unknown
+    'V1_POLICY_NOT_FOUND',   # V1 alias
+    'POLICY_INVALID',        # V1 alias
     'POLICY_EXPIRED',        # V1: policy validity window passed
     'POLICY_HASH_MISMATCH',  # V3: policy_hash does not match stored hash
     'THRESHOLD_MISMATCH',    # V4: claimed threshold != policy threshold
     'WINDOW_INVALID',        # V5: epoch outside valid window
+    'STALE_EPOCH',           # V5 alias
     'REPLAY',                # V6: proof_hash already seen
     'DECISION_MISMATCH',     # V7: proof decision != notice decision
     'INVALID_PROOF',         # V8: EZKL verification failed
