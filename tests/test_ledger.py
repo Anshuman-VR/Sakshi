@@ -19,6 +19,9 @@ def test_chain_tamper_detected(environment):
         for i in range(5):
             LedgerService.append(db, f"d{i}", f"v{i}", "FAILED", "TEST", "p1", "c1", f"{i:064x}")
         db.commit()
+        # Simulate a privileged database administrator bypassing application
+        # protections; ordinary SQL updates are blocked by the SQLite trigger.
+        db.execute(text("DROP TRIGGER ledger_no_update"))
         db.execute(text("UPDATE ledger SET reason='ALTERED' WHERE seq=3"))
         db.commit()
         assert LedgerService.verify_chain(db) == (False, 3)
@@ -47,7 +50,20 @@ def test_deleted_middle_record_detected(environment):
         for i in range(4):
             LedgerService.append(db, f"d{i}", f"v{i}", "FAILED", "TEST", "p1", "c1", f"{i:064x}")
         db.commit()
+        db.execute(text("DROP TRIGGER ledger_no_delete"))
         db.execute(text("DELETE FROM ledger WHERE seq=2"))
         db.commit()
         valid, broken_at = LedgerService.verify_chain(db)
         assert valid is False and broken_at == 3
+
+
+def test_sql_updates_and_deletes_are_blocked_by_database(environment):
+    with environment["session"]() as db:
+        LedgerService.append(db, "d1", "v1", "FAILED", "TEST", "p1", "c1", "1" * 64)
+        db.commit()
+        with pytest.raises(Exception, match="audit ledger is append-only"):
+            db.execute(text("UPDATE ledger SET reason='ALTERED' WHERE seq=1"))
+        db.rollback()
+        with pytest.raises(Exception, match="audit ledger is append-only"):
+            db.execute(text("DELETE FROM ledger WHERE seq=1"))
+        db.rollback()

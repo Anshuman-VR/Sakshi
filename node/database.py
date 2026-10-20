@@ -30,6 +30,12 @@ def init_db() -> None:
     # Import models so all metadata is registered before create_all.
     from node.models import Base  # noqa: F401
     Base.metadata.create_all(bind=engine)
+    if engine.dialect.name == "sqlite":
+        # Also install on databases created by earlier code versions where the
+        # table already existed and SQLAlchemy's after_create hook won't rerun.
+        with engine.begin() as connection:
+            connection.exec_driver_sql("CREATE TRIGGER IF NOT EXISTS ledger_no_update BEFORE UPDATE ON ledger BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END")
+            connection.exec_driver_sql("CREATE TRIGGER IF NOT EXISTS ledger_no_delete BEFORE DELETE ON ledger BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END")
 
 
 def get_db():

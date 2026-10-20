@@ -1,7 +1,7 @@
 """Persistent domain models. Shared API contracts remain in shared.types."""
 from datetime import datetime, timezone
-from sqlalchemy import (Boolean, DateTime, Float, ForeignKey, Index, Integer,
-                        LargeBinary, String, Text, JSON, UniqueConstraint, event)
+from sqlalchemy import (DateTime, Float, ForeignKey, Index, Integer,
+                        LargeBinary, String, Text, JSON, UniqueConstraint, event, DDL)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.exc import InvalidRequestError
 
@@ -132,3 +132,16 @@ def _prevent_ledger_update(_mapper, _connection, _target):
 @event.listens_for(LedgerEntry, "before_delete")
 def _prevent_ledger_delete(_mapper, _connection, _target):
     raise InvalidRequestError("Audit ledger is append-only; deletes are forbidden")
+
+
+# SQLite lacks table-level user grants, so install defensive database triggers
+# as well as ORM guards. Privileged tamper tests explicitly drop these triggers
+# to emulate an administrator who can bypass the application boundary.
+event.listen(LedgerEntry.__table__, "after_create", DDL(
+    "CREATE TRIGGER IF NOT EXISTS ledger_no_update BEFORE UPDATE ON ledger "
+    "BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END"
+).execute_if(dialect="sqlite"))
+event.listen(LedgerEntry.__table__, "after_create", DDL(
+    "CREATE TRIGGER IF NOT EXISTS ledger_no_delete BEFORE DELETE ON ledger "
+    "BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END"
+).execute_if(dialect="sqlite"))
