@@ -61,7 +61,7 @@ services:
     networks:
       - lender_net
     ports:
-      - "127.0.0.1:8000:8000"   # Local-only entrypoint: APIs, Lender Dashboard, Borrower DLA
+      - "0.0.0.0:8000:8000"   # Local-only entrypoint: APIs, Lender Dashboard, Borrower DLA
     environment:
       - SAKSHI_NODE_DATABASE_URL=sqlite:////app/data/sakshi.db
       - SAKSHI_NODE_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-secret-key-2026}
