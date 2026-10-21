@@ -80,6 +80,30 @@ DEFAULT_PERSONAS = {
         "loan_amount_requested": 80000.0,
         "behaviour_idx": 0.45,
         "employment_type": 0.0
+    },
+    "vikram": {
+        "bureau_score": 765.0,
+        "monthly_income": 115000.0,
+        "foir": 0.26,
+        "loan_tenure_months": 36.0,
+        "num_active_loans": 1.0,
+        "num_enquiries_6m": 0.0,
+        "bank_account_age_months": 92.0,
+        "loan_amount_requested": 180000.0,
+        "behaviour_idx": 0.15,
+        "employment_type": 0.0
+    },
+    "suresh": {
+        "bureau_score": 538.0,
+        "monthly_income": 28000.0,
+        "foir": 0.71,
+        "loan_tenure_months": 36.0,
+        "num_active_loans": 6.0,
+        "num_enquiries_6m": 5.0,
+        "bank_account_age_months": 18.0,
+        "loan_amount_requested": 150000.0,
+        "behaviour_idx": 0.91,
+        "employment_type": 1.0
     }
 }
 
@@ -119,6 +143,30 @@ DEFAULT_CUSTOMER_INFO = {
         "loan_amount": 80000,
         "tenure": 24,
         "bureau": 672,
+    },
+    "vikram": {
+        "name": "Vikram Malhotra",
+        "phone": "+91 98450 12891",
+        "pan": "BVMPS4821N",
+        "bank_account": "9184501289104",
+        "ifsc": "HDFC0001890",
+        "employment": "Principal Architect",
+        "monthly_income": 115000,
+        "loan_amount": 180000,
+        "tenure": 36,
+        "bureau": 765,
+    },
+    "suresh": {
+        "name": "Suresh Nair",
+        "phone": "+91 97422 66319",
+        "pan": "ASRPN7732K",
+        "bank_account": "8874226631902",
+        "ifsc": "ICIC0001042",
+        "employment": "Fleet Logistics Operator",
+        "monthly_income": 28000,
+        "loan_amount": 150000,
+        "tenure": 36,
+        "bureau": 538,
     }
 }
 
@@ -221,7 +269,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     # Assess underwriting rules at policy threshold (0.50)
     bureau = features.get("bureau_score", 0.0)
     foir = features.get("foir", 1.0)
-    honest_decision = 1 if (bureau >= 600.0 and foir <= 0.65 and persona_key != "rahul") else 0
+    honest_decision = 1 if (bureau >= 600.0 and foir <= 0.65 and persona_key not in {"rahul", "suresh"}) else 0
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     unique_suffix = uuid.uuid4().hex[:8].upper()
@@ -512,4 +560,41 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         "public_inputs": proof_payload.public_inputs.model_dump(mode="json"),
         "steps_evaluated": steps_evaluated,
         "mismatch_details": mismatch_details,
+    }
+
+
+@router.post("/reset")
+def demo_reset(db: Session = Depends(get_db)):
+    """Wipes session decisions and ledger entries, and re-seeds baseline fixtures."""
+    from node.database import engine
+    from node.models import Base
+    
+    if engine.dialect.name == "sqlite":
+        with engine.begin() as conn:
+            conn.exec_driver_sql("DROP TRIGGER IF EXISTS ledger_no_update")
+            conn.exec_driver_sql("DROP TRIGGER IF EXISTS ledger_no_delete")
+            conn.exec_driver_sql("DELETE FROM ledger")
+            conn.exec_driver_sql("DELETE FROM proof_records")
+            conn.exec_driver_sql("DELETE FROM input_bindings")
+            conn.exec_driver_sql("DELETE FROM decisions")
+            conn.exec_driver_sql("CREATE TRIGGER IF NOT EXISTS ledger_no_update BEFORE UPDATE ON ledger BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END")
+            conn.exec_driver_sql("CREATE TRIGGER IF NOT EXISTS ledger_no_delete BEFORE DELETE ON ledger BEGIN SELECT RAISE(ABORT, 'audit ledger is append-only'); END")
+    else:
+        db.query(LedgerEntry).delete()
+        db.query(ProofRecord).delete()
+        db.query(InputBinding).delete()
+        db.query(Decision).delete()
+        db.commit()
+
+    _ensure_demo_fixtures(db)
+    
+    # Re-seed 1 baseline honest prime decision record
+    seed_req = DemoApplyRequest(persona="vikram")
+    seeded = demo_apply(seed_req, db)
+    
+    return {
+        "status": "ok", 
+        "message": "Database reset and seeded with initial baseline record.",
+        "decision_id": seeded.get("decision_id"),
+        "ledger_seq": seeded.get("ledger_seq"),
     }

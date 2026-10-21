@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { 
   ArrowUpRight, Clock3, RefreshCw, CheckCircle2, XCircle, 
-  ShieldCheck, ShieldAlert, Key, Copy, Check, X, FileText,
-  User
+  ShieldCheck, ShieldAlert, Copy, Check, X, FileText
 } from 'lucide-react';
 import type { DecisionRecord } from '../api/types';
 import { InfoTip } from './InfoTip';
@@ -45,19 +44,19 @@ export function LiveDecisionFeed({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm min-w-0 overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-6 py-4 bg-slate-50/50">
+    <div className="bg-white rounded-xl border-2 border-slate-300 shadow-sm min-w-0 overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-slate-200 px-6 py-4 bg-slate-100">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-slate-600 font-extrabold block">
             Partner Underwriting Stream
           </span>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          <h2 className="text-xl font-black text-slate-950 tracking-tight">
             Incoming Loan Decisions & Verifications
           </h2>
         </div>
         <button
           onClick={onRefresh}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-slate-800 bg-white border border-slate-300 rounded-lg shadow-2xs hover:bg-slate-50 hover:text-slate-950 transition-colors"
         >
           <RefreshCw size={13} className={loading ? 'animate-spin text-indigo-600' : ''} />
           Refresh
@@ -67,51 +66,51 @@ export function LiveDecisionFeed({
       {decisions.length ? (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[850px] text-left text-sm">
-            <thead className="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 border-b border-slate-200 font-semibold">
+            <thead className="bg-slate-100 text-[10px] uppercase tracking-wider text-slate-700 border-b-2 border-slate-300 font-black">
               <tr>
-                <th className="px-6 py-3">Decision ID / Timestamp</th>
-                <th className="px-4 py-3">Borrower / PAN</th>
-                <th className="px-4 py-3">Credit Decision</th>
-                <th className="px-4 py-3">Disbursal Gate</th>
-                <th className="px-4 py-3">
+                <th className="px-6 py-3.5">Decision ID / Timestamp</th>
+                <th className="px-4 py-3.5">Borrower / PAN</th>
+                <th className="px-4 py-3.5">Credit Decision</th>
+                <th className="px-4 py-3.5">Disbursal Gate</th>
+                <th className="px-4 py-3.5">
                   Policy{' '}
                   <InfoTip
                     label="Policy reference"
                     text="Dual-signed policy contract governing this underwriting model and cutoff threshold."
                   />
                 </th>
-                <th className="px-4 py-3">
+                <th className="px-4 py-3.5">
                   Model Commitment (C){' '}
                   <InfoTip
                     label="Model commitment"
                     text="Salted cryptographic SHA-256 commitment of the approved ML model parameters."
                   />
                 </th>
-                <th className="px-4 py-3">Action</th>
+                <th className="px-4 py-3.5">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-200 bg-white">
               {decisions.map((d) => {
                 const isApproved = d.decision === 1;
                 const isVerified = d.status === 'VERIFIED';
                 const customer = d.customer_info;
                 return (
-                  <tr key={d.decision_id} className="hover:bg-slate-50/70 transition-colors">
+                  <tr key={d.decision_id} className="hover:bg-slate-100 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-mono text-xs font-bold text-slate-900">{d.decision_id}</div>
-                      <div className="mt-0.5 text-[11px] text-slate-500">{ist(d.verified_at || d.received_at)}</div>
+                      <div className="font-mono text-xs font-black text-slate-950">{d.decision_id}</div>
+                      <div className="mt-0.5 text-[11px] text-slate-600 font-medium">{ist(d.verified_at || d.received_at)}</div>
                     </td>
                     <td className="px-4 py-4">
-                      <div className="text-xs font-semibold text-slate-900">{customer?.name || 'Applicant'}</div>
-                      <div className="font-mono text-[11px] text-slate-500 uppercase">{customer?.pan || '—'}</div>
+                      <div className="text-xs font-extrabold text-slate-950">{customer?.name || 'Applicant'}</div>
+                      <div className="font-mono text-[11px] text-slate-600 font-bold uppercase">{customer?.pan || '—'}</div>
                     </td>
                     <td className="px-4 py-4">
                       {d.decision !== undefined && d.decision !== null ? (
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${
                             isApproved
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                              : 'bg-rose-50 text-rose-800 border-rose-200'
+                              ? 'bg-emerald-100 text-emerald-950 border-emerald-300'
+                              : 'bg-rose-100 text-rose-950 border-rose-300'
                           }`}
                         >
                           {isApproved ? <CheckCircle2 size={13} /> : <XCircle size={13} />}
@@ -124,30 +123,30 @@ export function LiveDecisionFeed({
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-1.5">
                         {isVerified && isApproved ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            <ShieldCheck size={13} /> AUTHORIZED
+                          <span className="inline-flex items-center gap-1 text-xs font-black text-emerald-950 bg-emerald-100 px-2.5 py-0.5 rounded border border-emerald-300">
+                            <ShieldCheck size={14} className="text-emerald-700" /> AUTHORIZED
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-                            <ShieldAlert size={13} /> BLOCKED
+                          <span className="inline-flex items-center gap-1 text-xs font-black text-rose-950 bg-rose-100 px-2.5 py-0.5 rounded border border-rose-300">
+                            <ShieldAlert size={14} className="text-rose-700" /> BLOCKED
                           </span>
                         )}
                       </div>
                       {d.failure_reason && (
-                        <p className="mt-1 max-w-[170px] text-[10px] text-rose-600 font-medium font-mono">
+                        <p className="mt-1 max-w-[170px] text-[10px] text-rose-700 font-bold font-mono">
                           {d.failure_reason}
                         </p>
                       )}
                     </td>
                     <td className="px-4 py-4">
-                      <span className="font-mono text-xs text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                      <span className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
                         {d.policy_id || 'pol_meridian_quickfin_v1'}
                       </span>
                     </td>
                     <td className="max-w-[170px] truncate px-4 py-4">
                       <span
                         title={d.model_commitment || ''}
-                        className="font-mono text-xs text-slate-500"
+                        className="font-mono text-xs font-semibold text-slate-700"
                       >
                         {d.model_commitment ? `${d.model_commitment.slice(0, 14)}…` : '—'}
                       </span>
@@ -156,7 +155,7 @@ export function LiveDecisionFeed({
                       <button
                         type="button"
                         onClick={() => setSelectedRecord(d)}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800 underline decoration-indigo-300 underline-offset-4"
+                        className="inline-flex items-center gap-1 text-xs font-black text-indigo-700 hover:text-indigo-900 underline decoration-indigo-400 underline-offset-4"
                       >
                         Inspect Proof <ArrowUpRight size={13} />
                       </button>
@@ -169,19 +168,19 @@ export function LiveDecisionFeed({
         </div>
       ) : (
         <div className="px-6 py-14 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 border border-slate-300">
             <Clock3 size={20} />
           </div>
-          <h3 className="mt-4 font-bold text-slate-800">
+          <h3 className="mt-4 font-black text-slate-900">
             {loading ? 'Connecting to verifier…' : 'No decisions in current session'}
           </h3>
-          <p className="mx-auto mt-1.5 max-w-md text-xs text-slate-500">
+          <p className="mx-auto mt-1.5 max-w-md text-xs text-slate-600 font-medium">
             Submit a loan application in the QuickLoan Borrower Portal to trigger a live proof verification.
           </p>
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-6 py-3 text-[11px] text-slate-500 bg-slate-50/30">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-6 py-3 text-[11px] text-slate-600 font-semibold bg-slate-50">
         <span>Auto-syncing with lender verifier every 4s</span>
         <span>
           Last update:{' '}
@@ -194,107 +193,107 @@ export function LiveDecisionFeed({
       {/* Expanded Verification Dossier Modal */}
       {selectedRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl border-2 border-slate-300 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
                   Lender Loan Dossier & ZK Verification
                 </span>
-                <h3 className="text-lg font-bold text-slate-900 font-mono">
+                <h3 className="text-lg font-black text-slate-950 font-mono">
                   {selectedRecord.decision_id}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedRecord(null)}
-                className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100"
               >
                 <X size={18} />
               </button>
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Customer Information Record */}
+              {/* Customer Information Record - clean heading without icon */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
-                  <User size={14} className="text-indigo-600" /> Borrower & Loan Application Record
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 mb-3">
+                  Borrower & Loan Application Record
                 </h4>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-2 sm:grid-cols-3 gap-3.5 text-xs">
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Legal Name</span>
-                    <strong className="text-slate-900 text-sm">{selectedRecord.customer_info?.name || 'Priya Sharma'}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Legal Name</span>
+                    <strong className="text-slate-950 text-sm font-black">{selectedRecord.customer_info?.name || 'Priya Sharma'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">PAN Card</span>
-                    <strong className="text-slate-900 font-mono text-sm">{selectedRecord.customer_info?.pan || 'BNZPS1042K'}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">PAN Card</span>
+                    <strong className="text-slate-950 font-mono text-sm font-black">{selectedRecord.customer_info?.pan || 'BNZPS1042K'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Mobile</span>
-                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.phone || '+91 98201 44821'}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Mobile</span>
+                    <strong className="text-slate-950 font-mono font-bold">{selectedRecord.customer_info?.phone || '+91 98201 44821'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Disbursal Account</span>
-                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.bank_account || '9182014482103'}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Disbursal Account</span>
+                    <strong className="text-slate-950 font-mono font-bold">{selectedRecord.customer_info?.bank_account || '9182014482103'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Bank IFSC</span>
-                    <strong className="text-slate-900 font-mono uppercase">{selectedRecord.customer_info?.ifsc || 'HDFC0001234'}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Bank IFSC</span>
+                    <strong className="text-slate-950 font-mono uppercase font-bold">{selectedRecord.customer_info?.ifsc || 'HDFC0001234'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Requested Amount</span>
-                    <strong className="text-slate-900 font-mono">{money(selectedRecord.customer_info?.loan_amount || 150000)}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Requested Amount</span>
+                    <strong className="text-slate-950 font-mono font-black">{money(selectedRecord.customer_info?.loan_amount || 150000)}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Tenure</span>
-                    <strong className="text-slate-900">{selectedRecord.customer_info?.tenure || 36} Months</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Tenure</span>
+                    <strong className="text-slate-950 font-bold">{selectedRecord.customer_info?.tenure || 36} Months</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Credit Score (CIBIL)</span>
-                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.bureau || 758}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Credit Score (CIBIL)</span>
+                    <strong className="text-slate-950 font-mono font-black">{selectedRecord.customer_info?.bureau || 758}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Monthly Income</span>
-                    <strong className="text-slate-900 font-mono">{money(selectedRecord.customer_info?.monthly_income || 95000)}</strong>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Monthly Income</span>
+                    <strong className="text-slate-950 font-mono font-black">{money(selectedRecord.customer_info?.monthly_income || 95000)}</strong>
                   </div>
                 </div>
               </div>
 
               {/* Gate Authorization Status */}
-              <div className="p-4 rounded-xl border flex items-center justify-between bg-slate-50 border-slate-200">
+              <div className="p-4 rounded-xl border-2 flex items-center justify-between bg-slate-50 border-slate-300">
                 <div>
-                  <span className="text-xs text-slate-500 block">Disbursal Gate Decision</span>
+                  <span className="text-xs text-slate-600 block font-bold">Disbursal Gate Decision</span>
                   <div className="flex items-center gap-2 mt-1">
                     {selectedRecord.status === 'VERIFIED' && selectedRecord.decision === 1 ? (
-                      <span className="text-base font-bold text-emerald-700 flex items-center gap-1.5">
-                        <ShieldCheck size={18} /> Disbursal Authorized (Ready for 24h Release)
+                      <span className="text-base font-black text-emerald-900 flex items-center gap-1.5">
+                        <ShieldCheck size={18} className="text-emerald-700" /> Disbursal Authorized (Ready for 24h Release)
                       </span>
                     ) : (
-                      <span className="text-base font-bold text-rose-700 flex items-center gap-1.5">
-                        <ShieldAlert size={18} /> Disbursal Blocked (Fail-Closed)
+                      <span className="text-base font-black text-rose-900 flex items-center gap-1.5">
+                        <ShieldAlert size={18} className="text-rose-700" /> Disbursal Blocked (Fail-Closed)
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-slate-500 block">Audit Block Height</span>
-                  <strong className="text-base font-mono text-slate-900">
+                  <span className="text-xs text-slate-600 block font-bold">Audit Block Height</span>
+                  <strong className="text-base font-mono font-black text-slate-950">
                     {selectedRecord.ledger_seq ? `#${selectedRecord.ledger_seq}` : 'Pending'}
                   </strong>
                 </div>
               </div>
 
-              {/* Zero-Knowledge Proof Details */}
+              {/* Zero-Knowledge Proof Details - clean heading without icon */}
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <Key size={14} className="text-purple-600" /> Halo2 Zero-Knowledge Proof Details
+                <div className="flex items-center justify-between mb-2.5">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">
+                    Halo2 Zero-Knowledge Proof Details
                   </h4>
                   {selectedRecord.proof_hash && (
                     <button
                       type="button"
                       onClick={() => handleCopy(selectedRecord.proof_hash || '', 'hash')}
-                      className="text-[11px] font-mono text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                      className="text-xs font-mono font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1"
                     >
                       {copiedKey === 'hash' ? <Check size={12} /> : <Copy size={12} />}
                       <span>Copy Digest</span>
@@ -302,10 +301,10 @@ export function LiveDecisionFeed({
                   )}
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-900 text-slate-100 text-xs font-mono space-y-2">
+                <div className="p-4 rounded-xl bg-slate-950 text-slate-100 text-xs font-mono space-y-2">
                   <div className="flex justify-between items-center py-1 border-b border-slate-800">
                     <span className="text-slate-400">Proof Hash (SHA-256):</span>
-                    <span className="text-purple-300 truncate max-w-xs" title={selectedRecord.proof_hash || ''}>
+                    <span className="text-purple-300 truncate max-w-xs font-bold" title={selectedRecord.proof_hash || ''}>
                       {selectedRecord.proof_hash || 'Derived from witness'}
                     </span>
                   </div>
@@ -320,7 +319,7 @@ export function LiveDecisionFeed({
                   {selectedRecord.public_inputs && (
                     <div className="pt-2">
                       <span className="text-slate-400 block mb-1">Public Inputs Vector:</span>
-                      <pre className="p-2.5 rounded bg-slate-950 text-[10px] text-slate-300 overflow-x-auto leading-relaxed">
+                      <pre className="p-2.5 rounded bg-black text-[10px] text-slate-300 overflow-x-auto leading-relaxed border border-slate-800">
                         {JSON.stringify(selectedRecord.public_inputs, null, 2)}
                       </pre>
                     </div>
@@ -330,8 +329,8 @@ export function LiveDecisionFeed({
 
               {/* 9-Step Verification Status Summary */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
-                  Verifier Engine Validation Summary (V1-V9)
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 mb-2.5">
+                  Verifier Engine Validation Summary (V1 to V9)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   {[
@@ -350,17 +349,17 @@ export function LiveDecisionFeed({
                       <div
                         key={v.code}
                         className={`p-2.5 rounded-lg border flex items-center justify-between ${
-                          isPassed ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+                          isPassed ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-300'
                         }`}
                       >
-                        <span className="font-mono text-slate-700">
+                        <span className="font-mono text-slate-900 font-semibold">
                           <strong>{v.code}</strong>: {v.label}
                         </span>
                         <span
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          className={`text-[10px] font-black px-2 py-0.5 rounded ${
                             isPassed
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-rose-100 text-rose-800'
+                              ? 'bg-emerald-200 text-emerald-950'
+                              : 'bg-rose-200 text-rose-950'
                           }`}
                         >
                           {isPassed ? 'PASSED' : 'CHECK'}
@@ -377,7 +376,7 @@ export function LiveDecisionFeed({
                   href={`/receipt/${encodeURIComponent(selectedRecord.decision_id)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                  className="text-xs font-black text-indigo-700 hover:text-indigo-900 flex items-center gap-1"
                 >
                   <FileText size={14} /> Open Full Sanction Letter <ArrowUpRight size={13} />
                 </a>
@@ -385,7 +384,7 @@ export function LiveDecisionFeed({
                 <button
                   type="button"
                   onClick={() => setSelectedRecord(null)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs rounded-lg transition-colors"
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold text-xs rounded-lg transition-colors"
                 >
                   Close Dossier
                 </button>

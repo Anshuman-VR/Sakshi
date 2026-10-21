@@ -26,3 +26,8 @@ export const submitLoanApplication = async (req: ApplyLoanRequest): Promise<Appl
   const response = await api.post<ApplyLoanResponse>('/v1/demo/apply', req);
   return response.data;
 };
+
+export const resetDatabase = async (): Promise<{ status: string; message: string; decision_id?: string; ledger_seq?: number }> => {
+  const response = await api.post('/v1/demo/reset', {});
+  return response.data;
+};
