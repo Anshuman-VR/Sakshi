@@ -244,6 +244,7 @@ class DecisionStatusResponse(BaseModel):
     proof_snippet: Optional[str] = None
     public_inputs: Optional[Dict[str, Any]] = None
     application_id_hash: Optional[str] = None
+    customer_info: Optional[Dict[str, Any]] = None
 
 
 class DashboardSummary(BaseModel):

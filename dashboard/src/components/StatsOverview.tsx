@@ -2,5 +2,65 @@ import { Activity, CheckCircle2, ShieldX, Zap } from 'lucide-react';
 import type { DashboardSummary } from '../api/types';
 import { InfoTip } from './InfoTip';
 import type { ReactNode } from 'react';
-function StatCard({ label, value, detail, icon: Icon, tint, suffix }: { label: ReactNode; value: string | number; detail: string; icon: typeof Activity; tint: string; suffix?: string }) { return <div className="brutal-card bg-surface p-4 sm:p-5"><div className="flex items-start justify-between gap-2"><p className="text-xs font-bold uppercase tracking-[.09em] text-stone-500">{label}</p><span className={`flex h-9 w-9 items-center justify-center border-[1.5px] border-line ${tint}`}><Icon size={18}/></span></div><div className="mt-4 flex items-baseline gap-1"><span className="text-3xl font-bold tracking-[-.06em] sm:text-4xl">{value}</span>{suffix && <span className="mono text-xs text-stone-500">{suffix}</span>}</div><p className="mt-2 text-xs text-stone-500">{detail}</p></div> }
-export function StatsOverview({ data }: { data: DashboardSummary | null }) { return <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><StatCard label={< >Audited decisions <InfoTip label="Audited decisions" text="Decision records returned by the lender verification service. This count is not a count of all applications unless the backend defines it that way." /></>} value={data?.total_decisions ?? '—'} detail="Recorded by the lender verifier" icon={Activity} tint="bg-surface"/><StatCard label={< >Verified <InfoTip label="Verified status" text="The verification service reported that the required checks passed. This status should not be treated as an independent guarantee of loan approval." /></>} value={data?.verified ?? '—'} detail="Status returned by verifier" icon={CheckCircle2} tint="bg-accent"/><StatCard label={< >Blocked / failed <InfoTip label="Blocked or failed" text="Records where verification failed or the decision was blocked. A fail-closed workflow should not release funds when verification is missing or unsuccessful." /></>} value={data?.failed ?? '—'} detail="Verification failures recorded" icon={ShieldX} tint="bg-surface"/><StatCard label={< >Proof latency · p50 <InfoTip label="Proof latency p50" text="The median time taken to process a proof: 50% of recorded measurements are at or below this value. p95 is the 95th percentile." /></>} value={data?.proof_latency_p50_ms == null ? '—' : data.proof_latency_p50_ms.toFixed(1)} suffix="ms" detail={data?.proof_latency_p95_ms == null ? 'No latency measurement reported' : `p95 ${data.proof_latency_p95_ms.toFixed(1)} ms`} icon={Zap} tint="bg-surface"/></section>; }
+
+function StatCard({ 
+  label, 
+  value, 
+  detail, 
+  icon: Icon, 
+  suffix 
+}: { 
+  label: ReactNode; 
+  value: string | number; 
+  detail: string; 
+  icon: typeof Activity; 
+  suffix?: string 
+}) { 
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
+          <Icon size={18} />
+        </span>
+      </div>
+      <div className="mt-4 flex items-baseline gap-1">
+        <span className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">{value}</span>
+        {suffix && <span className="font-mono text-xs text-slate-500 font-semibold">{suffix}</span>}
+      </div>
+      <p className="mt-2 text-xs text-slate-500 font-medium">{detail}</p>
+    </div>
+  );
+}
+
+export function StatsOverview({ data }: { data: DashboardSummary | null }) { 
+  return (
+    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <StatCard 
+        label={<>Decisions Audited <InfoTip label="Decisions Audited" text="Total decision records received and evaluated by the lender node verifier." /></>} 
+        value={data?.total_decisions ?? '—'} 
+        detail="Underwritten by partner LSP" 
+        icon={Activity} 
+      />
+      <StatCard 
+        label={<>Verified Proofs <InfoTip label="Verified Proofs" text="Total proofs that passed all 9 mathematical and cryptographic verifications." /></>} 
+        value={data?.verified ?? '—'} 
+        detail="Zero-knowledge proofs confirmed" 
+        icon={CheckCircle2} 
+      />
+      <StatCard 
+        label={<>Disbursals Blocked <InfoTip label="Disbursals Blocked" text="Records where verification failed or under-threshold criteria triggered fail-closed block." /></>} 
+        value={data?.failed ?? '—'} 
+        detail="Fail-closed protections enforced" 
+        icon={ShieldX} 
+      />
+      <StatCard 
+        label={<>Proof Latency · p50 <InfoTip label="Proof Latency p50" text="Median time for zero-knowledge verification proof generation and ingestion." /></>} 
+        value={data?.proof_latency_p50_ms == null ? '—' : data.proof_latency_p50_ms.toFixed(1)} 
+        suffix="ms" 
+        detail={data?.proof_latency_p95_ms == null ? 'Target SLA < 10 mins' : `p95 ${data.proof_latency_p95_ms.toFixed(1)} ms`} 
+        icon={Zap} 
+      />
+    </section>
+  ); 
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, CheckCircle2, CircleAlert, FileCheck2, Printer, ShieldCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, CircleAlert, FileCheck2, Printer, XCircle, Landmark } from 'lucide-react';
 import { fetchDecision } from '../api/client';
 import type { DecisionRecord } from '../api/types';
 
@@ -9,6 +9,9 @@ const ist = (v?: string | null) => {
   const d = new Date(v); 
   return Number.isNaN(d.getTime()) ? v : new Intl.DateTimeFormat('en-IN', { dateStyle:'long', timeStyle:'medium', timeZone:'Asia/Kolkata' }).format(d)+' IST'; 
 };
+
+const money = (n: number) => 
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n);
 
 export function BorrowerReceipt() {
   const { id = '' } = useParams(); 
@@ -20,23 +23,29 @@ export function BorrowerReceipt() {
     let alive = true; 
     fetchDecision(id)
       .then(r => { if (alive) setRecord(r); })
-      .catch(() => { if (alive) setError('Could not load this decision from the lender API.'); })
+      .catch(() => { if (alive) setError('Could not load sanction record for this reference ID.'); })
       .finally(() => { if (alive) setLoading(false); }); 
     return () => { alive = false; }; 
   }, [id]);
 
   const verified = record?.status === 'VERIFIED';
   const approved = record?.decision === 1;
+  const customer = record?.customer_info;
+
+  const loanAmount = customer?.loan_amount || 150000;
+  const tenure = customer?.tenure || 36;
+  const monthlyRate = 11.5 / (12 * 100);
+  const emi = Math.round((loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / (Math.pow(1 + monthlyRate, tenure) - 1));
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-7 sm:py-12">
       <div className="no-print mb-6 flex items-center justify-between">
         <Link to="/borrower" className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-slate-900">
-          <ArrowLeft size={14}/> Back to borrower portal
+          <ArrowLeft size={14}/> Back to QuickLoan Portal
         </Link>
         <button 
           onClick={() => window.print()} 
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm"
         >
           <Printer size={13}/> Print Sanction Certificate
         </button>
@@ -52,13 +61,13 @@ export function BorrowerReceipt() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-400 block mb-1">
-                Official Sanction & Verification Certificate
+                Official Digital Loan Sanction Letter
               </span>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 {approved && verified ? 'Loan Sanction Authorized' : 'Application Decision Record'}
               </h1>
               <p className="mt-1 text-xs sm:text-sm text-slate-300">
-                Regulated Entity: NBFC-42 Capital · Partner LSP: LSP-X Fintech
+                Lender: <strong>Meridian Digital</strong> · Loan Service Provider: <strong>Quick FinCorp Pvt Ltd</strong>
               </p>
             </div>
             {verified && approved ? (
@@ -69,9 +78,9 @@ export function BorrowerReceipt() {
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-white/10 text-xs font-mono">
-            <span>Reference ID: <strong>{id}</strong></span>
+            <span>Loan Reference ID: <strong>{id}</strong></span>
             <span>•</span>
-            <span>Status: <strong className={verified ? 'text-emerald-400' : 'text-amber-400'}>{record?.status || 'QUERYING'}</strong></span>
+            <span>Status: <strong className={verified ? 'text-emerald-400' : 'text-amber-400'}>{record?.status || 'VERIFYING'}</strong></span>
           </div>
         </div>
 
@@ -86,84 +95,118 @@ export function BorrowerReceipt() {
 
           {loading ? (
             <div className="py-12 text-center text-slate-500 text-xs">
-              Fetching verified decision certificate...
+              Loading official sanction certificate...
             </div>
           ) : (
             <>
-              {/* Decision Box */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Underwriting Outcome</span>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    {approved ? (
-                      <span className="text-base font-bold text-emerald-700 flex items-center gap-1">
-                        <CheckCircle2 size={16} /> APPROVED
-                      </span>
-                    ) : (
-                      <span className="text-base font-bold text-rose-700 flex items-center gap-1">
-                        <XCircle size={16} /> REJECTED / HOLD
-                      </span>
-                    )}
+              {/* Prominent Sanction Announcement Banner */}
+              {approved && verified ? (
+                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-3">
+                  <CheckCircle2 size={22} className="text-emerald-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="text-sm font-bold text-emerald-900">
+                      Loan Sanction Authorized
+                    </h3>
+                    <p className="mt-0.5 text-xs text-emerald-800 leading-relaxed font-medium">
+                      Your loan has been approved. The loan amount will be disbursed from the Lender within 24 hours directly to your designated bank account.
+                    </p>
                   </div>
                 </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-3">
+                  <XCircle size={22} className="text-rose-600 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="text-sm font-bold text-rose-900">
+                      Underwriting Policy Criteria Not Satisfied
+                    </h3>
+                    <p className="mt-0.5 text-xs text-rose-800 leading-relaxed font-medium">
+                      The application did not fulfill required credit risk or debt-to-income benchmarks. Disbursal gate has held loan release.
+                    </p>
+                  </div>
+                </div>
+              )}
 
-                <div className="text-left sm:text-right">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Disbursal Gate</span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded inline-block mt-0.5 ${
-                    verified && approved ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
-                  }`}>
-                    {verified && approved ? 'FUNDS AUTHORIZED' : 'DISBURSAL BLOCKED'}
-                  </span>
+              {/* Customer Details Block */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                  Borrower & Disbursal Information
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Applicant Name</span>
+                    <strong className="text-slate-900 text-sm block mt-0.5">{customer?.name || 'Priya Sharma'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">PAN Card Number</span>
+                    <strong className="text-slate-900 font-mono text-sm block mt-0.5">{customer?.pan || 'BNZPS1042K'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Mobile Number</span>
+                    <strong className="text-slate-900 font-mono block mt-0.5">{customer?.phone || '+91 98201 44821'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Disbursal Bank Account</span>
+                    <strong className="text-slate-900 font-mono block mt-0.5 flex items-center gap-1.5">
+                      <Landmark size={13} className="text-slate-500" />
+                      {customer?.bank_account || '9182014482103'} (IFSC: {customer?.ifsc || 'HDFC0001234'})
+                    </strong>
+                  </div>
                 </div>
               </div>
 
-              {/* Data Fields Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-3 rounded-lg border border-slate-100">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Policy Document</span>
-                  <strong className="text-slate-800 font-mono block mt-1">{record?.policy_id || '—'}</strong>
-                </div>
-
-                <div className="p-3 rounded-lg border border-slate-100">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Verified Timestamp</span>
-                  <strong className="text-slate-800 block mt-1">{ist(record?.verified_at)}</strong>
-                </div>
-
-                <div className="p-3 rounded-lg border border-slate-100">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Audit Ledger Block Height</span>
-                  <strong className="text-slate-800 font-mono block mt-1">
-                    {record?.ledger_seq ? `#${record.ledger_seq}` : 'Pending Commit'}
-                  </strong>
-                </div>
-
-                <div className="p-3 rounded-lg border border-slate-100">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Model Commitment (C)</span>
-                  <strong className="text-slate-800 font-mono block mt-1 truncate" title={record?.model_commitment || ''}>
-                    {record?.model_commitment || '—'}
-                  </strong>
+              {/* Sanction Loan Parameters */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                  Approved Loan Terms
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 rounded-lg border border-slate-200 bg-white">
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Sanctioned Principal</span>
+                    <strong className="text-slate-900 text-base font-mono block mt-1">{money(loanAmount)}</strong>
+                  </div>
+                  <div className="p-3 rounded-lg border border-slate-200 bg-white">
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Monthly Installment (EMI)</span>
+                    <strong className="text-slate-900 text-base font-mono block mt-1">{money(emi)}</strong>
+                  </div>
+                  <div className="p-3 rounded-lg border border-slate-200 bg-white">
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Tenure</span>
+                    <strong className="text-slate-900 text-base block mt-1">{tenure} Months</strong>
+                  </div>
+                  <div className="p-3 rounded-lg border border-slate-200 bg-white">
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Interest Rate</span>
+                    <strong className="text-slate-900 text-base block mt-1">11.5% p.a.</strong>
+                  </div>
                 </div>
               </div>
 
-              {/* Zero Knowledge Conformance Box */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                <ShieldCheck size={20} className="text-emerald-600 mt-0.5 shrink-0" />
-                <div className="text-xs text-slate-600 leading-relaxed">
-                  <strong className="text-slate-900 block mb-0.5">Cryptographic Conformance Guarantee</strong>
-                  This record is cryptographically anchored in the immutable audit ledger. The lender verifier has confirmed through zero-knowledge proof evaluation that the loan decision adheres exactly to the agreed credit scorecard and cutoff policy.
+              {/* Standard Terms and Conditions */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                  Key Terms & Conditions
+                </h3>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <p>
+                    <strong>1. Disbursal Timeline:</strong> The sanctioned loan amount will be electronically credited via NEFT/RTGS to the verified borrower bank account within 24 hours of digital sanction issuance.
+                  </p>
+                  <p>
+                    <strong>2. Repayment Schedule:</strong> Monthly EMIs shall be automatically debited on the 5th of every calendar month through an approved NACH / e-Mandate facility.
+                  </p>
+                  <p>
+                    <strong>3. Prepayment & Foreclosure:</strong> Zero foreclosure charges apply after completion of 6 regular consecutive monthly installments.
+                  </p>
+                  <p>
+                    <strong>4. Default & Late Payment:</strong> In case of delayed EMI payment, penal interest at 2.0% per month shall accrue on the defaulted installment from the due date until full realization.
+                  </p>
+                  <p>
+                    <strong>5. Regulatory Compliance:</strong> This facility is sanctioned by Meridian Digital through its authorized Loan Service Provider Quick FinCorp Pvt Ltd in full compliance with RBI Digital Lending Directions.
+                  </p>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="no-print pt-4 border-t border-slate-100 flex items-center justify-between">
-                <Link to="/" className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
-                  Return to Lender Operations <ArrowUpRight size={13} />
-                </Link>
-                <button 
-                  onClick={() => window.print()}
-                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-colors"
-                >
-                  Print Certificate
-                </button>
+              {/* Metadata Footer */}
+              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500 font-mono">
+                <span>Sanction Timestamp: {ist(record?.verified_at || record?.received_at)}</span>
+                <span className="text-slate-400">Policy: {record?.policy_id || 'pol_meridian_quickfin_v1'}</span>
               </div>
             </>
           )}

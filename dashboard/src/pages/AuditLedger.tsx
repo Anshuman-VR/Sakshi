@@ -1,17 +1,159 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArrowUpRight, CheckCheck, CircleAlert, FileSearch, RefreshCw, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, CheckCheck, CircleAlert, RefreshCw, ShieldCheck, Building } from 'lucide-react';
 import { fetchLedger } from '../api/client';
 import type { LedgerRecord } from '../api/types';
 import { InfoTip } from '../components/InfoTip';
 import { StatusPill } from '../components/StatusPill';
+
 export function AuditLedger() {
-  const [entries,setEntries] = useState<LedgerRecord[]>([]); const [loading,setLoading] = useState(true); const [error,setError] = useState('');
-  const load = useCallback(async()=>{setLoading(true);try{setEntries(await fetchLedger());setError('');}catch{setError('The ledger endpoint is unavailable or returned an unrecognized response. No local or synthetic ledger entries are substituted.');}finally{setLoading(false);}},[]);
-  useEffect(()=>{void load();},[load]);
-  return <main className="mx-auto w-[calc(100%-32px)] md:w-[calc(100%-48px)] xl:w-[calc(100%-64px)] max-w-[1600px] py-7 sm:py-10"><div className="mb-8 flex flex-wrap items-end justify-between gap-4"><div><span className="mono text-[10px] font-bold uppercase tracking-[.15em] text-stone-500">Audit ledger</span><h1 className="mt-2 text-4xl font-bold tracking-[-.07em] sm:text-5xl">Audit ledger</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">Review lender API records, verification status, proof fingerprints, and hash-chain fields.</p></div><button onClick={()=>void load()} className="brutal-button inline-flex items-center gap-2 bg-surface px-4 py-3 text-sm font-bold"><RefreshCw size={15} className={loading?'animate-spin':''}/> Refresh ledger</button></div>
-    <div className="brutal-card mb-6 flex flex-wrap items-start gap-4 bg-accent p-5"><ShieldCheck size={26}/><div className="flex-1"><h2 className="font-bold">Records from the lender API</h2><p className="mt-1 text-sm leading-6 text-white">This page displays only records returned by <code>/v1/dashboard/ledger?limit=50</code>. The interface does not independently validate the hash chain. Refer to the verifier for its reported integrity result.</p></div><div className="mono text-[10px] font-bold uppercase tracking-wider">Read-only</div></div>
-    {error && <div role="alert" className="mb-5 flex gap-3 border-[1.5px] border-line bg-surface p-4"><CircleAlert size={19} className="shrink-0"/><div><p className="font-bold">Ledger unavailable</p><p className="mt-1 text-sm">{error}</p></div></div>}
-    <section className="brutal-card overflow-hidden bg-surface"><div className="flex flex-wrap items-center justify-between gap-3 border-b-[1.5px] border-line p-5"><div><p className="mono text-[10px] uppercase tracking-[.15em] text-stone-500">Audit records</p><h2 className="mt-1 text-xl font-bold">Ledger entries <span className="mono text-sm text-stone-500">({entries.length})</span></h2></div><span className="status-pill bg-surface text-stone-600"><FileSearch size={12}/> API data</span></div>
-      {entries.length ? <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-left text-xs"><thead className="bg-paper text-[10px] uppercase tracking-wider text-stone-600"><tr><th className="px-4 py-3">Sequence <InfoTip label="Sequence number" text="The record position in the ledger, used to distinguish and order entries." /></th><th className="px-4 py-3">Decision <InfoTip label="Decision ID" text="A unique reference for a lending decision. It can be used to look up the related status or receipt." /></th><th className="px-4 py-3">Status <InfoTip label="Verification status" text="The state reported by the lender verification service, such as verified, failed, pending, or not found." /></th><th className="px-4 py-3">Reason <InfoTip label="Reason" text="A status explanation or reason code returned by the backend. Its exact meaning depends on the verification rules." /></th><th className="px-4 py-3">Proof hash <InfoTip label="Proof hash" text="A fixed-length fingerprint of proof data. It can help detect changes, but does not by itself establish who created the proof or whether it is valid." /></th><th className="px-4 py-3">Previous hash <InfoTip label="Previous hash" text="The stored fingerprint of the prior record, used to link records in a hash chain." /></th><th className="px-4 py-3">Row hash <InfoTip label="Row hash" text="A fingerprint calculated from a ledger record. Verification rules determine which fields are included and how it is checked." /></th></tr></thead><tbody>{entries.map((e,i)=><tr key={`${e.seq}-${e.decision_id}-${i}`} className="border-t border-line"><td className="mono px-4 py-4 font-bold">#{e.seq}</td><td className="mono px-4 py-4">{e.decision_id}</td><td className="px-4 py-4"><StatusPill status={e.status}/></td><td className="px-4 py-4">{e.reason || '—'}</td><td className="mono max-w-[160px] truncate px-4 py-4" title={e.proof_hash || undefined}>{e.proof_hash || '—'}</td><td className="mono max-w-[160px] truncate px-4 py-4" title={e.prev_hash || undefined}>{e.prev_hash || '—'}</td><td className="mono max-w-[160px] truncate px-4 py-4" title={e.row_hash || undefined}>{e.row_hash || '—'}</td></tr>)}</tbody></table></div> : <div className="px-6 py-14 text-center"><div className="mx-auto flex h-12 w-12 items-center justify-center border-[1.5px] border-line bg-paper"><CheckCheck size={22}/></div><h3 className="mt-4 font-bold">{loading?'Loading ledger entries…':'No audit records available'}</h3><p className="mx-auto mt-2 max-w-md text-sm text-stone-500">{error?'Check the lender API and response schema.':'Records will appear when the backend endpoint is available. No synthetic audit history is displayed.'}</p><a href="/" className="mt-4 inline-flex items-center gap-1 text-xs font-bold underline underline-offset-4">Return to overview <ArrowUpRight size={13}/></a></div>}
-    </section></main>;
+  const [entries, setEntries] = useState<LedgerRecord[]>([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState('');
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      setEntries(await fetchLedger());
+      setError('');
+    } catch {
+      setError('The ledger endpoint is unavailable or returned an unrecognized response.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  return (
+    <main className="mx-auto w-[calc(100%-32px)] md:w-[calc(100%-48px)] xl:w-[calc(100%-64px)] max-w-[1600px] py-7 sm:py-10">
+      {/* Header */}
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="mb-3 flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-900 border border-indigo-200">
+              <Building size={14} className="text-indigo-700" />
+              LSP Partner: Quick FinCorp Pvt Ltd
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            Audit Ledger
+          </h1>
+          <p className="mt-2.5 max-w-2xl text-sm sm:text-base text-slate-600">
+            Immutable, sequential cryptographic record of digital lending underwriting conformance proofs, block hashes, and gate decisions.
+          </p>
+        </div>
+        <button 
+          onClick={() => void load()} 
+          className="inline-flex items-center gap-2 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 transition-colors"
+        >
+          <RefreshCw size={14} className={loading ? 'animate-spin text-indigo-600' : ''}/> Refresh Ledger
+        </button>
+      </div>
+
+      {/* Compliance / Partner LSP Ledger Banner */}
+      <div className="mb-6 flex flex-wrap items-start gap-4 rounded-xl border border-indigo-200 bg-indigo-50/70 p-5 text-indigo-950 shadow-xs">
+        <ShieldCheck size={26} className="text-indigo-700 shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <h2 className="text-sm font-bold text-indigo-950">
+            Conformance Ledger for Partner LSP: Quick FinCorp Pvt Ltd
+          </h2>
+          <p className="mt-1 text-xs leading-relaxed text-indigo-900/80">
+            This ledger maintains immutable cryptographic decision records from Partner LSP Quick FinCorp Pvt Ltd in compliance with RBI Digital Lending Directions. Every credit decision is anchored into a continuous SHA-256 hash chain without exposing borrower personal identity (PII) or proprietary scoring weights.
+          </p>
+        </div>
+        <div className="font-mono text-[10px] font-bold uppercase tracking-wider bg-white px-2.5 py-1 rounded border border-indigo-200 text-indigo-800">
+          Append-Only Ledger
+        </div>
+      </div>
+
+      {error && (
+        <div role="alert" className="mb-5 flex gap-3 border border-rose-200 bg-rose-50 p-4 rounded-xl text-rose-800 text-xs">
+          <CircleAlert size={18} className="shrink-0 text-rose-600"/>
+          <div>
+            <p className="font-bold">Ledger Connection Notice</p>
+            <p className="mt-0.5">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Ledger Table */}
+      <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-6 py-4 bg-slate-50/50">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-bold">Audit Trail</p>
+            <h2 className="mt-0.5 text-lg font-bold text-slate-900">
+              Ledger Blocks <span className="font-mono text-xs font-normal text-slate-500">({entries.length} recorded)</span>
+            </h2>
+          </div>
+        </div>
+
+        {entries.length ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[960px] text-left text-xs">
+              <thead className="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 border-b border-slate-200 font-semibold">
+                <tr>
+                  <th className="px-5 py-3">
+                    Seq <InfoTip label="Sequence number" text="Sequential block height in the append-only ledger." />
+                  </th>
+                  <th className="px-4 py-3">
+                    Decision ID <InfoTip label="Decision ID" text="Loan decision identifier generated at underwriting." />
+                  </th>
+                  <th className="px-4 py-3">
+                    Status <InfoTip label="Status" text="Cryptographic verification status." />
+                  </th>
+                  <th className="px-4 py-3">
+                    Reason <InfoTip label="Reason" text="Verification outcome or failure step explanation." />
+                  </th>
+                  {/* Hash Columns ordered: Proof Hash, Block Hash, Previous Block Hash */}
+                  <th className="px-4 py-3">
+                    Proof Hash <InfoTip label="Proof Hash" text="Fixed-length SHA-256 fingerprint of the Zero-Knowledge proof bytes." />
+                  </th>
+                  <th className="px-4 py-3">
+                    Block Hash <InfoTip label="Block Hash" text="Cryptographic SHA-256 digest of this ledger block." />
+                  </th>
+                  <th className="px-4 py-3">
+                    Previous Block Hash <InfoTip label="Previous Block Hash" text="Hash pointer linking to the prior sequential ledger entry." />
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-mono">
+                {entries.map((e, i) => (
+                  <tr key={`${e.seq}-${e.decision_id}-${i}`} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="px-5 py-3.5 font-bold text-slate-900">#{e.seq}</td>
+                    <td className="px-4 py-3.5 text-slate-800 font-semibold">{e.decision_id}</td>
+                    <td className="px-4 py-3.5 font-sans"><StatusPill status={e.status}/></td>
+                    <td className="px-4 py-3.5 font-sans text-slate-600">{e.reason || '—'}</td>
+                    <td className="max-w-[170px] truncate px-4 py-3.5 text-purple-700" title={e.proof_hash || undefined}>
+                      {e.proof_hash ? `${e.proof_hash.slice(0, 16)}…` : '—'}
+                    </td>
+                    <td className="max-w-[170px] truncate px-4 py-3.5 text-slate-900 font-semibold" title={e.row_hash || undefined}>
+                      {e.row_hash ? `${e.row_hash.slice(0, 16)}…` : '—'}
+                    </td>
+                    <td className="max-w-[170px] truncate px-4 py-3.5 text-slate-400" title={e.prev_hash || undefined}>
+                      {e.prev_hash ? `${e.prev_hash.slice(0, 16)}…` : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="px-6 py-14 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+              <CheckCheck size={22}/>
+            </div>
+            <h3 className="mt-4 font-bold text-slate-800">{loading ? 'Loading ledger blocks…' : 'No audit records in session'}</h3>
+            <p className="mx-auto mt-2 max-w-md text-xs text-slate-500">
+              Records will appear when underwriting applications are processed.
+            </p>
+            <a href="/" className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800">
+              Return to Lender Dashboard <ArrowUpRight size={13}/>
+            </a>
+          </div>
+        )}
+      </section>
+    </main>
+  );
 }

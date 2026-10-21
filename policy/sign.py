@@ -69,10 +69,10 @@ def generate_signed_policy(
     lender_key = _load_or_create_private_key(lender_path)
     now = datetime.now(timezone.utc).replace(microsecond=0)
     unsigned: dict[str, Any] = {
-        "policy_id": "pol_nbfc42_lspX_personal_v1",
+        "policy_id": "pol_meridian_quickfin_v1",
         "version": 1,
-        "lender_id": "nbfc42_capital",
-        "lsp_id": "lspX_fintech",
+        "lender_id": "meridian_digital",
+        "lsp_id": "quick_fincorp",
         "product": "personal_loan",
         "model_commitment": model_commitment,
         "circuit_hash": circuit_hash,
@@ -80,7 +80,7 @@ def generate_signed_policy(
             ["bureau_score", "monthly_income", "foir", "loan_tenure_months", "num_active_loans",
              "num_enquiries_6m", "bank_account_age_months", "loan_amount_requested", "behaviour_idx", "employment_type"],
             separators=(",", ":"), ensure_ascii=True).encode()).hexdigest(),
-        "decision_threshold": 0.200,
+        "decision_threshold": 0.500,
         "fixed_point_scale": 1024,
         "hard_rules": [
             {"id": "R1", "feature": "bureau_score", "op": "gte", "value": 600.0},

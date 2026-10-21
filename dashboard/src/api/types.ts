@@ -9,6 +9,20 @@ export interface PublicInputsData {
   epoch: number;
 }
 
+export interface CustomerInfo {
+  name: string;
+  phone: string;
+  pan: string;
+  bank_account: string;
+  ifsc: string;
+  employment?: string;
+  monthly_income?: number;
+  loan_amount?: number;
+  tenure?: number;
+  bureau?: number;
+  existing_emi?: number;
+}
+
 export interface DecisionRecord {
   decision_id: string;
   status: DecisionStatus;
@@ -16,6 +30,7 @@ export interface DecisionRecord {
   model_commitment?: string | null;
   policy_id?: string | null;
   verified_at?: string | null;
+  received_at?: string | null;
   ledger_seq?: number | null;
   failure_reason?: string | null;
   sla_deadline?: string | null;
@@ -24,6 +39,7 @@ export interface DecisionRecord {
   proof_snippet?: string | null;
   public_inputs?: PublicInputsData | null;
   application_id_hash?: string | null;
+  customer_info?: CustomerInfo | null;
 }
 
 export interface DashboardSummary {
@@ -64,6 +80,7 @@ export interface VerificationStep {
   expected?: string | number;
   actual?: string | number;
   binding_status?: string;
+  detail?: string;
 }
 
 export interface ApplyLoanRequest {
@@ -71,6 +88,7 @@ export interface ApplyLoanRequest {
   policy_id?: string;
   persona?: string;
   features?: Record<string, number>;
+  customer_info?: CustomerInfo;
   tamper?: string;
 }
 
@@ -86,6 +104,7 @@ export interface ApplyLoanResponse {
   verified_at: string | null;
   failure_reason: string | null;
   failed_at_step?: string;
+  customer_info?: CustomerInfo;
   proof?: string;
   proof_hash?: string;
   proof_size_bytes?: number;

@@ -1,6 +1,6 @@
 {
   "circuit_hash": "0xd3b2dc63f9c9520b6d22069a015b36288d90676f45cf9bd5a41ec133911b6729",
-  "decision_threshold": 0.2,
+  "decision_threshold": 0.5,
   "feature_schema_hash": "71dbb8d4f57eec37feb01e1434ccdd9efc4b45bd92119eb88a31caf3243779d3",
   "fixed_point_scale": 1024,
   "hard_rules": [
@@ -17,19 +17,19 @@
       "value": 0.65
     }
   ],
-  "lender_id": "nbfc42_capital",
-  "lender_pubkey": "ed8976c0add040cad9deaf28460a02b3da80d1fa0c9caf80377814715680910d",
-  "lender_sig": "1c829621bedd289a699022d2dba1bec6d02b575135e850237345c58ffd4f4fd41d146686411b5445f9875d11be17bb384b55e3948882c696e472c6ffaf71950a",
-  "lsp_id": "lspX_fintech",
-  "lsp_pubkey": "bbce578fdc8db2fdc27764eed4ce988bf671b5d546dce0c3101b8d9ed83ed94e",
-  "lsp_sig": "aaacd1a2cbdd6ced1fab7b285911495ab29cd0786d50be8a02b94e7aecbed39d5f78b3d687afe0a1b305879c97d32a975ba5c44c60c1a16520a195da4dd99a0f",
+  "lender_id": "meridian_digital",
+  "lender_pubkey": "8ea9dcf81ea9df5ca7151de034820a9b5b939014b3900b2b6c6c35cee7b619c7",
+  "lender_sig": "9f0292824c0b4951e049ce24f553776bd027255b792b91ba26c410252994eb73f708a8e94d53879791439fbab22401497005bcbfb50f7fd17ffcfbb4b46ca503",
+  "lsp_id": "quick_fincorp",
+  "lsp_pubkey": "62956a00307eccd79445148711f0693803352106ac9d64b3cf650e913476e5f3",
+  "lsp_sig": "9228c3896b94b9757f1f8111b3b22c147625ad613b0f643c1a993c57282c605d2d7eb8899c504f099fa5f3e27c51201e43d12178f725436d1b0b2fce43cbe904",
   "model_commitment": "0xd031786a1e637500b6c16c661f33e751cc13e0c614eeb03045866660aeb09b80",
-  "policy_hash": "447930887ea48c1d40442e0a7c3ba681d9168e663df2d9920ddb814cfb5cbf47",
-  "policy_id": "pol_nbfc42_lspX_personal_v1",
+  "policy_hash": "f2f6778a81599ce4a9fbeebe1f0c337f37bfde894297632f1cee3581fcd32b9f",
+  "policy_id": "pol_meridian_quickfin_v1",
   "product": "personal_loan",
   "proof_sla_minutes": 10,
   "signing_mode": "demo-local-keys-not-production-trust",
-  "valid_from": "2026-10-20T18:51:36Z",
-  "valid_to": "2027-10-20T18:51:36Z",
+  "valid_from": "2026-10-21T16:27:37Z",
+  "valid_to": "2027-10-21T16:27:37Z",
   "version": 1
 }

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { 
   CheckCircle2, XCircle, ArrowRight, Shield, 
   Sparkles, CreditCard, Clock, UserCheck, 
-  ChevronRight
+  ChevronRight, Building2, Landmark
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { calculateEmi } from '../lib/loanEstimate';
@@ -17,11 +17,17 @@ interface PersonaPreset {
   role: string;
   pan: string;
   phone: string;
+  bankAccount: string;
+  ifsc: string;
   bureau: number;
   income: number;
-  foir: number;
+  existingEmi: number;
   amount: number;
   tenure: number;
+  activeLoans: number;
+  enquiries6m: number;
+  accountAgeMonths: number;
+  employmentType: number; // 0=Salaried, 1=Self-employed
   expected: 'APPROVED' | 'REJECTED';
   tag: string;
 }
@@ -33,11 +39,17 @@ const PRESETS: PersonaPreset[] = [
     role: 'Senior Software Engineer',
     pan: 'BNZPS1042K',
     phone: '+91 98201 44821',
+    bankAccount: '9182014482103',
+    ifsc: 'HDFC0001234',
     bureau: 758,
     income: 95000,
-    foir: 28,
+    existingEmi: 15000,
     amount: 150000,
     tenure: 36,
+    activeLoans: 1,
+    enquiries6m: 0,
+    accountAgeMonths: 84,
+    employmentType: 0,
     expected: 'APPROVED',
     tag: 'Salaried Tech'
   },
@@ -47,11 +59,17 @@ const PRESETS: PersonaPreset[] = [
     role: 'Logistics Executive',
     pan: 'AXRPV8841M',
     phone: '+91 97112 55290',
+    bankAccount: '8871125529041',
+    ifsc: 'ICIC0000456',
     bureau: 542,
     income: 32000,
-    foir: 68,
+    existingEmi: 22000,
     amount: 200000,
     tenure: 36,
+    activeLoans: 5,
+    enquiries6m: 4,
+    accountAgeMonths: 22,
+    employmentType: 1,
     expected: 'REJECTED',
     tag: 'Contract / Gig'
   },
@@ -61,11 +79,17 @@ const PRESETS: PersonaPreset[] = [
     role: 'Retail Store Owner',
     pan: 'CPZPA3391J',
     phone: '+91 99042 18834',
+    bankAccount: '5504218834092',
+    ifsc: 'SBIN0002100',
     bureau: 672,
     income: 52000,
-    foir: 44,
+    existingEmi: 18000,
     amount: 80000,
     tenure: 24,
+    activeLoans: 2,
+    enquiries6m: 1,
+    accountAgeMonths: 45,
+    employmentType: 1,
     expected: 'APPROVED',
     tag: 'Self-Employed'
   }
@@ -76,11 +100,17 @@ export function BorrowerPortal() {
   const [name, setName] = useState<string>('Priya Sharma');
   const [phone, setPhone] = useState<string>('+91 98201 44821');
   const [pan, setPan] = useState<string>('BNZPS1042K');
+  const [bankAccount, setBankAccount] = useState<string>('9182014482103');
+  const [ifsc, setIfsc] = useState<string>('HDFC0001234');
   const [amount, setAmount] = useState<number>(150000);
   const [tenure, setTenure] = useState<number>(36);
   const [income, setIncome] = useState<number>(95000);
-  const [foir, setFoir] = useState<number>(28);
+  const [existingEmi, setExistingEmi] = useState<number>(15000);
   const [bureauScore, setBureauScore] = useState<number>(758);
+  const [activeLoans, setActiveLoans] = useState<number>(1);
+  const [enquiries6m, setEnquiries6m] = useState<number>(0);
+  const [accountAgeMonths, setAccountAgeMonths] = useState<number>(84);
+  const [employmentType, setEmploymentType] = useState<number>(0);
   const [consent, setConsent] = useState<boolean>(true);
 
   // Submission state
@@ -96,11 +126,17 @@ export function BorrowerPortal() {
     setName(p.name);
     setPhone(p.phone);
     setPan(p.pan);
+    setBankAccount(p.bankAccount);
+    setIfsc(p.ifsc);
     setAmount(p.amount);
     setTenure(p.tenure);
     setIncome(p.income);
-    setFoir(p.foir);
+    setExistingEmi(p.existingEmi);
     setBureauScore(p.bureau);
+    setActiveLoans(p.activeLoans);
+    setEnquiries6m(p.enquiries6m);
+    setAccountAgeMonths(p.accountAgeMonths);
+    setEmploymentType(p.employmentType);
     setResult(null);
     setErrorMsg(null);
   };
@@ -112,28 +148,45 @@ export function BorrowerPortal() {
     setErrorMsg(null);
 
     try {
-      setStepLabel('Verifying identity & credit score...');
+      setStepLabel('Verifying identity & CIBIL score...');
       await new Promise(r => setTimeout(r, 400));
       
       setStepLabel('Evaluating underwriting criteria...');
       await new Promise(r => setTimeout(r, 450));
 
+      const calculatedFoir = Math.min(1.0, existingEmi / Math.max(1, income));
+
       const features: Record<string, number> = {
         bureau_score: bureauScore,
         monthly_income: income,
-        foir: foir / 100.0,
+        foir: calculatedFoir,
         loan_tenure_months: tenure,
-        num_active_loans: selectedPersona === 'rahul' ? 5.0 : 1.0,
-        num_enquiries_6m: selectedPersona === 'rahul' ? 4.0 : 0.0,
-        bank_account_age_months: selectedPersona === 'rahul' ? 22.0 : 84.0,
+        num_active_loans: activeLoans,
+        num_enquiries_6m: enquiries6m,
+        bank_account_age_months: accountAgeMonths,
         loan_amount_requested: amount,
         behaviour_idx: selectedPersona === 'rahul' ? 0.88 : 0.18,
-        employment_type: selectedPersona === 'rahul' ? 1.0 : 0.0,
+        employment_type: employmentType,
+      };
+
+      const customerInfo = {
+        name,
+        phone,
+        pan,
+        bank_account: bankAccount,
+        ifsc,
+        employment: employmentType === 0 ? 'Salaried' : 'Self-Employed',
+        monthly_income: income,
+        loan_amount: amount,
+        tenure,
+        bureau: bureauScore,
+        existing_emi: existingEmi,
       };
 
       const resp = await submitLoanApplication({
         persona: selectedPersona,
         features: features,
+        customer_info: customerInfo,
       });
 
       setStepLabel('Finalizing sanction details...');
@@ -153,20 +206,20 @@ export function BorrowerPortal() {
       {/* Brand Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-3 shadow-xs">
-          <Sparkles size={14} className="text-emerald-600" /> Instant Digital Loan
+          <Sparkles size={14} className="text-emerald-600" /> QuickLoan by Quick FinCorp Pvt Ltd
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Personal Credit in Minutes
+          Instant Digital Personal Loan
         </h1>
         <p className="mt-2 text-sm sm:text-base text-slate-600">
-          Fast, paperless personal loans with direct disbursal to your bank account.
+          Fast, paperless digital credit with transparent terms and direct disbursal within 24 hours.
         </p>
 
         {/* Value Props */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-600">
           <span className="flex items-center gap-1.5"><Shield size={14} className="text-emerald-600" /> 100% Paperless</span>
           <span>•</span>
-          <span className="flex items-center gap-1.5"><Clock size={14} className="text-indigo-600" /> Instant Sanction</span>
+          <span className="flex items-center gap-1.5"><Clock size={14} className="text-indigo-600" /> Instant Decision</span>
           <span>•</span>
           <span className="flex items-center gap-1.5"><CreditCard size={14} className="text-blue-600" /> Transparent 11.5% APR</span>
         </div>
@@ -176,9 +229,9 @@ export function BorrowerPortal() {
       <div className="mb-8 bg-slate-100/70 p-4 rounded-2xl border border-slate-200/80">
         <div className="flex items-center justify-between mb-3 px-1">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-            <UserCheck size={14} className="text-indigo-600" /> Quick-Fill Demo Profiles:
+            <UserCheck size={14} className="text-indigo-600" /> Demo Applicant Profiles:
           </span>
-          <span className="text-[11px] text-slate-500">Pick an applicant to test loan outcomes</span>
+          <span className="text-[11px] text-slate-500">Select a profile to populate verified credit records</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {PRESETS.map((p) => {
@@ -188,10 +241,10 @@ export function BorrowerPortal() {
                 key={p.id}
                 type="button"
                 onClick={() => handleSelectPreset(p)}
-                className={`p-3 rounded-xl border text-left transition-all ${
+                className={`p-3.5 rounded-xl border text-left transition-all ${
                   isSelected 
                     ? 'border-indigo-600 bg-white shadow-sm ring-2 ring-indigo-600/20' 
-                    : 'border-slate-200 bg-white/60 hover:bg-white hover:border-slate-300'
+                    : 'border-slate-200 bg-white/70 hover:bg-white hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -204,9 +257,9 @@ export function BorrowerPortal() {
                 </div>
                 <div className="mt-1 text-xs text-slate-500 font-medium">{p.role}</div>
                 <div className="mt-2 text-[11px] text-slate-600 font-mono flex items-center justify-between pt-1 border-t border-slate-100">
-                  <span>₹{p.income.toLocaleString('en-IN')}/mo</span>
+                  <span>Req: {money(p.amount)}</span>
                   <span className={p.expected === 'APPROVED' ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-semibold'}>
-                    Will {p.expected}
+                    Will be {p.expected === 'APPROVED' ? 'Approved' : 'Rejected'}
                   </span>
                 </div>
               </button>
@@ -247,10 +300,10 @@ export function BorrowerPortal() {
                   <span>₹50,000</span>
                   <span>₹5,00,000</span>
                 </div>
-                
+
                 {/* Quick Pills */}
                 <div className="mt-3 flex gap-2">
-                  {[50000, 100000, 150000, 250000].map((amt) => (
+                  {[50000, 80000, 150000, 200000, 300000].map((amt) => (
                     <button
                       key={amt}
                       type="button"
@@ -304,11 +357,11 @@ export function BorrowerPortal() {
             </div>
           </div>
 
-          {/* Section 2: Personal Details */}
+          {/* Section 2: Personal & Financial Profile */}
           <div>
             <h2 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
               <span className="w-6 h-6 rounded-full bg-indigo-50 text-indigo-700 text-xs flex items-center justify-center font-bold">2</span>
-              Applicant Profile
+              Applicant & Financial Details
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -337,7 +390,7 @@ export function BorrowerPortal() {
                 <input 
                   type="text" 
                   value={pan} 
-                  onChange={(e) => setPan(e.target.value)}
+                  onChange={(e) => setPan(e.target.value.toUpperCase())}
                   className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono uppercase"
                 />
               </div>
@@ -356,17 +409,20 @@ export function BorrowerPortal() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Existing Monthly Loan EMIs (%)</label>
-                <input 
-                  type="number" 
-                  value={foir} 
-                  onChange={(e) => setFoir(Number(e.target.value))}
-                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
-                />
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Existing Monthly Loan EMIs (₹)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-mono">₹</span>
+                  <input 
+                    type="number" 
+                    value={existingEmi} 
+                    onChange={(e) => setExistingEmi(Number(e.target.value))}
+                    className="w-full text-sm font-medium pl-7 pr-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Credit Score (Bureau)</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Credit Score (CIBIL)</label>
                 <input 
                   type="number" 
                   value={bureauScore} 
@@ -374,10 +430,78 @@ export function BorrowerPortal() {
                   className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
                 />
               </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Employment Type</label>
+                <select 
+                  value={employmentType} 
+                  onChange={(e) => setEmploymentType(Number(e.target.value))}
+                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 bg-white"
+                >
+                  <option value={0}>Salaried Professional</option>
+                  <option value={1}>Self-Employed / Business</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Active Loan Accounts</label>
+                <input 
+                  type="number" 
+                  value={activeLoans} 
+                  onChange={(e) => setActiveLoans(Number(e.target.value))}
+                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Recent Inquiries (Past 6M)</label>
+                <input 
+                  type="number" 
+                  value={enquiries6m} 
+                  onChange={(e) => setEnquiries6m(Number(e.target.value))}
+                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Section 3: Standard Borrower Consent */}
+          {/* Section 3: Bank Disbursal Account Details */}
+          <div>
+            <h2 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-indigo-50 text-indigo-700 text-xs flex items-center justify-center font-bold">3</span>
+              Bank Account for Disbursal
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-xl bg-slate-50 border border-slate-100">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                  <Landmark size={13} className="text-slate-500" /> Bank Account Number
+                </label>
+                <input 
+                  type="text" 
+                  value={bankAccount} 
+                  onChange={(e) => setBankAccount(e.target.value)}
+                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono"
+                  placeholder="e.g. 9182014482103"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                  <Building2 size={13} className="text-slate-500" /> Bank IFSC Code
+                </label>
+                <input 
+                  type="text" 
+                  value={ifsc} 
+                  onChange={(e) => setIfsc(e.target.value.toUpperCase())}
+                  className="w-full text-sm font-medium px-3.5 py-2.5 rounded-lg border border-slate-200 focus:outline-indigo-600 font-mono uppercase"
+                  placeholder="e.g. HDFC0001234"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Standard Borrower Consent */}
           <div className="pt-2 border-t border-slate-100">
             <label className="flex items-start gap-3 cursor-pointer select-none">
               <input 
@@ -387,7 +511,7 @@ export function BorrowerPortal() {
                 className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
               />
               <span className="text-xs text-slate-600 leading-relaxed">
-                I hereby declare that the information provided is accurate and authorize the lending partner to verify my credit profile to process this loan application in accordance with terms and conditions.
+                I hereby declare that the information provided is accurate and authorize Quick FinCorp Pvt Ltd and its partner lender Meridian Digital to evaluate my credit eligibility and process this loan application in accordance with terms and conditions.
               </span>
             </label>
           </div>
@@ -408,7 +532,7 @@ export function BorrowerPortal() {
               className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition-all ${
                 submitting || !consent
                   ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 shadow-md hover:-translate-y-0.5'
+                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20 shadow-md hover:-translate-y-0.5'
               }`}
             >
               {submitting ? (
@@ -432,7 +556,7 @@ export function BorrowerPortal() {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
           {result.status === 'VERIFIED' && result.decision === 1 ? (
             /* APPROVAL SCREEN */
-            <div className="bg-gradient-to-b from-emerald-50/50 to-white rounded-2xl border-2 border-emerald-500 shadow-md p-6 sm:p-8">
+            <div className="bg-gradient-to-b from-emerald-50/60 to-white rounded-2xl border-2 border-emerald-500 shadow-md p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-emerald-100">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
@@ -475,24 +599,21 @@ export function BorrowerPortal() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Disbursal 24h Notice & View Sanction Letter */}
               <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-emerald-800 bg-emerald-100/80 px-4 py-2.5 rounded-xl border border-emerald-200">
+                  <Clock size={18} className="text-emerald-700 shrink-0" />
+                  <span className="text-xs font-bold">
+                    Loan will be disbursed within 24 hours to your bank account ({bankAccount.slice(-4).padStart(bankAccount.length, '•')}).
+                  </span>
+                </div>
+
                 <Link
                   to={`/receipt/${encodeURIComponent(result.decision_id)}`}
-                  className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1"
+                  className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-1.5 shrink-0"
                 >
                   View Sanction Letter & Terms <ChevronRight size={14} />
                 </Link>
-
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={() => alert('Proceeding to NetBanking e-Mandate setup for direct disbursal.')}
-                    className="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors"
-                  >
-                    Select Bank Account & Disburse
-                  </button>
-                </div>
               </div>
             </div>
           ) : (
@@ -510,7 +631,7 @@ export function BorrowerPortal() {
                     We Cannot Approve This Loan Offer Right Now
                   </h3>
                   <p className="mt-1 text-xs text-slate-600 leading-relaxed max-w-xl">
-                    Thank you for applying with us, {name.split(' ')[0]}. Based on the credit policy guidelines regarding credit bureau obligations and debt-to-income limits, your application cannot be approved at this time.
+                    Thank you for applying with us, {name.split(' ')[0]}. Based on the credit underwriting policy regarding credit bureau obligations, existing EMIs, and debt-to-income limits, your application cannot be approved at this time.
                   </p>
                 </div>
               </div>

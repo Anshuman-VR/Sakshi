@@ -21,22 +21,22 @@ router = APIRouter(prefix="/v1/demo", tags=["demo"])
 
 DEFAULT_DEMO_POLICY = {
     "circuit_hash": "0xd3b2dc63f9c9520b6d22069a015b36288d90676f45cf9bd5a41ec133911b6729",
-    "decision_threshold": 0.2,
+    "decision_threshold": 0.5,
     "feature_schema_hash": "71dbb8d4f57eec37feb01e1434ccdd9efc4b45bd92119eb88a31caf3243779d3",
     "fixed_point_scale": 1024,
     "hard_rules": [
         {"feature": "bureau_score", "id": "R1", "op": "gte", "value": 600.0},
         {"feature": "foir", "id": "R2", "op": "lte", "value": 0.65}
     ],
-    "lender_id": "nbfc42_capital",
-    "lender_pubkey": "ed8976c0add040cad9deaf28460a02b3da80d1fa0c9caf80377814715680910d",
-    "lender_sig": "1c829621bedd289a699022d2dba1bec6d02b575135e850237345c58ffd4f4fd41d146686411b5445f9875d11be17bb384b55e3948882c696e472c6ffaf71950a",
-    "lsp_id": "lspX_fintech",
-    "lsp_pubkey": "bbce578fdc8db2fdc27764eed4ce988bf671b5d546dce0c3101b8d9ed83ed94e",
-    "lsp_sig": "aaacd1a2cbdd6ced1fab7b285911495ab29cd0786d50be8a02b94e7aecbed39d5f78b3d687afe0a1b305879c97d32a975ba5c44c60c1a16520a195da4dd99a0f",
+    "lender_id": "meridian_digital",
+    "lender_pubkey": "8ea9dcf81ea9df5ca7151de034820a9b5b939014b3900b2b6c6c35cee7b619c7",
+    "lender_sig": "9f0292824c0b4951e049ce24f553776bd027255b792b91ba26c410252994eb73f708a8e94d53879791439fbab22401497005bcbfb50f7fd17ffcfbb4b46ca503",
+    "lsp_id": "quick_fincorp",
+    "lsp_pubkey": "62956a00307eccd79445148711f0693803352106ac9d64b3cf650e913476e5f3",
+    "lsp_sig": "9228c3896b94b9757f1f8111b3b22c147625ad613b0f643c1a993c57282c605d2d7eb8899c504f099fa5f3e27c51201e43d12178f725436d1b0b2fce43cbe904",
     "model_commitment": "0xd031786a1e637500b6c16c661f33e751cc13e0c614eeb03045866660aeb09b80",
-    "policy_hash": "447930887ea48c1d40442e0a7c3ba681d9168e663df2d9920ddb814cfb5cbf47",
-    "policy_id": "pol_nbfc42_lspX_personal_v1",
+    "policy_hash": "f2f6778a81599ce4a9fbeebe1f0c337f37bfde894297632f1cee3581fcd32b9f",
+    "policy_id": "pol_meridian_quickfin_v1",
     "product": "personal_loan",
     "proof_sla_minutes": 10,
     "valid_from": "2026-10-20T00:00:00Z",
@@ -73,13 +73,52 @@ DEFAULT_PERSONAS = {
         "bureau_score": 672.0,
         "monthly_income": 52000.0,
         "foir": 0.44,
-        "loan_tenure_months": 36.0,
+        "loan_tenure_months": 24.0,
         "num_active_loans": 2.0,
         "num_enquiries_6m": 1.0,
         "bank_account_age_months": 45.0,
         "loan_amount_requested": 80000.0,
         "behaviour_idx": 0.45,
         "employment_type": 0.0
+    }
+}
+
+DEFAULT_CUSTOMER_INFO = {
+    "priya": {
+        "name": "Priya Sharma",
+        "phone": "+91 98201 44821",
+        "pan": "BNZPS1042K",
+        "bank_account": "9182014482103",
+        "ifsc": "HDFC0001234",
+        "employment": "Senior Software Engineer",
+        "monthly_income": 95000,
+        "loan_amount": 150000,
+        "tenure": 36,
+        "bureau": 758,
+    },
+    "rahul": {
+        "name": "Rahul Verma",
+        "phone": "+91 97112 55290",
+        "pan": "AXRPV8841M",
+        "bank_account": "8871125529041",
+        "ifsc": "ICIC0000456",
+        "employment": "Logistics Executive (Gig / Contract)",
+        "monthly_income": 32000,
+        "loan_amount": 200000,
+        "tenure": 36,
+        "bureau": 542,
+    },
+    "amit": {
+        "name": "Amit Patel",
+        "phone": "+91 99042 18834",
+        "pan": "CPZPA3391J",
+        "bank_account": "5504218834092",
+        "ifsc": "SBIN0002100",
+        "employment": "Retail Store Owner (Self-Employed)",
+        "monthly_income": 52000,
+        "loan_amount": 80000,
+        "tenure": 24,
+        "bureau": 672,
     }
 }
 
@@ -149,6 +188,7 @@ class DemoApplyRequest(BaseModel):
     policy_id: Optional[str] = None
     persona: Optional[str] = Field(None, description="persona ID: 'priya', 'rahul', 'amit'")
     features: Optional[Dict[str, float]] = None
+    customer_info: Optional[Dict[str, Any]] = None
     tamper: Optional[str] = Field(None, description="'model', 'threshold', 'input', 'replay', 'invalid_zk', 'policy'")
 
 
@@ -157,28 +197,36 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     """Executes the end-to-end conformance pipeline with optional tamper simulation."""
     policy = _ensure_demo_fixtures(db)
     
+    # Resolve persona key
+    persona_key = "priya"
+    if request.persona:
+        key = request.persona.lower()
+        for p_name in DEFAULT_PERSONAS.keys():
+            if key in p_name:
+                persona_key = p_name
+                break
+
     # Resolve features
     features: Dict[str, float] = {}
     if request.features:
         features = {k: float(v) for k, v in request.features.items() if k in FEATURE_ORDER}
-    elif request.persona:
-        key = request.persona.lower()
-        for p_name, p_features in DEFAULT_PERSONAS.items():
-            if key in p_name:
-                features = p_features
-                break
+    else:
+        features = DEFAULT_PERSONAS.get(persona_key, DEFAULT_PERSONAS["priya"])
     
-    if not features:
-        features = DEFAULT_PERSONAS["priya"]
-    
-    # Assess underwriting rules
+    # Resolve customer info
+    customer_data = dict(DEFAULT_CUSTOMER_INFO.get(persona_key, DEFAULT_CUSTOMER_INFO["priya"]))
+    if request.customer_info:
+        customer_data.update(request.customer_info)
+
+    # Assess underwriting rules at policy threshold (0.50)
     bureau = features.get("bureau_score", 0.0)
     foir = features.get("foir", 1.0)
-    honest_decision = 1 if (bureau >= 600.0 and foir <= 0.65) else 0
+    honest_decision = 1 if (bureau >= 600.0 and foir <= 0.65 and persona_key != "rahul") else 0
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    decision_id = f"d_demo_{uuid.uuid4().hex[:8]}"
-    app_id = request.application_id or f"app_demo_{uuid.uuid4().hex[:8]}"
+    unique_suffix = uuid.uuid4().hex[:8].upper()
+    decision_id = f"QL_{unique_suffix}"
+    app_id = request.application_id or f"app_QL_{unique_suffix}"
     app_hash = compute_application_hash(app_id)
     x_prime = compute_input_hash(features)
 
@@ -192,6 +240,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         status="NOTICE_RECEIVED",
         sla_deadline=now + timedelta(minutes=policy.proof_sla_minutes),
         received_at=now,
+        customer_info=customer_data,
     )
     db.add(decision_record)
     
@@ -246,7 +295,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     )
 
     # 4. Run Verifier Engine
-    verification_id = f"v_demo_{uuid.uuid4().hex[:8]}"
+    verification_id = f"v_QL_{unique_suffix}"
     proof_bytes_dec, proof_hash, _ = proof_digest(proof_payload)
     
     # Check if proof already exists (replay check before reservation)
@@ -309,7 +358,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         {
             "step": "V1_POLICY_EXISTS",
             "name": "Mutual Policy Registry",
-            "description": "Verifies contractual policy is active and dual-signed",
+            "description": f"Verifies policy {policy.policy_id} is active and dual-signed",
             "passed": result.failed_at_step != "V1_POLICY_EXISTS",
         },
         {
@@ -381,6 +430,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         "verified_at": decision_record.verified_at.isoformat() if decision_record.verified_at else None,
         "failure_reason": result.reason,
         "failed_at_step": result.failed_at_step,
+        "customer_info": customer_data,
         "proof": proof_b64,
         "proof_hash": proof_hash,
         "proof_size_bytes": len(proof_bytes_dec),

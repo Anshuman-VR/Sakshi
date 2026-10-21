@@ -32,7 +32,7 @@ services:
     environment:
       - SAKSHI_SIDECAR_LENDER_NODE_URL=http://sakshi-lender:8000
       - SAKSHI_SIDECAR_SIDECAR_API_KEY=${SIDECAR_API_KEY:-sakshi-dev-secret-key-2026}
-      - SAKSHI_SIDECAR_POLICY_ID=${POLICY_ID:-pol_nbfc42_lspX_personal_v1}
+      - SAKSHI_SIDECAR_POLICY_ID=${POLICY_ID:-pol_meridian_quickfin_v1}
       - SAKSHI_SIDECAR_NUM_WORKERS=2
       - SAKSHI_SIDECAR_DB_PATH=/app/data/sidecar.db
       - SAKSHI_ALLOW_MOCK_PROOFS=${ALLOW_MOCK_PROOFS:-true}

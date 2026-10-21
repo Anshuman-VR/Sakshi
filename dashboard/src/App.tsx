@@ -21,19 +21,44 @@ function Shell() {
     ? 'demo' 
     : 'overview';
 
+  const isBorrowerZone = active === 'borrower';
+  const isLspZone = active === 'lsp';
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
       <header className="no-print sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex w-[calc(100%-32px)] md:w-[calc(100%-48px)] xl:w-[calc(100%-64px)] max-w-[1600px] flex-wrap items-center justify-between gap-4 py-3">
-          <Link to="/" aria-label="Sakshi home" className="shrink-0 flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-sm group-hover:bg-indigo-700 transition-colors">
-              <Shield size={18} />
-            </div>
-            <div>
-              <span className="text-xl font-black tracking-tight text-slate-950 font-mono">SAKSHI</span>
-              <span className="text-[10px] block font-mono text-slate-500 uppercase tracking-widest leading-none">ZK-Credit Gate</span>
-            </div>
-          </Link>
+          {isBorrowerZone ? (
+            <Link to="/borrower" aria-label="QuickLoan home" className="shrink-0 flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-base shadow-sm group-hover:bg-emerald-700 transition-colors">
+                <Shield size={18} />
+              </div>
+              <div>
+                <span className="text-xl font-black tracking-tight text-slate-950 font-sans">QuickLoan</span>
+                <span className="text-[10px] block font-medium text-slate-500 tracking-wide leading-none">by Quick FinCorp Pvt Ltd</span>
+              </div>
+            </Link>
+          ) : isLspZone ? (
+            <Link to="/lsp" aria-label="Quick FinCorp home" className="shrink-0 flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-purple-700 text-white flex items-center justify-center font-bold text-base shadow-sm group-hover:bg-purple-800 transition-colors">
+                <Shield size={18} />
+              </div>
+              <div>
+                <span className="text-lg font-black tracking-tight text-slate-950 font-sans">Quick FinCorp Pvt Ltd</span>
+                <span className="text-[10px] block font-mono text-purple-700 uppercase tracking-widest leading-none">LSP Dashboard</span>
+              </div>
+            </Link>
+          ) : (
+            <Link to="/" aria-label="Meridian Digital home" className="shrink-0 flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-indigo-700 text-white flex items-center justify-center font-bold text-base shadow-sm group-hover:bg-indigo-800 transition-colors">
+                <Shield size={18} />
+              </div>
+              <div>
+                <span className="text-lg font-black tracking-tight text-slate-950 font-sans">Meridian Digital</span>
+                <span className="text-[10px] block font-mono text-slate-500 uppercase tracking-widest leading-none">Sakshi ZK Credit Gate</span>
+              </div>
+            </Link>
+          )}
           <div className="flex-1">
             <ModeLinks active={active} />
           </div>

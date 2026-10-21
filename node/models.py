@@ -73,6 +73,7 @@ class Decision(Base):
     model_commitment: Mapped[str | None] = mapped_column(String(256), nullable=True)
     ledger_seq: Mapped[int | None] = mapped_column(Integer, nullable=True)
     failure_reason: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    customer_info: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class ProofRecord(Base):

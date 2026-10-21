@@ -31,6 +31,11 @@ def init_db() -> None:
     from node.models import Base  # noqa: F401
     Base.metadata.create_all(bind=engine)
     if engine.dialect.name == "sqlite":
+        with engine.begin() as connection:
+            try:
+                connection.exec_driver_sql("ALTER TABLE decisions ADD COLUMN customer_info JSON")
+            except Exception:
+                pass
         # Also install on databases created by earlier code versions where the
         # table already existed and SQLAlchemy's after_create hook won't rerun.
         with engine.begin() as connection:

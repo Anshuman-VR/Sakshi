@@ -31,6 +31,7 @@ def _response(decision: Decision, proof: ProofRecord | None = None) -> DecisionS
         proof_snippet=proof_snippet,
         public_inputs=public_inputs,
         application_id_hash=decision.application_id_hash,
+        customer_info=decision.customer_info,
     )
 
 

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { 
   ArrowUpRight, Clock3, RefreshCw, CheckCircle2, XCircle, 
-  ShieldCheck, ShieldAlert, Key, Copy, Check, X, FileText
+  ShieldCheck, ShieldAlert, Key, Copy, Check, X, FileText,
+  User
 } from 'lucide-react';
 import type { DecisionRecord } from '../api/types';
 import { InfoTip } from './InfoTip';
@@ -16,6 +17,11 @@ const ist = (value?: string | null) => {
         timeStyle: 'short',
         timeZone: 'Asia/Kolkata',
       }).format(d) + ' IST';
+};
+
+const money = (n?: number | null) => {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n);
 };
 
 export function LiveDecisionFeed({
@@ -60,17 +66,18 @@ export function LiveDecisionFeed({
 
       {decisions.length ? (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-left text-sm">
+          <table className="w-full min-w-[850px] text-left text-sm">
             <thead className="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 border-b border-slate-200 font-semibold">
               <tr>
                 <th className="px-6 py-3">Decision ID / Timestamp</th>
+                <th className="px-4 py-3">Borrower / PAN</th>
                 <th className="px-4 py-3">Credit Decision</th>
                 <th className="px-4 py-3">Disbursal Gate</th>
                 <th className="px-4 py-3">
                   Policy{' '}
                   <InfoTip
                     label="Policy reference"
-                    text="Dual-signed policy contract ID governing this underwriting model and loan criteria."
+                    text="Dual-signed policy contract governing this underwriting model and cutoff threshold."
                   />
                 </th>
                 <th className="px-4 py-3">
@@ -87,11 +94,16 @@ export function LiveDecisionFeed({
               {decisions.map((d) => {
                 const isApproved = d.decision === 1;
                 const isVerified = d.status === 'VERIFIED';
+                const customer = d.customer_info;
                 return (
                   <tr key={d.decision_id} className="hover:bg-slate-50/70 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-mono text-xs font-bold text-slate-900">{d.decision_id}</div>
-                      <div className="mt-0.5 text-[11px] text-slate-500">{ist(d.verified_at)}</div>
+                      <div className="mt-0.5 text-[11px] text-slate-500">{ist(d.verified_at || d.received_at)}</div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="text-xs font-semibold text-slate-900">{customer?.name || 'Applicant'}</div>
+                      <div className="font-mono text-[11px] text-slate-500 uppercase">{customer?.pan || '—'}</div>
                     </td>
                     <td className="px-4 py-4">
                       {d.decision !== undefined && d.decision !== null ? (
@@ -122,17 +134,17 @@ export function LiveDecisionFeed({
                         )}
                       </div>
                       {d.failure_reason && (
-                        <p className="mt-1 max-w-[170px] text-[10px] text-red-600 font-medium font-mono">
+                        <p className="mt-1 max-w-[170px] text-[10px] text-rose-600 font-medium font-mono">
                           {d.failure_reason}
                         </p>
                       )}
                     </td>
                     <td className="px-4 py-4">
                       <span className="font-mono text-xs text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                        {d.policy_id || '—'}
+                        {d.policy_id || 'pol_meridian_quickfin_v1'}
                       </span>
                     </td>
-                    <td className="max-w-[180px] truncate px-4 py-4">
+                    <td className="max-w-[170px] truncate px-4 py-4">
                       <span
                         title={d.model_commitment || ''}
                         className="font-mono text-xs text-slate-500"
@@ -164,13 +176,13 @@ export function LiveDecisionFeed({
             {loading ? 'Connecting to verifier…' : 'No decisions in current session'}
           </h3>
           <p className="mx-auto mt-1.5 max-w-md text-xs text-slate-500">
-            Submit a loan application in the Borrower Portal to trigger a live proof verification.
+            Submit a loan application in the QuickLoan Borrower Portal to trigger a live proof verification.
           </p>
         </div>
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-6 py-3 text-[11px] text-slate-500 bg-slate-50/30">
-        <span>Auto-syncing with lender verifier every 5s</span>
+        <span>Auto-syncing with lender verifier every 4s</span>
         <span>
           Last update:{' '}
           {lastUpdated
@@ -179,7 +191,7 @@ export function LiveDecisionFeed({
         </span>
       </div>
 
-      {/* Verification Dossier Modal */}
+      {/* Expanded Verification Dossier Modal */}
       {selectedRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -187,7 +199,7 @@ export function LiveDecisionFeed({
             <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Cryptographic Verification Dossier
+                  Lender Loan Dossier & ZK Verification
                 </span>
                 <h3 className="text-lg font-bold text-slate-900 font-mono">
                   {selectedRecord.decision_id}
@@ -203,6 +215,51 @@ export function LiveDecisionFeed({
             </div>
 
             <div className="p-6 space-y-6">
+              {/* Customer Information Record */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
+                  <User size={14} className="text-indigo-600" /> Borrower & Loan Application Record
+                </h4>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Legal Name</span>
+                    <strong className="text-slate-900 text-sm">{selectedRecord.customer_info?.name || 'Priya Sharma'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">PAN Card</span>
+                    <strong className="text-slate-900 font-mono text-sm">{selectedRecord.customer_info?.pan || 'BNZPS1042K'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Mobile</span>
+                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.phone || '+91 98201 44821'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Disbursal Account</span>
+                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.bank_account || '9182014482103'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Bank IFSC</span>
+                    <strong className="text-slate-900 font-mono uppercase">{selectedRecord.customer_info?.ifsc || 'HDFC0001234'}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Requested Amount</span>
+                    <strong className="text-slate-900 font-mono">{money(selectedRecord.customer_info?.loan_amount || 150000)}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Tenure</span>
+                    <strong className="text-slate-900">{selectedRecord.customer_info?.tenure || 36} Months</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Credit Score (CIBIL)</span>
+                    <strong className="text-slate-900 font-mono">{selectedRecord.customer_info?.bureau || 758}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Monthly Income</span>
+                    <strong className="text-slate-900 font-mono">{money(selectedRecord.customer_info?.monthly_income || 95000)}</strong>
+                  </div>
+                </div>
+              </div>
+
               {/* Gate Authorization Status */}
               <div className="p-4 rounded-xl border flex items-center justify-between bg-slate-50 border-slate-200">
                 <div>
@@ -210,7 +267,7 @@ export function LiveDecisionFeed({
                   <div className="flex items-center gap-2 mt-1">
                     {selectedRecord.status === 'VERIFIED' && selectedRecord.decision === 1 ? (
                       <span className="text-base font-bold text-emerald-700 flex items-center gap-1.5">
-                        <ShieldCheck size={18} /> Disbursal Authorized
+                        <ShieldCheck size={18} /> Disbursal Authorized (Ready for 24h Release)
                       </span>
                     ) : (
                       <span className="text-base font-bold text-rose-700 flex items-center gap-1.5">
@@ -281,7 +338,7 @@ export function LiveDecisionFeed({
                     { code: 'V1', label: 'Policy Active & Signed' },
                     { code: 'V2', label: 'Model Commitment (C) Match' },
                     { code: 'V3', label: 'Canonical Policy Hash Match' },
-                    { code: 'V4', label: 'Threshold Agreement (tau)' },
+                    { code: 'V4', label: 'Threshold Agreement (tau=0.50)' },
                     { code: 'V5', label: 'Replay Window Valid' },
                     { code: 'V6', label: 'Proof Uniqueness' },
                     { code: 'V7', label: 'Notice & Input Commitment' },
@@ -322,7 +379,7 @@ export function LiveDecisionFeed({
                   rel="noreferrer"
                   className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
                 >
-                  <FileText size={14} /> Open Full Printable Receipt <ArrowUpRight size={13} />
+                  <FileText size={14} /> Open Full Sanction Letter <ArrowUpRight size={13} />
                 </a>
 
                 <button

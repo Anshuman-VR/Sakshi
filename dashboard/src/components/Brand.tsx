@@ -25,7 +25,7 @@ export function ModeLinks({ active }: { active: string }) {
         to="/"
       >
         <ShieldCheck size={14} className="text-indigo-600" />
-        <span>Lender Ops</span>
+        <span>Lender Dashboard</span>
       </Link>
 
       <Link 
@@ -37,7 +37,7 @@ export function ModeLinks({ active }: { active: string }) {
         to="/lsp"
       >
         <Cpu size={14} className="text-purple-600" />
-        <span>LSP Prover Zone</span>
+        <span>LSP Dashboard</span>
       </Link>
 
       <Link 
