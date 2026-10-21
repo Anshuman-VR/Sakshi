@@ -1,0 +1,102 @@
+flowchart TB
+    %% ===================================================
+    %% SAKSHI SYSTEM ARCHITECTURE FLOWCHART
+    %% ===================================================
+
+    subgraph ZONE1["Zone 1: LSP Private Enclave (Quick FinCorp Pvt Ltd) - Zero Inbound Ports"]
+        direction TB
+        subgraph APP["FinTech Loan Acquisition & Underwriting"]
+            BORROWER_APP["Borrower Loan Portal / Mobile DLA"]
+            FEATURE_VAULT["Raw Feature Vault\n(Income, Bureau, Phone Telemetry - PII)"]
+            ML_MODEL["Proprietary Credit Scorecard (Theta)\n(Evaluates Raw Features -> Decision: 0 or 1)"]
+            BORROWER_APP -->|"User Submits Application"| FEATURE_VAULT
+            FEATURE_VAULT -->|"Unmasked PII Features"| ML_MODEL
+        end
+
+        subgraph CONTAINER1["Container 1: sakshi-lsp (:8001 internal)"]
+            INGESTOR["Witness Builder & Quantizer\n(Fixed-Point 1024, FEATURE_ORDER)"]
+            PROVER["EZKL Halo2 KZG Prover Engine\n(Generates 24KB SNARK Proof Bytes)"]
+            OUTBOX["Transactional SQLite Outbox & Worker\n(At-Least-Once Delivery, Exponential Backoff)"]
+            INGESTOR --> PROVER
+            PROVER --> OUTBOX
+        end
+
+        ML_MODEL -->|"DecisionEvent (Internal API)"| INGESTOR
+    end
+
+    subgraph BOUNDARY["Trust Anchor & Contract Boundary"]
+        direction TB
+        POLICY["Dual-Signed Policy Document (Ed25519)\n(C = SHA256(Salt || Theta), Threshold tau = 0.500, SLA = 10m)"]
+        CROSS_WIRE["Cross-Zone Network Wire (Outbound mTLS Only)\n1. DecisionNotice (Starts SLA Clock)\n2. ProofPayload (24KB SNARK + Public Inputs)\n3. HTTP 202 ACK Confirmation"]
+    end
+
+    subgraph ZONE2["Zone 3: Lender Conformance Appliance (Meridian Digital) - Port 0.0.0.0:8000"]
+        direction TB
+        subgraph CONTAINER2["Container 2: sakshi-lender (:8000)"]
+            direction TB
+            subgraph INGRESS_ROUTER["Ingress Router & SLA Monitor"]
+                NODE_API["FastAPI Node Router (/v1)"]
+                SLA_WATCH["SLA Monitor (10-Minute Expiry Countdown)"]
+                NODE_API --> SLA_WATCH
+            end
+
+            subgraph VERIFIER_9STEP["Sequential 9-Step Verifier Pipeline (<10ms)"]
+                V1_V4["V1-V4: Policy Active, Model C Match, Policy Hash, Threshold tau"]
+                V5_V7["V5-V7: Epoch Window, Proof Uniqueness (Replay), Decision Parity"]
+                V8_ZK["V8: Halo2 KZG Verification (Public VK + Polynomial Pairing)"]
+                V9_RULES["V9: Hard Business Rules Gate"]
+                V1_V4 --> V5_V7 --> V8_ZK --> V9_RULES
+            end
+
+            subgraph ADAPTER["Input Binding Adapter"]
+                X_PRIME["Independent AA / Bureau Fetch\n(Recomputes X' = SHA256(features))"]
+            end
+
+            subgraph LEDGER["Audit & Ledger Engine"]
+                CHAIN_LEDGER[("SHA-256 Recursive Hash-Chained Ledger\nRow_Hash[i] = SHA256(Row_Hash[i-1] || Entry[i])")]
+                TRIGGERS["SQLite Triggers\n(ledger_no_update, ledger_no_delete)"]
+                CHAIN_LEDGER --- TRIGGERS
+            end
+
+            subgraph DISBURSAL["Fail-Closed Disbursal Gate & LMS"]
+                GATE_API["Disbursal Gate API (/v1/decisions/{id}/status)"]
+                LMS_CORE["Core Banking Disbursal Engine"]
+                GATE_API -->|"VERIFIED & Approved"| LMS_CORE
+            end
+
+            subgraph UI_LAYER["Integrated React 18 Multi-Persona Web Suite"]
+                DASHBOARD["Lender Dashboard (/)"]
+                BORROWER_PORTAL_UI["Borrower Portal (/borrower)"]
+                DEMO_LAB_UI["Demo Lab (/demo)"]
+                LEDGER_UI["Audit Explorer (/ledger)"]
+                LSP_PORTAL_UI["LSP Portal (/lsp)"]
+            end
+
+            NODE_API --> VERIFIER_9STEP
+            X_PRIME -.->|"Trap Liar-Prover (X' ?= X)"| VERIFIER_9STEP
+            VERIFIER_9STEP -->|"Logged to Immutable Chain"| CHAIN_LEDGER
+            VERIFIER_9STEP -->|"Update Decision Status"| GATE_API
+            CHAIN_LEDGER --> UI_LAYER
+        end
+    end
+
+    OUTBOX ==>|"Outbound Proof Transmission"| CROSS_WIRE
+    CROSS_WIRE ==>|"HTTP POST /v1/decisions, /v1/proofs"| NODE_API
+    NODE_API -.->|"200/202 Acknowledgment"| OUTBOX
+    POLICY -.->|"Ground Truth Contract Rules"| VERIFIER_9STEP
+
+    classDef lspZone fill:#1E293B,stroke:#3B82F6,stroke-width:2px,color:#FFFFFF;
+    classDef trustZone fill:#1E293B,stroke:#8B5CF6,stroke-width:2px,color:#FFFFFF;
+    classDef lenderZone fill:#1E293B,stroke:#059669,stroke-width:2px,color:#FFFFFF;
+    classDef card fill:#0F172A,stroke:#475569,stroke-width:1.5px,color:#E2E8F0;
+    classDef highlight fill:#1E3A8A,stroke:#60A5FA,stroke-width:1.5px,color:#FFFFFF;
+    classDef greenCard fill:#064E3B,stroke:#10B981,stroke-width:1.5px,color:#FFFFFF;
+    classDef redCard fill:#450A0A,stroke:#EF4444,stroke-width:1.5px,color:#FFFFFF;
+
+    class ZONE1 lspZone;
+    class BOUNDARY trustZone;
+    class ZONE2 lenderZone;
+    class CONTAINER1,CONTAINER2 card;
+    class VERIFIER_9STEP greenCard;
+    class GATE_API redCard;
+    class PROVER highlight;
