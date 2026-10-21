@@ -1,0 +1,344 @@
+"""
+Generator script for architecture_diagram.svg
+Generates a professional, high-resolution vector architecture diagram
+for the Sakshi Zero-Knowledge Digital Lending Assurance platform.
+"""
+
+import os
+
+def generate_svg():
+    width = 1440
+    height = 920
+    
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" height="100%" style="background:#0F172A; font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgLsp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="bgLender" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="gradLspHeader" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="gradLenderHeader" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="gradTrustHeader" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="gradCard" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#1E293B" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="gradCardActive" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1E293B" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="gradCardLender" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#1E293B" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#60A5FA"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34D399"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#A78BFA"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#F87171"/>
+    </marker>
+  </defs>
+
+  <!-- ================= HEADER SECTION ================= -->
+  <g transform="translate(60, 36)">
+    <rect x="0" y="0" width="1320" height="74" rx="12" fill="#1E293B" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="30" y="34" fill="#FFFFFF" font-size="20" font-weight="800" letter-spacing="0.5">SAKSHI (साक्षी) — END-TO-END SYSTEM ARCHITECTURE</text>
+    <text x="30" y="56" fill="#94A3B8" font-size="12">Zero-Knowledge Computational Contract Conformance &amp; Fail-Closed Disbursal Architecture for Digital Lending (RBI &amp; DPDP Compliant)</text>
+    <rect x="1100" y="20" width="190" height="34" rx="6" fill="#0F172A" stroke="#475569" stroke-width="1"/>
+    <circle cx="1120" cy="37" r="5" fill="#10B981"/>
+    <text x="1135" y="41" fill="#E2E8F0" font-size="11" font-weight="700">2 ISOLATED ZONES</text>
+  </g>
+
+  <!-- ================= ZONE 1: LSP PRIVATE ENCLAVE ================= -->
+  <g transform="translate(60, 130)">
+    <!-- Container Outer Box -->
+    <rect x="0" y="0" width="540" height="730" rx="16" fill="url(#bgLsp)" stroke="#3B82F6" stroke-width="2" stroke-opacity="0.6" filter="url(#shadow)"/>
+    
+    <!-- Zone Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 524 0 Q 540 0 540 16 L 540 50 L 0 50 Z" fill="url(#gradLspHeader)"/>
+    <text x="24" y="32" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5">ZONE 1: LSP PRIVATE ENCLAVE (FinTech VPC)</text>
+    <text x="410" y="32" fill="#BFDBFE" font-size="11" font-weight="700">Zero Inbound Ports</text>
+
+    <!-- Component 1: Consumer DLA / Loan App -->
+    <g transform="translate(24, 70)">
+      <rect x="0" y="0" width="492" height="96" rx="10" fill="url(#gradCard)" stroke="#475569" stroke-width="1.2"/>
+      <text x="16" y="26" fill="#93C5FD" font-size="12" font-weight="700">1. FinTech Loan Acquisition Engine (Quick FinCorp)</text>
+      <text x="16" y="48" fill="#E2E8F0" font-size="11">• Borrower Onboarding, KYC, PAN, Bank IFSC, Telecom Telemetry</text>
+      <text x="16" y="66" fill="#E2E8F0" font-size="11">• Ingests Raw Features: bureau_score, income, FOIR, behaviour_idx</text>
+      <rect x="360" y="68" width="116" height="20" rx="4" fill="#0F172A" stroke="#EF4444" stroke-width="1"/>
+      <text x="368" y="82" fill="#FCA5A5" font-size="9" font-weight="700">PII Stays in LSP Enclave</text>
+    </g>
+
+    <!-- Arrow down to Model -->
+    <path d="M 270 166 L 270 190" stroke="#60A5FA" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+    <!-- Component 2: Proprietary Scoring Model -->
+    <g transform="translate(24, 192)">
+      <rect x="0" y="0" width="492" height="106" rx="10" fill="url(#gradCard)" stroke="#475569" stroke-width="1.2"/>
+      <text x="16" y="26" fill="#93C5FD" font-size="12" font-weight="700">2. Proprietary Credit Risk Model (scikit-learn / XGBoost)</text>
+      <text x="16" y="48" fill="#CBD5E1" font-size="11">• Evaluates unmasked features against secret model weights Θ</text>
+      <text x="16" y="66" fill="#CBD5E1" font-size="11">• Produces Credit Decision: 1 = Approve, 0 = Reject (Instant &lt;1ms)</text>
+      <rect x="16" y="76" width="310" height="22" rx="4" fill="#0F172A" stroke="#3B82F6" stroke-width="1"/>
+      <text x="24" y="91" fill="#93C5FD" font-size="10" font-family="monospace">Commitment C = SHA256(Salt || Weights)</text>
+      <rect x="335" y="76" width="140" height="22" rx="4" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
+      <text x="345" y="91" fill="#E2E8F0" font-size="9" font-weight="700">Weights NEVER Exported</text>
+    </g>
+
+    <!-- Arrow down to Sidecar -->
+    <path d="M 270 298 L 270 322" stroke="#60A5FA" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+    <!-- Component 3: CONTAINER 1 - SAKSHI PROVER SIDECAR -->
+    <g transform="translate(24, 324)">
+      <!-- Outer Sidecar Container Border -->
+      <rect x="0" y="0" width="492" height="376" rx="12" fill="url(#gradCardActive)" stroke="#3B82F6" stroke-width="1.8"/>
+      <rect x="14" y="12" width="464" height="28" rx="6" fill="#1E293B" stroke="#3B82F6" stroke-width="1"/>
+      <text x="24" y="31" fill="#60A5FA" font-size="12" font-weight="800">CONTAINER 1: SAKSHI PROVER SIDECAR (sakshi-lsp:8001)</text>
+
+      <!-- Submodule A: Ingestor & Witness Builder -->
+      <g transform="translate(16, 52)">
+        <rect x="0" y="0" width="460" height="66" rx="8" fill="#0F172A" stroke="#475569" stroke-width="1"/>
+        <text x="14" y="22" fill="#E2E8F0" font-size="11" font-weight="700">A. Ingestor &amp; Witness Builder</text>
+        <text x="14" y="40" fill="#94A3B8" font-size="10">• Ingests DecisionEvent (decision_id, features, decision, ts)</text>
+        <text x="14" y="55" fill="#94A3B8" font-size="10">• Quantizes features to Fixed-Point 1024, orders by FEATURE_ORDER</text>
+      </g>
+
+      <!-- Submodule B: EZKL Halo2 KZG Prover Engine -->
+      <g transform="translate(16, 128)">
+        <rect x="0" y="0" width="460" height="114" rx="8" fill="#0F172A" stroke="#3B82F6" stroke-width="1.2"/>
+        <text x="14" y="22" fill="#93C5FD" font-size="11" font-weight="700">B. EZKL Halo2 KZG SNARK Prover (circuits/prove.py)</text>
+        <text x="14" y="40" fill="#E2E8F0" font-size="10">• Proves inference execution without disclosing input witness or weights</text>
+        <text x="14" y="58" fill="#E2E8F0" font-size="10">• Generates 24 KB Halo2 KZG Proof Bytes (P50: 2.28s, P95: 3.12s)</text>
+        <text x="14" y="76" fill="#E2E8F0" font-size="10">• Computes Public Inputs Vector: (policy_hash, C, X, decision, tau, epoch)</text>
+        <rect x="14" y="86" width="432" height="20" rx="4" fill="#1E293B"/>
+        <text x="24" y="100" fill="#38BDF8" font-size="9" font-family="monospace">Input Hash X = SHA256(canonical_json(features))</text>
+      </g>
+
+      <!-- Submodule C: Transactional Outbox Worker -->
+      <g transform="translate(16, 252)">
+        <rect x="0" y="0" width="460" height="106" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1.2"/>
+        <text x="14" y="22" fill="#34D399" font-size="11" font-weight="700">C. Transactional Outbox &amp; Reliable Dispatcher (SQLite Outbox)</text>
+        <text x="14" y="40" fill="#CBD5E1" font-size="10">• Guarantees At-Least-Once Delivery to Lender Node</text>
+        <text x="14" y="58" fill="#CBD5E1" font-size="10">• Step 1: POST DecisionNotice (/v1/decisions) -&gt; Starts 10-Min SLA Clock</text>
+        <text x="14" y="76" fill="#CBD5E1" font-size="10">• Step 2: POST ProofPayload (/v1/proofs) with Idempotency-Key</text>
+        <text x="14" y="94" fill="#94A3B8" font-size="9.5">• Automated Exponential Backoff Retries on network disconnection</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ================= TRUST ANCHOR / BOUNDARY SECTION ================= -->
+  <g transform="translate(620, 130)">
+    <!-- Trust Anchor Card -->
+    <rect x="0" y="0" width="200" height="730" rx="16" fill="#1E293B" stroke="#8B5CF6" stroke-width="2" stroke-opacity="0.6" filter="url(#shadow)"/>
+    <path d="M 0 16 Q 0 0 16 0 L 184 0 Q 200 0 200 16 L 200 50 L 0 50 Z" fill="url(#gradTrustHeader)"/>
+    <text x="20" y="32" fill="#FFFFFF" font-size="12" font-weight="800">TRUST ANCHOR</text>
+    <text x="110" y="32" fill="#DDD6FE" font-size="10" font-weight="600">Contract</text>
+
+    <!-- Boundary Box Details -->
+    <g transform="translate(12, 70)">
+      <rect x="0" y="0" width="176" height="180" rx="8" fill="#0F172A" stroke="#6D28D9" stroke-width="1"/>
+      <text x="10" y="22" fill="#C4B5FD" font-size="11" font-weight="700">Bilateral Policy</text>
+      <text x="10" y="42" fill="#E2E8F0" font-size="9.5" font-weight="600">Dual-Signed JSON</text>
+      <text x="10" y="60" fill="#94A3B8" font-size="9">• Ed25519 Lender Sig</text>
+      <text x="10" y="76" fill="#94A3B8" font-size="9">• Ed25519 LSP Sig</text>
+      <text x="10" y="94" fill="#94A3B8" font-size="9">• Model Commitment C</text>
+      <text x="10" y="110" fill="#94A3B8" font-size="9">• Cutoff Threshold tau</text>
+      <text x="10" y="126" fill="#94A3B8" font-size="9">• Fixed Scale (1024)</text>
+      <text x="10" y="142" fill="#94A3B8" font-size="9">• 10-Min SLA Window</text>
+      <text x="10" y="164" fill="#A78BFA" font-size="8.5" font-family="monospace">policy_id: pol_v1</text>
+    </g>
+
+    <!-- Transmission Channel -->
+    <g transform="translate(12, 270)">
+      <rect x="0" y="0" width="176" height="240" rx="8" fill="#0F172A" stroke="#475569" stroke-width="1"/>
+      <text x="10" y="22" fill="#CBD5E1" font-size="11" font-weight="700">Cross-Zone Wire</text>
+      <text x="10" y="40" fill="#94A3B8" font-size="9" font-weight="700">Outbound Only (mTLS)</text>
+
+      <path d="M 12 70 L 164 70" stroke="#60A5FA" stroke-width="2" marker-end="url(#arrowBlue)"/>
+      <text x="14" y="64" fill="#60A5FA" font-size="9" font-weight="700">1. DecisionNotice</text>
+      <text x="14" y="85" fill="#94A3B8" font-size="8">(decision_id, app_hash)</text>
+
+      <path d="M 12 130 L 164 130" stroke="#A78BFA" stroke-width="2" marker-end="url(#arrowPurple)"/>
+      <text x="14" y="124" fill="#C4B5FD" font-size="9" font-weight="700">2. ProofPayload</text>
+      <text x="14" y="145" fill="#94A3B8" font-size="8">(24KB SNARK, PubInputs)</text>
+
+      <path d="M 164 190 L 12 190" stroke="#34D399" stroke-width="2" marker-end="url(#arrowGreen)"/>
+      <text x="14" y="184" fill="#34D399" font-size="9" font-weight="700">3. HTTP 202 / Ack</text>
+      <text x="14" y="205" fill="#94A3B8" font-size="8">(verification_id)</text>
+    </g>
+
+    <!-- Data Guard Callout -->
+    <g transform="translate(12, 530)">
+      <rect x="0" y="0" width="176" height="170" rx="8" fill="#1E293B" stroke="#EF4444" stroke-width="1.2"/>
+      <text x="10" y="22" fill="#FCA5A5" font-size="10" font-weight="800">WHAT DOES NOT CROSS</text>
+      <text x="10" y="44" fill="#FECACA" font-size="9">✗ No Raw Features</text>
+      <text x="10" y="62" fill="#FECACA" font-size="9">✗ No Borrower PII</text>
+      <text x="10" y="80" fill="#FECACA" font-size="9">✗ No Model Weights</text>
+      <text x="10" y="98" fill="#FECACA" font-size="9">✗ No Proving Key</text>
+      <text x="10" y="116" fill="#FECACA" font-size="9">✗ No Phone / PAN Data</text>
+      <rect x="10" y="132" width="156" height="26" rx="4" fill="#450A0A"/>
+      <text x="16" y="148" fill="#F87171" font-size="8.5" font-weight="700">Zero-Knowledge Invariant</text>
+    </g>
+  </g>
+
+  <!-- ================= ZONE 3: LENDER APPLIANCE CONTAINER ================= -->
+  <g transform="translate(840, 130)">
+    <!-- Container Outer Box -->
+    <rect x="0" y="0" width="540" height="730" rx="16" fill="url(#bgLender)" stroke="#059669" stroke-width="2" stroke-opacity="0.6" filter="url(#shadow)"/>
+    
+    <!-- Zone Header Banner -->
+    <path d="M 0 16 Q 0 0 16 0 L 524 0 Q 540 0 540 16 L 540 50 L 0 50 Z" fill="url(#gradLenderHeader)"/>
+    <text x="24" y="32" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5">ZONE 3: LENDER CONFORMANCE APPLIANCE</text>
+    <text x="390" y="32" fill="#A7F3D0" font-size="11" font-weight="700">Port 0.0.0.0:8000</text>
+
+    <!-- Component 4: CONTAINER 2 - ALL-IN-ONE LENDER NODE -->
+    <g transform="translate(24, 66)">
+      <rect x="0" y="0" width="492" height="634" rx="12" fill="url(#gradCardLender)" stroke="#10B981" stroke-width="1.8"/>
+      <rect x="14" y="10" width="464" height="26" rx="6" fill="#064E3B" stroke="#059669" stroke-width="1"/>
+      <text x="24" y="28" fill="#6EE7B7" font-size="11" font-weight="800">CONTAINER 2: ALL-IN-ONE LENDER APPLIANCE (sakshi-lender:8000)</text>
+
+      <!-- Submodule 1: Sequential 9-Step Verifier -->
+      <g transform="translate(16, 44)">
+        <rect x="0" y="0" width="460" height="150" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1.2"/>
+        <text x="14" y="22" fill="#6EE7B7" font-size="11" font-weight="700">1. Sequential 9-Step Verifier Engine (node/services/verifier.py)</text>
+        <text x="14" y="38" fill="#94A3B8" font-size="9.5">Ordered cheap-to-expensive: Memory Lookups -&gt; Elliptic Curve Pairings (&lt;10ms)</text>
+        
+        <!-- Steps Grid -->
+        <g transform="translate(14, 48)">
+          <rect x="0" y="0" width="136" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700">V1: Policy Active</text>
+
+          <rect x="146" y="0" width="136" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(146, 0)">V2: Model Approved (C)</text>
+
+          <rect x="292" y="0" width="140" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(292, 0)">V3: Policy Hash Match</text>
+
+          <rect x="0" y="32" width="136" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(0, 32)">V4: Cutoff Match (tau)</text>
+
+          <rect x="146" y="32" width="136" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(146, 32)">V5: Epoch Replay Window</text>
+
+          <rect x="292" y="32" width="140" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(292, 32)">V6: Proof Uniqueness</text>
+
+          <rect x="0" y="64" width="136" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(0, 64)">V7: Decision Parity</text>
+
+          <rect x="146" y="64" width="136" height="26" rx="4" fill="#1E3A8A" stroke="#3B82F6"/>
+          <text x="8" y="17" fill="#93C5FD" font-size="9" font-weight="700" transform="translate(146, 64)">V8: Halo2 KZG Verify</text>
+
+          <rect x="292" y="64" width="140" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+          <text x="8" y="17" fill="#E2E8F0" font-size="9" font-weight="700" transform="translate(292, 64)">V9: Hard Rules Gate</text>
+        </g>
+      </g>
+
+      <!-- Submodule 2: Input Binding Adapter -->
+      <g transform="translate(16, 202)">
+        <rect x="0" y="0" width="460" height="66" rx="8" fill="#0F172A" stroke="#475569" stroke-width="1"/>
+        <text x="14" y="22" fill="#E2E8F0" font-size="11" font-weight="700">2. Input Binding Adapter (X' ?= X)</text>
+        <text x="14" y="40" fill="#CBD5E1" font-size="10">• Recomputes X' = SHA256(bureau_features) from Lender's independent data</text>
+        <text x="14" y="55" fill="#CBD5E1" font-size="10">• Traps Liar-Prover attack if LSP proved inference on spoofed features (Scenario 5)</text>
+      </g>
+
+      <!-- Submodule 3: Cryptographic Audit Ledger -->
+      <g transform="translate(16, 276)">
+        <rect x="0" y="0" width="460" height="88" rx="8" fill="#0F172A" stroke="#F59E0B" stroke-width="1.2"/>
+        <text x="14" y="22" fill="#FBBF24" font-size="11" font-weight="700">3. Tamper-Evident Hash-Chained Audit Ledger (node/services/ledger.py)</text>
+        <text x="14" y="40" fill="#E2E8F0" font-size="10">• Append-only hash chain: Row_Hash[i] = SHA256(Row_Hash[i-1] || canonical(Entry[i]))</text>
+        <text x="14" y="58" fill="#E2E8F0" font-size="10">• Enforced via SQLite triggers (ledger_no_update, ledger_no_delete)</text>
+        <text x="14" y="76" fill="#94A3B8" font-size="9.5">• Exportable to RBI / external auditors with independent chain integrity verify</text>
+      </g>
+
+      <!-- Submodule 4: Fail-Closed Disbursal Gate & LMS -->
+      <g transform="translate(16, 372)">
+        <rect x="0" y="0" width="460" height="106" rx="8" fill="#0F172A" stroke="#EF4444" stroke-width="1.5"/>
+        <text x="14" y="22" fill="#F87171" font-size="11" font-weight="800">4. Fail-Closed Disbursal Gate &amp; Mock LMS (/v1/decisions/{id}/status)</text>
+        <text x="14" y="42" fill="#E2E8F0" font-size="10">• Direct Core Banking Integration (The Disbursal Switch)</text>
+        <text x="14" y="60" fill="#34D399" font-size="10" font-weight="700">✓ If status == 'VERIFIED' and decision == 1: Authorize Disbursal within 24 Hours</text>
+        <text x="14" y="78" fill="#F87171" font-size="10" font-weight="700">✗ If status != 'VERIFIED': STRICT DISBURSAL BLOCK (Fail-Closed, Zero INR leaves)</text>
+        <text x="14" y="96" fill="#FCD34D" font-size="10">⏱ If SLA &gt; 10 mins: Automatically marks EXPIRED, blocks funds, raises alert</text>
+      </g>
+
+      <!-- Submodule 5: Integrated Multi-Portal React Frontend -->
+      <g transform="translate(16, 486)">
+        <rect x="0" y="0" width="460" height="136" rx="8" fill="#0F172A" stroke="#3B82F6" stroke-width="1.2"/>
+        <text x="14" y="22" fill="#93C5FD" font-size="11" font-weight="700">5. Multi-Persona Web Interface (React 18 + Vite + Tailwind)</text>
+        <g transform="translate(14, 32)">
+          <rect x="0" y="0" width="136" height="42" rx="4" fill="#1E293B" stroke="#475569"/>
+          <text x="8" y="18" fill="#FFFFFF" font-size="9.5" font-weight="700">Lender Dashboard (/)</text>
+          <text x="8" y="32" fill="#94A3B8" font-size="8">Live Decisions, Latency</text>
+
+          <rect x="146" y="0" width="136" height="42" rx="4" fill="#1E293B" stroke="#475569"/>
+          <text x="8" y="18" fill="#FFFFFF" font-size="9.5" font-weight="700" transform="translate(146, 0)">Borrower Portal (/borrower)</text>
+          <text x="8" y="32" fill="#94A3B8" font-size="8" transform="translate(146, 0)">Instant Loan Sanction</text>
+
+          <rect x="292" y="0" width="140" height="42" rx="4" fill="#1E3A8A" stroke="#3B82F6"/>
+          <text x="8" y="18" fill="#93C5FD" font-size="9.5" font-weight="700" transform="translate(292, 0)">Demo Lab (/demo)</text>
+          <text x="8" y="32" fill="#BFDBFE" font-size="8" transform="translate(292, 0)">7 Interactive Scenarios</text>
+
+          <rect x="0" y="50" width="210" height="42" rx="4" fill="#1E293B" stroke="#475569"/>
+          <text x="8" y="18" fill="#FFFFFF" font-size="9.5" font-weight="700" transform="translate(0, 50)">Audit Ledger (/ledger)</text>
+          <text x="8" y="32" fill="#94A3B8" font-size="8" transform="translate(0, 50)">Hash Chain Explorer &amp; Export</text>
+
+          <rect x="222" y="50" width="210" height="42" rx="4" fill="#1E293B" stroke="#475569"/>
+          <text x="8" y="18" fill="#FFFFFF" font-size="9.5" font-weight="700" transform="translate(222, 50)">LSP Partner Portal (/lsp)</text>
+          <text x="8" y="32" fill="#94A3B8" font-size="8" transform="translate(222, 50)">Model Registration &amp; Sidecar Health</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ================= FOOTER / LEGEND ================= -->
+  <g transform="translate(60, 876)">
+    <rect x="0" y="0" width="1320" height="34" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="24" y="21" fill="#94A3B8" font-size="11" font-weight="600">Legend &amp; Guarantees:</text>
+    <circle cx="160" cy="17" r="5" fill="#3B82F6"/>
+    <text x="172" y="21" fill="#CBD5E1" font-size="10">LSP Zone: Private Witness &amp; Prover</text>
+    <circle cx="430" cy="17" r="5" fill="#8B5CF6"/>
+    <text x="442" y="21" fill="#CBD5E1" font-size="10">Trust Anchor: Dual-Signed Policy Contract</text>
+    <circle cx="740" cy="17" r="5" fill="#10B981"/>
+    <text x="752" y="21" fill="#CBD5E1" font-size="10">Lender Appliance: 9-Step Verifier &amp; Ledger</text>
+    <circle cx="1070" cy="17" r="5" fill="#EF4444"/>
+    <text x="1082" y="21" fill="#CBD5E1" font-size="10">Disbursal Gate: Fail-Closed Protection</text>
+  </g>
+</svg>
+"""
+    output_path = os.path.abspath("architecture_diagram.svg")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(svg.strip())
+    print(f"Architecture SVG successfully generated at: {output_path}")
+
+if __name__ == "__main__":
+    generate_svg()
