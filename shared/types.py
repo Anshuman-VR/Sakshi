@@ -239,6 +239,11 @@ class DecisionStatusResponse(BaseModel):
     ledger_seq: Optional[int] = None
     failure_reason: Optional[str] = None
     sla_deadline: Optional[str] = None
+    proof_hash: Optional[str] = None
+    proof_size_bytes: Optional[int] = None
+    proof_snippet: Optional[str] = None
+    public_inputs: Optional[Dict[str, Any]] = None
+    application_id_hash: Optional[str] = None
 
 
 class DashboardSummary(BaseModel):

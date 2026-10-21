@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 import base64
 import json
 from pathlib import Path
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -147,26 +147,17 @@ def _ensure_demo_fixtures(db: Session) -> Policy:
 class DemoApplyRequest(BaseModel):
     application_id: Optional[str] = None
     policy_id: Optional[str] = None
-    persona: Optional[str] = Field(None, description="persona ID or name substring: 'priya', 'rahul', 'amit'")
+    persona: Optional[str] = Field(None, description="persona ID: 'priya', 'rahul', 'amit'")
     features: Optional[Dict[str, float]] = None
-    tamper: Optional[str] = Field(None, description="Optional tamper mode: 'model', 'threshold', 'input'")
+    tamper: Optional[str] = Field(None, description="'model', 'threshold', 'input', 'replay', 'invalid_zk', 'policy'")
 
 
 @router.post("/apply")
 def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
-    """Live demo application endpoint.
-    
-    Executes the REAL end-to-end conformance pipeline:
-    1. Evaluates loan features.
-    2. Issues notice to lender node.
-    3. Records input commitment binding.
-    4. Proves decision conformance (honest or simulated tamper).
-    5. Verifier checks V1-V9.
-    6. Writes entry to the immutable hash-chained audit ledger.
-    """
+    """Executes the end-to-end conformance pipeline with optional tamper simulation."""
     policy = _ensure_demo_fixtures(db)
     
-    # Resolve features from persona or explicit features
+    # Resolve features
     features: Dict[str, float] = {}
     if request.features:
         features = {k: float(v) for k, v in request.features.items() if k in FEATURE_ORDER}
@@ -224,7 +215,20 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     # 3. Generate Proof Payload
     proof_threshold = 0.05 if request.tamper == "threshold" else policy.decision_threshold
     proof_commitment = "0x" + "dead" * 16 if request.tamper == "model" else policy.model_commitment
-    proof_bytes = f"SAKSHI_TEST_VALID_PROOF:{decision_id}".encode("utf-8")
+    proof_policy_hash = "0x" + "badc0de" * 8 if request.tamper == "policy" else policy.policy_hash
+
+    if request.tamper == "replay":
+        # Find a previous proof to replay
+        prev_proof = db.execute(select(ProofRecord).order_by(ProofRecord.submitted_at.desc()).limit(1)).scalar_one_or_none()
+        if prev_proof is not None:
+            proof_bytes = prev_proof.proof_blob
+        else:
+            proof_bytes = b"SAKSHI_TEST_VALID_PROOF:seed_for_replay"
+    elif request.tamper == "invalid_zk":
+        proof_bytes = b"CORRUPTED_MALFORMED_CIRCUIT_PROOF_BYTES_0xDEAD"
+    else:
+        proof_bytes = f"SAKSHI_TEST_VALID_PROOF:{decision_id}".encode("utf-8")
+
     proof_b64 = base64.b64encode(proof_bytes).decode("ascii")
 
     proof_payload = ProofPayload(
@@ -232,7 +236,7 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         policy_id=policy.policy_id,
         proof=proof_b64,
         public_inputs=PublicInputs(
-            policy_hash=policy.policy_hash,
+            policy_hash=proof_policy_hash,
             C=proof_commitment,
             X=x_prime,
             decision=honest_decision,
@@ -245,24 +249,29 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
     verification_id = f"v_demo_{uuid.uuid4().hex[:8]}"
     proof_bytes_dec, proof_hash, _ = proof_digest(proof_payload)
     
-    # Reserve proof record
-    proof_rec = ProofRecord(
-        id=verification_id,
-        decision_id=decision_id,
-        proof_hash=proof_hash,
-        proof_blob=proof_bytes_dec,
-        public_inputs=proof_payload.public_inputs.model_dump(mode="json"),
-        status="PENDING",
-        submitted_at=now,
-    )
-    db.add(proof_rec)
-    db.flush()
+    # Check if proof already exists (replay check before reservation)
+    existing_by_hash = db.execute(select(ProofRecord.id).where(ProofRecord.proof_hash == proof_hash)).scalar_one_or_none()
+    proof_rec = None
+    if existing_by_hash is None:
+        proof_rec = ProofRecord(
+            id=verification_id,
+            decision_id=decision_id,
+            proof_hash=proof_hash,
+            proof_blob=proof_bytes_dec,
+            public_inputs=proof_payload.public_inputs.model_dump(mode="json"),
+            status="PENDING",
+            submitted_at=now,
+        )
+        db.add(proof_rec)
+        db.flush()
 
     result = VerifierEngine.run_pipeline(db, proof_payload, verification_id=verification_id)
 
     # 5. Commit Decision & Ledger
-    proof_rec.status = result.status
-    proof_rec.reason = result.reason
+    if proof_rec is not None:
+        proof_rec.status = result.status
+        proof_rec.reason = result.reason
+    
     decision_record.status = result.status
     decision_record.failure_reason = result.reason
 
@@ -296,6 +305,70 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
 
     db.commit()
 
+    steps_evaluated = [
+        {
+            "step": "V1_POLICY_EXISTS",
+            "name": "Mutual Policy Registry",
+            "description": "Verifies contractual policy is active and dual-signed",
+            "passed": result.failed_at_step != "V1_POLICY_EXISTS",
+        },
+        {
+            "step": "V2_MODEL_APPROVED",
+            "name": "Model Commitment Match (C)",
+            "description": f"Compares C against registered model ({policy.model_commitment[:16]}...)",
+            "passed": result.failed_at_step != "V2_MODEL_APPROVED",
+            "expected": policy.model_commitment,
+            "actual": proof_payload.public_inputs.C,
+        },
+        {
+            "step": "V3_POLICY_HASH_MATCH",
+            "name": "Canonical Policy Digest",
+            "description": "Compares contract terms hash against agreed policy document",
+            "passed": result.failed_at_step != "V3_POLICY_HASH_MATCH",
+            "expected": policy.policy_hash,
+            "actual": proof_payload.public_inputs.policy_hash,
+        },
+        {
+            "step": "V4_THRESHOLD_MATCH",
+            "name": "Decision Cutoff Consistency",
+            "description": f"Verifies claimed threshold against policy ({policy.decision_threshold:.3f})",
+            "passed": result.failed_at_step != "V4_THRESHOLD_MATCH",
+            "expected": float(policy.decision_threshold),
+            "actual": float(proof_payload.public_inputs.threshold),
+        },
+        {
+            "step": "V5_WINDOW_VALID",
+            "name": "Proving Epoch Window",
+            "description": f"Ensures proving timestamp epoch ({today_epoch()}) is valid",
+            "passed": result.failed_at_step != "V5_WINDOW_VALID",
+        },
+        {
+            "step": "V6_UNIQUENESS",
+            "name": "Proof Uniqueness (Replay Guard)",
+            "description": "Checks that the proof hash has never been consumed before",
+            "passed": result.failed_at_step != "V6_UNIQUENESS",
+        },
+        {
+            "step": "V7_DECISION_MATCH",
+            "name": "Notice & Input Binding Alignment",
+            "description": "Compares lender feature commitment X' with prover witness commitment X",
+            "passed": result.failed_at_step != "V7_DECISION_MATCH",
+            "binding_status": binding.binding_status,
+        },
+        {
+            "step": "V8_ZK_VERIFY",
+            "name": "Halo2 Zero-Knowledge Proof Verification",
+            "description": "Cryptographically validates polynomial constraints of the credit scorecard circuit",
+            "passed": result.failed_at_step != "V8_ZK_VERIFY",
+        },
+        {
+            "step": "V9_HARD_RULES",
+            "name": "Underwriting Hard Rules",
+            "description": "Enforces mandatory boundaries (CIBIL >= 600, FOIR <= 65%)",
+            "passed": result.failed_at_step != "V9_HARD_RULES",
+        },
+    ]
+
     return {
         "decision_id": decision_id,
         "application_id": app_id,
@@ -308,4 +381,9 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         "verified_at": decision_record.verified_at.isoformat() if decision_record.verified_at else None,
         "failure_reason": result.reason,
         "failed_at_step": result.failed_at_step,
+        "proof": proof_b64,
+        "proof_hash": proof_hash,
+        "proof_size_bytes": len(proof_bytes_dec),
+        "public_inputs": proof_payload.public_inputs.model_dump(mode="json"),
+        "steps_evaluated": steps_evaluated,
     }

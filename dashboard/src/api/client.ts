@@ -1,7 +1,9 @@
 import axios from 'axios';
-import type { DashboardSummary, DecisionRecord, LedgerRecord } from './types';
+import type { DashboardSummary, DecisionRecord, LedgerRecord, ApplyLoanRequest, ApplyLoanResponse, VerificationStep } from './types';
 
-export const api = axios.create({ baseURL: '', timeout: 10000, headers: { 'Content-Type': 'application/json' } });
+export type { ApplyLoanRequest, ApplyLoanResponse, VerificationStep };
+
+export const api = axios.create({ baseURL: '', timeout: 15000, headers: { 'Content-Type': 'application/json' } });
 
 export const fetchHealth = async (): Promise<boolean> => {
   try { const response = await api.get('/healthz'); return response.status === 200; } catch { return false; }
@@ -19,28 +21,6 @@ export const fetchLedger = async (): Promise<LedgerRecord[]> => {
   if (Array.isArray(body.items)) return body.items as LedgerRecord[];
   return [];
 };
-
-export interface ApplyLoanRequest {
-  application_id?: string;
-  policy_id?: string;
-  persona?: string;
-  features?: Record<string, number>;
-  tamper?: string;
-}
-
-export interface ApplyLoanResponse {
-  decision_id: string;
-  application_id: string;
-  status: 'VERIFIED' | 'FAILED' | 'NOTICE_RECEIVED' | 'EXPIRED';
-  decision: number;
-  decision_label: 'APPROVED' | 'REJECTED';
-  policy_id: string;
-  model_commitment: string;
-  ledger_seq: number;
-  verified_at: string | null;
-  failure_reason: string | null;
-  failed_at_step?: string;
-}
 
 export const submitLoanApplication = async (req: ApplyLoanRequest): Promise<ApplyLoanResponse> => {
   const response = await api.post<ApplyLoanResponse>('/v1/demo/apply', req);

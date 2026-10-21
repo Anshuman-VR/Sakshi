@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { 
-  Cpu, Shield, Lock, Database, CheckCircle2, 
-  Key, Server, ArrowUpRight, Clock, FileCode, Check
+  Cpu, Lock, Database, CheckCircle2, 
+  Key, Server, ArrowUpRight, Clock, FileCode, Check, X, Code2
 } from 'lucide-react';
 import { fetchSummary } from '../api/client';
-import type { DashboardSummary } from '../api/types';
+import type { DashboardSummary, DecisionRecord } from '../api/types';
 
 const ist = (v?: string | null) => {
   if (!v) return '—';
@@ -18,9 +18,23 @@ const ist = (v?: string | null) => {
       }).format(d) + ' IST';
 };
 
+const FEATURES_SCHEMA = [
+  { name: 'bureau_score', type: 'float32', role: 'CIBIL Bureau Credit Score (300-900)' },
+  { name: 'monthly_income', type: 'float32', role: 'Net Monthly Take-Home Salary in INR' },
+  { name: 'foir', type: 'float32', role: 'Fixed Obligation to Income Ratio (0.0-1.0)' },
+  { name: 'loan_tenure_months', type: 'float32', role: 'Requested Loan Tenure (12-60 months)' },
+  { name: 'num_active_loans', type: 'float32', role: 'Current Active Credit Lines' },
+  { name: 'num_enquiries_6m', type: 'float32', role: 'Hard Credit Enquiries in Past 6 Months' },
+  { name: 'bank_account_age_months', type: 'float32', role: 'Primary Banking Relationship Age' },
+  { name: 'loan_amount_requested', type: 'float32', role: 'Principal Loan Amount in INR' },
+  { name: 'behaviour_idx', type: 'float32', role: 'Digital Behavioral Repayment Signal' },
+  { name: 'employment_type', type: 'float32', role: 'Employment Category (0=Salaried, 1=Self)' },
+];
+
 export function LspPortal() {
   const [data, setData] = useState<DashboardSummary | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [selectedProof, setSelectedProof] = useState<DecisionRecord | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -82,7 +96,7 @@ export function LspPortal() {
               <Database className="text-indigo-600" size={18} />
               Trained Scorecard (ONNX)
             </div>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 font-mono">
               10 Features
             </span>
           </div>
@@ -100,7 +114,7 @@ export function LspPortal() {
             </div>
             <div className="flex justify-between items-center py-1.5">
               <span className="text-slate-500">Decision Threshold</span>
-              <span className="font-bold text-slate-900">0.200 (Cutoff)</span>
+              <span className="font-bold text-slate-900 font-mono">0.200 (Cutoff)</span>
             </div>
           </div>
         </div>
@@ -109,24 +123,24 @@ export function LspPortal() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-              <Shield className="text-purple-600" size={18} />
-              Zero-Knowledge Guarantees
+              <Cpu className="text-purple-600" size={18} />
+              Halo2 Arithmetic Circuit
             </div>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
-              EZKL Halo2
+            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200 font-mono">
+              Scale 1024
             </span>
           </div>
           <p className="text-xs text-slate-500 mb-4 leading-relaxed">
-            Enforces mathematical underwriting integrity without leaking commercial IP or borrower PII across VPC boundaries.
+            Quantized fixed-point Halo2 circuit proving model inference integrity. Zero model parameters or borrower witness leaked across boundary.
           </p>
           <div className="space-y-2 text-xs">
             <div className="p-2.5 rounded bg-slate-50 border border-slate-100">
-              <strong className="text-slate-800 block mb-0.5">Private Inputs (Witness):</strong>
-              <span className="text-slate-500">CIBIL score, monthly salary, FOIR, active loans stay in LSP zone.</span>
+              <strong className="text-slate-800 block mb-0.5">Private Witness (X):</strong>
+              <span className="text-slate-500">Raw financial features committed via SHA-256 canonical hashing.</span>
             </div>
             <div className="p-2.5 rounded bg-slate-50 border border-slate-100">
-              <strong className="text-slate-800 block mb-0.5">Fixed Circuit Parameters:</strong>
-              <span className="text-slate-500">Model weights fixed in arithmetic circuit; lender cannot view weights.</span>
+              <strong className="text-slate-800 block mb-0.5">Fixed Circuit Weights (C):</strong>
+              <span className="text-slate-500">Model coefficients fixed as circuit advice columns.</span>
             </div>
           </div>
         </div>
@@ -138,7 +152,7 @@ export function LspPortal() {
               <Server className="text-emerald-600" size={18} />
               Transactional Outbox
             </div>
-            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono">
               At-Least-Once
             </span>
           </div>
@@ -180,9 +194,9 @@ export function LspPortal() {
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="px-6 py-3">Decision ID / Timestamp</th>
-                  <th className="px-4 py-3">Underwriting Decision</th>
-                  <th className="px-4 py-3">Verification Outcome</th>
-                  <th className="px-4 py-3">Audit Block</th>
+                  <th className="px-4 py-3">Underwriting Output</th>
+                  <th className="px-4 py-3">Proof Hash (SHA-256)</th>
+                  <th className="px-4 py-3">Lender Ack</th>
                   <th className="px-4 py-3">Proof Action</th>
                 </tr>
               </thead>
@@ -201,8 +215,11 @@ export function LspPortal() {
                             ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
                             : 'bg-rose-50 text-rose-800 border-rose-200'
                         }`}>
-                          {isApproved ? 'APPROVED' : 'REJECTED'}
+                          {isApproved ? 'DECISION = 1 (APPROVE)' : 'DECISION = 0 (REJECT)'}
                         </span>
+                      </td>
+                      <td className="px-4 py-3.5 text-slate-500 truncate max-w-[180px]">
+                        {p.proof_hash ? `${p.proof_hash.slice(0, 16)}…` : 'Derived in circuit'}
                       </td>
                       <td className="px-4 py-3.5">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-sans font-bold border ${
@@ -213,16 +230,14 @@ export function LspPortal() {
                           <CheckCircle2 size={12} /> {p.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3.5 text-slate-600">
-                        {p.ledger_seq ? `#${p.ledger_seq}` : 'Pending'}
-                      </td>
                       <td className="px-4 py-3.5">
-                        <a 
-                          href={`/receipt/${encodeURIComponent(p.decision_id)}`} 
-                          className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-indigo-600 hover:text-indigo-800"
+                        <button
+                          type="button"
+                          onClick={() => setSelectedProof(p)}
+                          className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-purple-600 hover:text-purple-800 underline underline-offset-4"
                         >
-                          Receipt <ArrowUpRight size={13} />
-                        </a>
+                          View Payload <ArrowUpRight size={13} />
+                        </button>
                       </td>
                     </tr>
                   );
@@ -235,6 +250,39 @@ export function LspPortal() {
             No outbound proofs dispatched yet. Submit an application in the Borrower Portal to trigger a proof.
           </div>
         )}
+      </div>
+
+      {/* Feature Dimensions & Model Schema Card */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Code2 size={16} className="text-slate-700" />
+            <h2 className="text-sm font-bold text-slate-900">Scorecard ONNX Feature Dimension Schema (10 Inputs)</h2>
+          </div>
+          <span className="text-xs font-mono text-slate-500">Fixed Column Ordering</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs font-mono">
+            <thead className="bg-slate-50 border-b border-slate-100 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-6 py-2.5">Index</th>
+                <th className="px-4 py-2.5">Feature Key</th>
+                <th className="px-4 py-2.5">Data Type</th>
+                <th className="px-6 py-2.5 font-sans">Underwriting Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {FEATURES_SCHEMA.map((f, i) => (
+                <tr key={f.name} className="hover:bg-slate-50/50">
+                  <td className="px-6 py-2.5 text-slate-400">[{i}]</td>
+                  <td className="px-4 py-2.5 font-bold text-slate-900">{f.name}</td>
+                  <td className="px-4 py-2.5 text-slate-500">{f.type}</td>
+                  <td className="px-6 py-2.5 font-sans text-slate-600">{f.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Cryptographic Artifacts Card */}
@@ -306,49 +354,56 @@ export function LspPortal() {
         </div>
       </div>
 
-      {/* Trust & Boundary Architecture Diagram */}
-      <div className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
-          <div>
-            <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold block mb-1">
-              Architecture & Trust Boundary
-            </span>
-            <h3 className="text-xl font-bold">Why Regulators & Lenders Trust This Model</h3>
+      {/* Proof Payload Inspection Modal */}
+      {selectedProof && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-xl w-full p-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 mb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                  Outbound Proof Payload
+                </span>
+                <h3 className="text-base font-bold text-slate-900 font-mono">
+                  {selectedProof.decision_id}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedProof(null)}
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-mono">
+              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                <span className="text-slate-400 block text-[10px] uppercase">SHA-256 Proof Digest</span>
+                <span className="text-slate-900 break-all">{selectedProof.proof_hash || 'Calculated via witness polynomial'}</span>
+              </div>
+
+              {selectedProof.public_inputs && (
+                <div className="p-3 rounded-lg bg-slate-900 text-slate-200">
+                  <span className="text-[10px] uppercase text-slate-400 block mb-1">Public Inputs Transmitted:</span>
+                  <pre className="text-[11px] text-slate-300 leading-relaxed overflow-x-auto">
+                    {JSON.stringify(selectedProof.public_inputs, null, 2)}
+                  </pre>
+                </div>
+              )}
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProof(null)}
+                  className="px-4 py-2 bg-slate-900 text-white font-semibold text-xs rounded-lg hover:bg-slate-800"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
-          <span className="text-xs text-slate-400 max-w-md">
-            RBI Digital Lending Directions (2025) require Regulated Entities (RE) to retain underwriting accountability while allowing fintech innovation.
-          </span>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-800/60 rounded-xl p-5 border border-slate-700/60">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-2">
-              <CheckCircle2 size={16} /> 1. No IP Exposure
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Fintech LSPs never surrender model weights, proprietary scoring coefficients, or feature engineering secrets to the bank or competitors.
-            </p>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-5 border border-slate-700/60">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-2">
-              <CheckCircle2 size={16} /> 2. Complete Auditability
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Banks verify cryptographically that every loan decision used the exact approved model version, agreed threshold, and input commitment without inspecting the black box.
-            </p>
-          </div>
-
-          <div className="bg-slate-800/60 rounded-xl p-5 border border-slate-700/60">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-2">
-              <CheckCircle2 size={16} /> 3. Fail-Closed Disbursal
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              The Loan Management System (LMS) strictly holds disbursals. If any of the 9 verification checks fail, no funds are ever released.
-            </p>
-          </div>
-        </div>
-      </div>
+      )}
     </main>
   );
 }
