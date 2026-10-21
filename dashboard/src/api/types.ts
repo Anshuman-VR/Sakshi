@@ -92,6 +92,17 @@ export interface ApplyLoanRequest {
   tamper?: string;
 }
 
+export interface MismatchDetails {
+  step: string;
+  label: string;
+  reason: string;
+  field: string;
+  expected: string;
+  expected_label: string;
+  actual: string;
+  actual_label: string;
+}
+
 export interface ApplyLoanResponse {
   decision_id: string;
   application_id: string;
@@ -110,4 +121,5 @@ export interface ApplyLoanResponse {
   proof_size_bytes?: number;
   public_inputs?: PublicInputsData;
   steps_evaluated?: VerificationStep[];
+  mismatch_details?: MismatchDetails | null;
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import type { DashboardSummary, DecisionRecord, LedgerRecord, ApplyLoanRequest, ApplyLoanResponse, VerificationStep } from './types';
+import type { DashboardSummary, DecisionRecord, LedgerRecord, ApplyLoanRequest, ApplyLoanResponse, VerificationStep, MismatchDetails } from './types';
 
-export type { ApplyLoanRequest, ApplyLoanResponse, VerificationStep };
+export type { ApplyLoanRequest, ApplyLoanResponse, VerificationStep, MismatchDetails };
 
 export const api = axios.create({ baseURL: '', timeout: 15000, headers: { 'Content-Type': 'application/json' } });
 

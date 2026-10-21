@@ -382,8 +382,8 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
             "name": "Decision Cutoff Consistency",
             "description": f"Verifies claimed threshold against policy ({policy.decision_threshold:.3f})",
             "passed": result.failed_at_step != "V4_THRESHOLD_MATCH",
-            "expected": float(policy.decision_threshold),
-            "actual": float(proof_payload.public_inputs.threshold),
+            "expected": f"{policy.decision_threshold:.3f}",
+            "actual": f"{proof_payload.public_inputs.threshold:.3f}",
         },
         {
             "step": "V5_WINDOW_VALID",
@@ -396,6 +396,8 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
             "name": "Proof Uniqueness (Replay Guard)",
             "description": "Checks that the proof hash has never been consumed before",
             "passed": result.failed_at_step != "V6_UNIQUENESS",
+            "expected": "Unique unconsumed proof hash (SHA-256)",
+            "actual": f"Replayed proof hash: {proof_hash[:16]}... (already recorded)" if result.failed_at_step == "V6_UNIQUENESS" else f"Unique hash: {proof_hash[:16]}...",
         },
         {
             "step": "V7_DECISION_MATCH",
@@ -403,12 +405,16 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
             "description": "Compares lender feature commitment X' with prover witness commitment X",
             "passed": result.failed_at_step != "V7_DECISION_MATCH",
             "binding_status": binding.binding_status,
+            "expected": binding.x_prime,
+            "actual": proof_payload.public_inputs.X,
         },
         {
             "step": "V8_ZK_VERIFY",
             "name": "Halo2 Zero-Knowledge Proof Verification",
             "description": "Cryptographically validates polynomial constraints of the credit scorecard circuit",
             "passed": result.failed_at_step != "V8_ZK_VERIFY",
+            "expected": "Valid Halo2 KZG SNARK polynomial proof",
+            "actual": "Corrupted / malformed proof bytes rejected by KZG pairing verifier" if result.failed_at_step == "V8_ZK_VERIFY" else "Valid KZG proof verified",
         },
         {
             "step": "V9_HARD_RULES",
@@ -417,6 +423,75 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
             "passed": result.failed_at_step != "V9_HARD_RULES",
         },
     ]
+
+    mismatch_details = None
+    if result.status == "FAILED":
+        if result.failed_at_step == "V2_MODEL_APPROVED":
+            mismatch_details = {
+                "step": "V2_MODEL_APPROVED",
+                "label": "Model Commitment (C) Mismatch",
+                "reason": "LSP attempted to use an unapproved or modified ML model. The model commitment C in the public inputs does not match the registered & signed policy model.",
+                "field": "C",
+                "expected": policy.model_commitment,
+                "expected_label": "Authorized Model Commitment C (Policy Contract)",
+                "actual": proof_payload.public_inputs.C,
+                "actual_label": "Tampered Model Commitment C (Claimed in Proof)",
+            }
+        elif result.failed_at_step == "V4_THRESHOLD_MATCH":
+            mismatch_details = {
+                "step": "V4_THRESHOLD_MATCH",
+                "label": "Threshold Cutoff (tau) Creep Mismatch",
+                "reason": f"LSP lowered the underwriting cutoff threshold from {policy.decision_threshold:.3f} to {proof_payload.public_inputs.threshold:.3f} to force approval of a high-risk loan. Caught by exact decimal check at Step V4.",
+                "field": "threshold",
+                "expected": f"{policy.decision_threshold:.3f} (50.0% Minimum Required Cutoff)",
+                "expected_label": "Agreed Underwriting Cutoff (tau)",
+                "actual": f"{proof_payload.public_inputs.threshold:.3f} (5.0% Unauthorized Relaxation)",
+                "actual_label": "Claimed Cutoff in Proof (tau)",
+            }
+        elif result.failed_at_step == "V7_DECISION_MATCH":
+            mismatch_details = {
+                "step": "V7_DECISION_MATCH",
+                "label": "Input Binding Mismatch (X != X')",
+                "reason": "Feature spoofing detected! Features submitted to the Lender Node do not match the witness features proven by the ZK prover. Lender recomputed X' differs from Prover X.",
+                "field": "X",
+                "expected": binding.x_prime,
+                "expected_label": "Lender Recomputed Commitment X' (from Bureau & Bank API)",
+                "actual": proof_payload.public_inputs.X,
+                "actual_label": "Prover Witness Commitment X (Tampered Features)",
+            }
+        elif result.failed_at_step == "V6_UNIQUENESS":
+            mismatch_details = {
+                "step": "V6_UNIQUENESS",
+                "label": "Proof Replay Attack Detected",
+                "reason": f"This cryptographic proof hash has already been consumed and recorded in the immutable audit ledger. Re-submitting an existing proof for a new loan is rejected.",
+                "field": "proof_hash",
+                "expected": "Unique unconsumed proof hash (SHA-256)",
+                "expected_label": "Fresh Proof Requirement",
+                "actual": f"Duplicate SHA-256 Digest: {proof_hash}",
+                "actual_label": "Seen Proof Hash (Already in Ledger)",
+            }
+        elif result.failed_at_step == "V8_ZK_VERIFY":
+            mismatch_details = {
+                "step": "V8_ZK_VERIFY",
+                "label": "Malformed Halo2 Proof Bytes (INVALID_PROOF)",
+                "reason": "The cryptographic proof bytes are malformed or corrupted. Verification failed polynomial arithmetic and KZG pairing checks.",
+                "field": "proof",
+                "expected": "Valid Halo2 KZG SNARK polynomial proof conforming to circuit",
+                "expected_label": "Expected Valid SNARK Proof",
+                "actual": "Malformed / Corrupted bytes (Invalid elliptic curve point)",
+                "actual_label": "Received Proof Bytes",
+            }
+        else:
+            mismatch_details = {
+                "step": result.failed_at_step or "VERIFICATION_FAILED",
+                "label": result.reason or "Verification Failed",
+                "reason": f"Underwriting verification failed at step {result.failed_at_step} with reason {result.reason}.",
+                "field": "status",
+                "expected": "Pass all 9 verifier checks",
+                "expected_label": "Expected Policy Conformance",
+                "actual": f"Failed with {result.reason}",
+                "actual_label": "Actual Outcome",
+            }
 
     return {
         "decision_id": decision_id,
@@ -436,4 +511,5 @@ def demo_apply(request: DemoApplyRequest, db: Session = Depends(get_db)):
         "proof_size_bytes": len(proof_bytes_dec),
         "public_inputs": proof_payload.public_inputs.model_dump(mode="json"),
         "steps_evaluated": steps_evaluated,
+        "mismatch_details": mismatch_details,
     }
