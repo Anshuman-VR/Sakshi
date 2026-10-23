@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ SAKSHI (सक्षी)
+# 🛡️ SAKSHI (साक्षी)
 ### Zero-Knowledge Contract-Conformance Assurance for Digital Lending
 **Verifying credit underwriting compliance for 100% of loans without exposing proprietary model IP**
 
@@ -11,6 +11,163 @@
 [![Regulatory-Aligned](https://img.shields.io/badge/RBI-Digital%20Lending%20Directions%202025-green.svg)](https://rbi.org.in/)
 
 </div>
+
+---
+
+## 🚀 Deployment Guide (Start Here)
+
+> **Two access methods:**
+> - **College Intranet / LAN:** `http://172.20.88.119:8000` (accessible to anyone on the same network)
+> - **Public Internet:** via ngrok tunnel URL
+>
+> All commands are written for a **Kali Linux VPS** (or any Debian/Ubuntu-based Linux VM).
+
+### Prerequisites — One-Time Setup on the VM
+
+```bash
+# 1. Install Docker Engine
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+newgrp docker                          # Apply group without logout
+
+# 2. Install Docker Compose v2
+sudo apt-get install -y docker-compose-plugin
+docker compose version                 # Verify: Docker Compose version v2.x.x
+
+# 3. Install Python 3 + pip (for the reset script)
+sudo apt-get install -y python3 python3-pip
+pip3 install httpx
+
+# 4. Install ngrok
+curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+  | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+  | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt-get update && sudo apt-get install -y ngrok
+
+# 5. Authenticate ngrok (get token from https://dashboard.ngrok.com/get-started/your-authtoken)
+ngrok config add-authtoken <YOUR_NGROK_AUTHTOKEN>
+```
+
+---
+
+### Step 1 — Clone the Repository
+
+```bash
+git clone https://github.com/Anshuman-VR/Sakshi.git
+cd Sakshi
+```
+
+---
+
+### Step 2 — Build & Start the Containers
+
+```bash
+# Build both container images and start them in detached mode
+docker compose -f deploy/docker-compose.yml up -d --build
+```
+
+This single command:
+- Builds **`sakshi-lender`** (Verifier Node + Audit Ledger + React Dashboard + Mock LMS) and binds it to `0.0.0.0:8000`
+- Builds **`sakshi-lsp`** (Private Halo2 Prover Sidecar) on the internal Docker network only — **zero public ports**
+- Runs health checks every 10 seconds; both containers will show **(healthy)** within ~30 seconds
+
+Watch the startup progress:
+```bash
+docker compose -f deploy/docker-compose.yml logs -f
+```
+
+Verify both containers are healthy:
+```bash
+docker compose -f deploy/docker-compose.yml ps
+# Expected:
+# NAME            STATUS                   PORTS
+# sakshi-lender   Up X minutes (healthy)   0.0.0.0:8000->8000/tcp
+# sakshi-lsp      Up X minutes (healthy)   (no public ports)
+```
+
+---
+
+### Step 3 — Seed the Database with Demo Data
+
+```bash
+python3 scripts/reset_demo.py
+# Expected output:
+# [RESET] HTTP 200: Database reset and seeded with initial baseline record.
+#         Baseline Decision ID: QL_XXXXXXXX
+#         Ledger Height: #1
+```
+
+You can also click **"Reset & Seed DB"** on any portal in the UI to reseed at any time.
+
+---
+
+### Step 4 — Access via College Intranet (LAN)
+
+Anyone on the same college WiFi/LAN network can open:
+
+| Portal | URL |
+| :--- | :--- |
+| **Lender Dashboard** | `http://172.20.88.119:8000` |
+| **Borrower Portal** | `http://172.20.88.119:8000/borrower` |
+| **Demo Lab (7 Scenarios)** | `http://172.20.88.119:8000/demo` |
+| **Audit Ledger Explorer** | `http://172.20.88.119:8000/ledger` |
+| **LSP Partner Portal** | `http://172.20.88.119:8000/lsp` |
+| **API Docs (Swagger UI)** | `http://172.20.88.119:8000/docs` |
+| **Health Check** | `http://172.20.88.119:8000/healthz` |
+
+---
+
+### Step 5 — Expose to the Public Internet via ngrok
+
+Open a **second terminal** on the VM (leave containers running in the first):
+
+```bash
+ngrok http 8000
+```
+
+ngrok will display:
+```
+Forwarding   https://abcd-1234-efgh.ngrok-free.app -> http://localhost:8000
+```
+
+The entire Sakshi suite is now publicly accessible at that URL. All portals work identically through the tunnel.
+
+> **Tip — Persistent static ngrok domain (same URL every session):**
+> ```bash
+> ngrok http --domain=your-reserved-domain.ngrok-free.app 8000
+> ```
+> Reserve a free static domain at: https://dashboard.ngrok.com/domains
+
+---
+
+### Container Control — Quick Reference
+
+```bash
+# Stop containers (preserves database volumes)
+docker compose -f deploy/docker-compose.yml down
+
+# Stop AND wipe all persistent data (full clean slate)
+docker compose -f deploy/docker-compose.yml down -v
+
+# Rebuild after code changes
+git pull origin main
+docker compose -f deploy/docker-compose.yml up -d --build
+python3 scripts/reset_demo.py
+
+# View live logs (both containers)
+docker compose -f deploy/docker-compose.yml logs -f
+
+# View logs for one container
+docker compose -f deploy/docker-compose.yml logs -f sakshi-lender
+docker compose -f deploy/docker-compose.yml logs -f sakshi-lsp
+
+# Restart a single container without full rebuild
+docker compose -f deploy/docker-compose.yml restart sakshi-lender
+
+# Open interactive shell inside lender container (for debugging)
+docker exec -it sakshi-lender bash
+```
 
 ---
 
